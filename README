@@ -23,14 +23,7 @@ Prep
 Run::
 
     python3 -m venv .venv
-    .venv/bin/pip install wheel
     .venv/bin/pip install -r requirements.txt
-
-wheel__ must be installed first to keep feedgenerator_ and peewee_ happy.
-
-.. __: https://pypi.org/project/wheel/
-.. _feedgenerator: https://pypi.org/project/feedgenerator/
-.. _peewee: https://pypi.org/project/peewee/
 
 Configure the development database with::
 
