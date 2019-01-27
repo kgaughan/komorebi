@@ -1,0 +1,46 @@
+===============
+stereochrome v2
+===============
+
+The code under here is meant to allow me to migrate to what I hope is a more
+permanent setup for all my online stuff. Fundamentally, the project is to
+deprecate stereochro.me as a website.
+
+The project will be a partial port of my old PHP code over to a WSGI app of
+some sort written in Python. Additionally, I'll be replacing the database
+with SQLite, though I'm slightly worried about data corruption issues there.
+
+The pages functionality is due to be replaced with a set of permanent
+redirects to my blog. The linklog is probably going to be moved to
+talideon.com/links, with permanent redirects forwarding there for linklog
+entries, and posts redirecting to the weblog.
+
+The output cache functionality will be replaced with Redis.
+
+Prep
+====
+
+Run::
+
+    python3 -m venv .venv
+    .venv/bin/pip install wheel
+    .venv/bin/pip install -r requirements.txt
+
+wheel__ must be installed first to keep feedgenerator_ and peewee_ happy.
+
+.. __: https://pypi.org/project/wheel/
+.. _feedgenerator: https://pypi.org/project/feedgenerator/
+.. _peewee: https://pypi.org/project/peewee/
+
+Configure the development database with::
+
+    sqlite db.sqlite < schema/linklog.sql
+
+Development server
+==================
+
+Run::
+
+    PYTHONPATH=src .venv/bin/python -m linklog
+
+.. vim:set ft=rst:
