@@ -4,7 +4,7 @@ import os
 import sqlite3
 from xml.sax import saxutils
 
-from flask import Flask, g
+from flask import Flask, g, render_template
 
 
 app = Flask(__name__)
@@ -15,6 +15,7 @@ def get_db():
     if db is None:
         db_path = os.environ.get('LINKLOG_DB_PATH', 'db.sqlite')
         db = g._database = sqlite3.connect(db_path)
+        db.row_factory = sqlite3.Row
     return db
 
 
@@ -104,9 +105,38 @@ class XMLBuilder:
     __str__ = as_string
 
 
+def query(sql, args=()):
+    con = get_db()
+    cur = con.cursor()
+    try:
+        cur.execute(sql, args)
+        for row in iter(cur.fetchone, None):
+            yield row
+    finally:
+        cur.close()
+
+
+def query_one(sql, args=(), default=None):
+    con = get_db()
+    cur = con.cursor()
+    try:
+        cur.execute(sql, args)
+        for row in iter(cur.fetchone, None):
+            return row
+    finally:
+        cur.close()
+    return default
+
+
 @app.route("/")
 def latest():
-    return "Hello World!"
+    sql = """
+        SELECT   id, time_c, time_m, link, title, via, note
+        FROM     links
+        ORDER BY time_c DESC
+        LIMIT    40
+        """
+    return render_template("latest.html", entries=query(sql))
 
 
 @app.route("/;add")
