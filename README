@@ -22,18 +22,13 @@ Prep
 
 Run::
 
-    python3 -m venv .venv
-    .venv/bin/pip install -r requirements.txt
-
-Configure the development database with::
-
-    sqlite db.sqlite < schema/komorebi.sql
+    make develop
 
 Development server
 ==================
 
 Run::
 
-    PYTHONPATH=src .venv/bin/python -m komorebi
+    make run
 
 .. vim:set ft=rst:
