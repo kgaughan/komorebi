@@ -1,14 +1,14 @@
-===============
-stereochrome v2
-===============
+========
+komorebi
+========
 
 The code under here is meant to allow me to migrate to what I hope is a more
 permanent setup for all my online stuff. Fundamentally, the project is to
 deprecate stereochro.me as a website.
 
 The project will be a partial port of my old PHP code over to a WSGI app of
-some sort written in Python. Additionally, I'll be replacing the database
-with SQLite, though I'm slightly worried about data corruption issues there.
+some sort written in Python. Additionally, I'll be replacing the database with
+SQLite, though I'm slightly worried about data corruption issues there.
 
 The pages functionality is due to be replaced with a set of permanent
 redirects to my blog. The linklog is probably going to be moved to
@@ -27,13 +27,13 @@ Run::
 
 Configure the development database with::
 
-    sqlite db.sqlite < schema/linklog.sql
+    sqlite db.sqlite < schema/komorebi.sql
 
 Development server
 ==================
 
 Run::
 
-    PYTHONPATH=src .venv/bin/python -m linklog
+    PYTHONPATH=src .venv/bin/python -m komorebi
 
 .. vim:set ft=rst:
