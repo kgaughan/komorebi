@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% import 'macros.html' as macros %}
+{% block title %}{{ entry.title }}{% endblock %}
+{% block content %}{{ macros.entry(entry) }}{% endblock %}

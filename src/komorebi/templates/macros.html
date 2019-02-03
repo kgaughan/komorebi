@@ -1,0 +1,26 @@
+{%- macro entry(entry) %}
+<article>
+
+	<header>
+		<div class="permalink"><a title="Permalink" href="{{ url_for('entry', entry_id=entry.id) }}">&infin;</a></div>
+
+		{% if entry.link %}
+			<h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
+		{% else %}
+			<h2>{{ entry.title }}</h2>
+		{% endif -%}
+	</header>
+
+	{{ entry.note | markdown | safe }}
+
+	<footer>
+		{% if entry.via %}
+		Via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a><br>
+		{% endif %}
+		Created at {{ entry.time_c }}
+		{% if entry.time_c != entry.time_m %}
+		and last modified at {{ entry.time_m }}
+		{% endif %}
+	</footer>
+</article>
+{%- endmacro %}
