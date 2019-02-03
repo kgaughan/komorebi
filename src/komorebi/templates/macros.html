@@ -9,18 +9,14 @@
 		{% else %}
 			<h2>{{ entry.title }}</h2>
 		{% endif -%}
+		<div class="metadata">
+		<span title="Published">&#128337; <time>{{ entry.time_c }}</time></span>
+		{%- if entry.via -%}
+		; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
+		{% endif %}
+		</div>
 	</header>
 
 	{{ entry.note | markdown | safe }}
-
-	<footer>
-		{% if entry.via %}
-		Via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a><br>
-		{% endif %}
-		Created at {{ entry.time_c }}
-		{% if entry.time_c != entry.time_m %}
-		and last modified at {{ entry.time_m }}
-		{% endif %}
-	</footer>
 </article>
 {%- endmacro %}

@@ -1,0 +1,107 @@
+@import 'https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:400,400i,600';
+body {
+  font-family: 'Raleway', sans-serif;
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  color: #555;
+}
+a {
+  color: #048;
+}
+pre, code {
+  font-family: 'Inconsolata', monospace;
+}
+body > header {
+  background-color: #802;
+  color: white;
+  padding: 2rem 0 1rem 0;
+  max-width: 40rem;
+  margin: 0 auto;
+  border-radius: 0 0 1rem 1rem;
+}
+nav {
+  margin-top: 1rem;
+  text-align: center;
+  color: #C03;
+}
+nav a {
+  color: white;
+  text-decoration: none;
+}
+body > main, body > footer {
+  line-height: 1.6;
+  max-width: 40rem;
+  width: 100%;
+  padding: 0 4rem;
+  margin: 2rem auto;
+}
+body > footer {
+  text-align: center;
+}
+article {
+  border-bottom: 1px dashed #FEE;
+}
+article .metadata {
+  font-size: 80%;
+}
+article > header {
+  position: relative;
+}
+article > header .permalink {
+  position: absolute;
+  left: -1em;
+  font-size: 150%;
+}
+.permalink a {
+  text-decoration: none;
+  color: #870;
+}
+h1, h2 {
+  font-weight: 400;
+  margin-bottom: 0;
+}
+article h1,
+article h2 {
+  color: black;
+}
+h1 {
+  font-size: 300%;
+  line-height: 1.1;
+  text-align: center;
+  margin-top: 0;
+}
+h2 {
+  font-size: 250%;
+  line-height: 1.2;
+  color: #802;
+}
+pre, code {
+  background: #eee;
+}
+p code {
+  padding: 0.25em;
+}
+pre {
+  padding: 0.75rem;
+  border-left: 2px solid #802;
+  overflow-x: auto;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+thead, tbody {
+  border-bottom: 1px solid #802;
+}
+tbody tr + tr {
+  border-top: 1px solid #ccc;
+}
+th, td {
+  padding: 0.5em 1em;
+}
+th {
+  text-align: left;
+}
