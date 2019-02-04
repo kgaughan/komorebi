@@ -44,6 +44,23 @@ body > footer {
 article {
   border-bottom: 1px dashed #FEE;
 }
+blockquote:before {
+  content: "\275d";
+  position: absolute;
+  left: -0.5em;
+  top: -0.25em;
+  font-size: 400%;
+  color: #804;
+  font-style: normal;
+}
+blockquote {
+  position: relative;
+  padding-left: 1rem;
+  font-style: italic;
+}
+blockquote em {
+  font-size: normal;
+}
 article .metadata {
   font-size: 80%;
 }
