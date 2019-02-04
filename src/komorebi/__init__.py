@@ -271,7 +271,7 @@ def feed():
                         "xml:lang": "en",
                         "xml:base": permalink,
                     }
-                    xml.content(entry['note'], **attrs)
+                    xml.content(md(entry['note']), **attrs)
 
     return Response(xml.as_string(),
                     content_type='application/atom+xml; charset=UTF-8')
