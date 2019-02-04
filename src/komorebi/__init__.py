@@ -167,6 +167,53 @@ def latest():
     return render_template("latest.html", entries=query(sql))
 
 
+@app.route("/archive")
+def archive():
+    # This is gross.
+    sql = """
+        SELECT   CAST(SUBSTR(time_c, 0, 5) AS INTEGER) AS "year",
+                 CAST(SUBSTR(time_c, 6, 2) AS INTEGER) AS "month",
+                 COUNT(*) AS n
+        FROM     links
+        GROUP BY SUBSTR(time_c, 0, 8)
+        ORDER BY SUBSTR(time_c, 0, 5) DESC,
+                 SUBSTR(time_c, 6, 2) ASC
+        """
+    return render_template("archive.html",
+                           entries=process_archive(query(sql)))
+
+
+def process_archive(records):
+    year = None
+    last_month = 0
+    for record in records:
+        # Pad out to the end of the year.
+        if record['year'] != year:
+            if last_month != 0:
+                for i in range(1, 13 - last_month):
+                    yield {
+                        'n': 0,
+                        'year': year,
+                        'month': last_month + i,
+                        'part': 'a',
+                    }
+            year = record['year']
+            last_month = 0
+
+        # Pad out between months in a year.
+        if record['month'] - 1 != last_month:
+            for i in range(1, record['month'] - last_month):
+                yield {
+                    'n': 0,
+                    'year': record['year'],
+                    'month': last_month + i,
+                    'part': 'b',
+                }
+
+        yield record
+        last_month = record['month']
+
+
 @app.route("/add")
 def add_entry():
     return "Hello World!"
@@ -231,7 +278,7 @@ def feed():
 
 
 @app.route("/<string(length=4):year>-<string(length=2):month>")
-def archive(year, month):
+def month(year, month):
     dt = datetime.date(int(year), int(month), 1)
     sql = """
         SELECT  id, time_c, time_m, link, title, via, note

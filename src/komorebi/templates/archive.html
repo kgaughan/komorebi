@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}archive{% endblock %}
+
+{% block content %}
+<dl id="archive-summary">
+	<dt>&nbsp;</dt>
+	<dd class="month">Jan</dd>
+	<dd class="month">Feb</dd>
+	<dd class="month">Mar</dd>
+	<dd class="month">Apr</dd>
+	<dd class="month">May</dd>
+	<dd class="month">Jun</dd>
+	<dd class="month">Jul</dd>
+	<dd class="month">Aug</dd>
+	<dd class="month">Sep</dd>
+	<dd class="month">Oct</dd>
+	<dd class="month">Nov</dd>
+	<dd class="month">Dec</dd>
+{% set ns = namespace(year=None) %}
+{% set year = None -%}
+{% for entry in entries %}
+	{% if ns.year != entry.year %}
+		<dt>{{ entry.year }}</dt>
+		{% set ns.year = entry.year -%}
+	{% endif %}
+	{% if entry.n == 0 %}
+		<dd class="empty">&mdash;</dd>
+	{% else %}
+		<dd><a href="{{ url_for('month', year=entry.year, month='{:02}'.format(entry.month) )}}">{{ entry.n }}</a></dd>
+	{% endif %}
+{% endfor %}
+</dl>
+
+{% endblock %}

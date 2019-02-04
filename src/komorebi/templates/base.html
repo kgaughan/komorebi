@@ -15,9 +15,11 @@
 			<h1>Inklings</h1>
 			<nav>
 				<a href="{{ url_for('latest') }}">Home</a> &#x2055;
-				<a href="https//i.canthack.it/about.html">About</a> &#x2055;
-				<a href="https//i.canthack.it/">Weblog</a> &#x2055;
-				<a href="https//twitter.com/talideon">Twitter</a> &#x2055;
+				<a href="{{ url_for('archive') }}">Archive</a> &#x2055;
+				<a href="https://i.canthack.it/pages/about.html">About Me</a> &#x2055;
+				<a href="https://i.canthack.it/">Weblog</a> &#x2055;
+				<a href="https://twitter.com/talideon">Twitter</a> &#x2055;
+				<a href="https://github.com/kgaughan">Github</a> &#x2055;
 				<a rel="alternate" type="application/atom+xml" href="{{ url_for('feed') }}">Feed</a>
 			</nav>
 		</header>

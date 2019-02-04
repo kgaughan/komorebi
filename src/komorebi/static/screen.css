@@ -105,3 +105,30 @@ th, td {
 th {
   text-align: left;
 }
+
+dl#archive-summary {
+	overflow: hidden;
+}
+dl#archive-summary dd.month {
+  font-weight: bold;
+}
+dl#archive-summary dt, dl#archive-summary dd {
+	float: left;
+}
+dl#archive-summary dt {
+	clear: left;
+	width: 3.5em;
+	font-weight: bold;
+	text-align: right;
+}
+dl#archive-summary dd {
+	margin: 0;
+	width: 3em;
+	text-align: right;
+}
+dl#archive-summary dd a {
+	display: block;
+}
+.empty {
+  color: silver;
+}
