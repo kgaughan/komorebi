@@ -64,7 +64,7 @@ app.wsgi_app = ReverseProxied(app.wsgi_app)
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
-        db_path = os.environ.get('LINKLOG_DB_PATH', 'db.sqlite')
+        db_path = os.environ.get('KOMOREBI_DB_PATH', 'db.sqlite')
         db = g._database = sqlite3.connect(db_path)
         db.row_factory = sqlite3.Row
     return db
