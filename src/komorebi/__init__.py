@@ -276,14 +276,14 @@ def feed():
         xml.title('Inklings')
         xml.subtitle('A stream of random things')
         if modified:
-            xml.modified(modified.isoformat())
+            xml.updated(modified.isoformat())
         with xml.within('author'):
             xml.name('Keith Gaughan')
         xml.id(FEED_ID)
         xml.rights('Copyright (c) Keith Gaughan 2001-2019')
         xml.link(rel='alternate', type='text/html', hreflang='en',
                  href=url_for('latest', _external=True))
-        xml.link(rel='self', type='text/html', hreflang='en',
+        xml.link(rel='self', type='application/atom+xml', hreflang='en',
                  href=url_for('feed', _external=True))
 
         for entry in query(sql):
