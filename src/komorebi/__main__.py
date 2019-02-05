@@ -1,3 +1,3 @@
-from komorebi import app
+from komorebi.app import app
 
 app.run()
