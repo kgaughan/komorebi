@@ -165,6 +165,11 @@ def entry(entry_id):
     return render_template("entry.html", entry=entry)
 
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return (render_template('404.html'), 404)
+
+
 @app.template_filter('markdown')
 def md(text):
     return markdown.markdown(text,
