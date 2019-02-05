@@ -124,27 +124,27 @@ th {
 }
 
 dl#archive-summary {
-	overflow: hidden;
+  overflow: hidden;
 }
 dl#archive-summary dd.month {
   font-weight: bold;
 }
 dl#archive-summary dt, dl#archive-summary dd {
-	float: left;
+  float: left;
 }
 dl#archive-summary dt {
-	clear: left;
-	width: 3.5em;
-	font-weight: bold;
-	text-align: right;
+  clear: left;
+  width: 3.5em;
+  font-weight: bold;
+  text-align: right;
 }
 dl#archive-summary dd {
-	margin: 0;
-	width: 3em;
-	text-align: right;
+  margin: 0;
+  width: 3em;
+  text-align: right;
 }
 dl#archive-summary dd a {
-	display: block;
+  display: block;
 }
 .empty {
   color: silver;
