@@ -13,6 +13,9 @@
 		<span title="Published">&#128337; <time>{{ entry.time_c }}</time></span>
 		{%- if entry.via -%}
 		; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
+		{%- endif -%}
+		{%- if entry.link -%}
+		; try the <a rel="nofollow" href="https://web.archive.org/web/*/{{ entry.link }}">Wayback Machine</a>
 		{% endif %}
 		</div>
 	</header>
