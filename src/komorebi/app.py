@@ -44,8 +44,7 @@ def archive():
         ORDER BY SUBSTR(time_c, 0, 5) DESC,
                  SUBSTR(time_c, 6, 2) ASC
         """
-    return render_template("archive.html",
-                           entries=process_archive(db.query(sql)))
+    return render_template("archive.html", entries=process_archive(db.query(sql)))
 
 
 def process_archive(records):
@@ -53,30 +52,20 @@ def process_archive(records):
     last_month = 0
     for record in records:
         # Pad out to the end of the year.
-        if record['year'] != year:
+        if record["year"] != year:
             if last_month != 0:
                 for i in range(1, 13 - last_month):
-                    yield {
-                        'n': 0,
-                        'year': year,
-                        'month': last_month + i,
-                        'part': 'a',
-                    }
-            year = record['year']
+                    yield {"n": 0, "year": year, "month": last_month + i}
+            year = record["year"]
             last_month = 0
 
         # Pad out between months in a year.
-        if record['month'] - 1 != last_month:
-            for i in range(1, record['month'] - last_month):
-                yield {
-                    'n': 0,
-                    'year': record['year'],
-                    'month': last_month + i,
-                    'part': 'b',
-                }
+        if record["month"] - 1 != last_month:
+            for i in range(1, record["month"] - last_month):
+                yield {"n": 0, "year": record["year"], "month": last_month + i}
 
         yield record
-        last_month = record['month']
+        last_month = record["month"]
 
 
 @app.route("/feed")
@@ -94,47 +83,46 @@ def feed():
         """
 
     xml = xmlutils.XMLBuilder()
-    with xml.within('feed', xmlns='http://www.w3.org/2005/Atom'):
-        xml.title('Inklings')
-        xml.subtitle('A stream of random things')
+    with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
+        xml.title("Inklings")
+        xml.subtitle("A stream of random things")
         if modified:
             xml.modified(modified.isoformat())
-        with xml.within('author'):
-            xml.name('Keith Gaughan')
+        with xml.within("author"):
+            xml.name("Keith Gaughan")
         xml.id(FEED_ID)
-        xml.rights('Copyright (c) Keith Gaughan 2001-2019')
-        xml.link(rel='alternate', type='text/html', hreflang='en',
-                 href=url_for('latest', _external=True))
-        xml.link(rel='self', type='text/html', hreflang='en',
-                 href=url_for('feed', _external=True))
+        xml.rights("Copyright (c) Keith Gaughan 2001-2019")
+        xml.link(
+            rel="alternate",
+            type="text/html",
+            hreflang="en",
+            href=url_for("latest", _external=True),
+        )
+        xml.link(
+            rel="self",
+            type="text/html",
+            hreflang="en",
+            href=url_for("feed", _external=True),
+        )
 
         for entry in db.query(sql):
-            with xml.within('entry'):
-                xml.title(entry['title'])
-                xml.published(parse_dt(entry['time_c']).isoformat())
-                xml.updated(parse_dt(entry['time_m']).isoformat())
-                xml.id("{}:{}".format(FEED_ID, entry['id']))
-                permalink = url_for('entry',
-                                    entry_id=entry['id'],
-                                    _external=True)
-                alternate = entry['link'] if entry['link'] else permalink
-                xml.link(rel='alternate', type='text/html', href=alternate)
-                if entry['link']:
-                    xml.link(rel='related',
-                             type='text/html',
-                             href=permalink)
-                if entry['via']:
-                    xml.link(rel='via', type='text/html', href=entry['via'])
-                if entry['note']:
-                    attrs = {
-                        "type": "html",
-                        "xml:lang": "en",
-                        "xml:base": permalink,
-                    }
-                    xml.content(md(entry['note']), **attrs)
+            with xml.within("entry"):
+                xml.title(entry["title"])
+                xml.published(parse_dt(entry["time_c"]).isoformat())
+                xml.updated(parse_dt(entry["time_m"]).isoformat())
+                xml.id("{}:{}".format(FEED_ID, entry["id"]))
+                permalink = url_for("entry", entry_id=entry["id"], _external=True)
+                alternate = entry["link"] if entry["link"] else permalink
+                xml.link(rel="alternate", type="text/html", href=alternate)
+                if entry["link"]:
+                    xml.link(rel="related", type="text/html", href=permalink)
+                if entry["via"]:
+                    xml.link(rel="via", type="text/html", href=entry["via"])
+                if entry["note"]:
+                    attrs = {"type": "html", "xml:lang": "en", "xml:base": permalink}
+                    xml.content(md(entry["note"]), **attrs)
 
-    return Response(xml.as_string(),
-                    content_type='application/atom+xml; charset=UTF-8')
+    return Response(xml.as_string(), content_type="application/atom+xml; charset=UTF-8")
 
 
 @app.route("/<string(length=4):year>-<string(length=2):month>")
@@ -167,19 +155,23 @@ def entry(entry_id):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return (render_template('404.html'), 404)
+    return (render_template("404.html"), 404)
 
 
-@app.template_filter('markdown')
+@app.template_filter("markdown")
 def md(text):
-    return markdown.markdown(text,
-                             output_format='html',
-                             extensions=['smarty',
-                                         'tables',
-                                         'attr_list',
-                                         'def_list',
-                                         'fenced_code',
-                                         'admonition'])
+    return markdown.markdown(
+        text,
+        output_format="html",
+        extensions=[
+            "smarty",
+            "tables",
+            "attr_list",
+            "def_list",
+            "fenced_code",
+            "admonition",
+        ],
+    )
 
 
 @app.template_filter()
@@ -191,5 +183,5 @@ def parse_dt(dt):
     """
     Parse an SQLite datetime, treating it as UTC.
     """
-    parsed = datetime.datetime.strptime(dt, '%Y-%m-%d %H:%M:%S')
+    parsed = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
     return parsed.replace(tzinfo=datetime.timezone.utc)
