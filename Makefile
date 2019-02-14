@@ -1,7 +1,7 @@
 develop: .venv db.sqlite
 
 run: develop
-	PYTHONPATH=src FLASK_ENV=development .venv/bin/python -m komorebi
+	PYTHONPATH=. FLASK_ENV=development .venv/bin/python -m komorebi
 
 clean:
 	rm -rf db.sqlite .venv
