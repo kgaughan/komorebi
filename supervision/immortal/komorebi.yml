@@ -1,9 +1,9 @@
 ---
-cmd: /usr/local/bin/python3 /home/freebsd/transitional/komorebi/src/komorebi/run.py --unix /var/run/www/komorebi.socket
-cwd: /home/freebsd/transitional/komorebi/src
+cmd: /usr/local/bin/python3 /home/freebsd/transitional/komorebi/komorebi/run.py --unix /var/run/www/komorebi.socket
+cwd: /home/freebsd/transitional/komorebi
 env:
     KOMOREBI_DB_PATH: /var/db/komorebi/db.sqlite
-    PYTHONPATH: /home/freebsd/transitional/komorebi/src
+    PYTHONPATH: /home/freebsd/transitional/komorebi
 log:
     file: /var/log/www/talideon.com.komorebi.log
     age: 86400
