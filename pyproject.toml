@@ -6,4 +6,9 @@ build-backend = "flit.buildapi"
 module = "komorebi"
 author = "Keith Gaughan"
 author-email = "k@stereochro.me"
-classifiers = ["License :: OSI Approved :: MIT License"]
+home-page = "https://github.com/kgaughan/komorebi"
+requires-python = ">=3.3"
+description-file = "README.rst"
+classifiers = [
+	"License :: OSI Approved :: MIT License",
+]
