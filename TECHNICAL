@@ -1,0 +1,24 @@
+=================
+Technical details
+=================
+
+Pocket integration
+==================
+
+The config table contains a ``dict`` called 'pocket', which can contain the
+following:
+
+============ ==================================================
+Key          Value                                             
+============ ==================================================
+consumer_key API key obtained from Pocket.
+access_token Obtained from the oauth/authorize request.
+last_request Unix timestamp giving when we last made a request.
+============ ==================================================
+
+If the environment variable ``POCKET_CONSUMER_KEY`` exists, that's used if
+its corresponding entry doesn't exist in the config dict.
+
+``last_request`` is a Unix timestamp corresponding to the 'since' parameter of
+the 'get' endpoint. If an entry doesn't exist, it's assumed to have a value of
+'0'.
