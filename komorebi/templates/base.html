@@ -2,13 +2,11 @@
 <html>
 	<head>
 		<title>Inklings: {% block title %}a tumblelog{% endblock %}</title>
-		<meta name="MSSmartTagsPreventParsing" content="true">
 		<meta name="Author" content="Keith Gaughan">
 		<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2019">
 		<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('feed') }}">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous">
 		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='screen.css') }}">
-		<link rel="stylesheet" type="text/css" media="print" href="{{ url_for('static', filename='print.css') }}">
 	</head>
 	<body>
 		<header>
