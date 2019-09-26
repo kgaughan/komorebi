@@ -1,5 +1,5 @@
 import json
-from urllib import request
+from urllib import parse, request
 
 
 class Client:
@@ -22,9 +22,9 @@ class Client:
             data.update(params)
 
         req = request.Request(
-            self.PREFIX + method,
-            json.dumps(data),
-            {
+            parse.urljoin(self.PREFIX, method),
+            data=json.dumps(data),
+            headers={
                 "Content-Type": "application/json; charset=UTF8",
                 "X-Accept": "application/json",
             },
