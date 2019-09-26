@@ -3,6 +3,10 @@ develop: .venv db.sqlite
 run: develop
 	FLASK_ENV=development .venv/bin/python -m komorebi
 
+build: .venv
+	find . -name \*.orig -delete
+	.venv/bin/flit build --format wheel
+
 clean:
 	rm -rf db.sqlite .venv
 
@@ -16,4 +20,4 @@ db.sqlite:
 	sqlite3 db.sqlite < schema/komorebi.sql
 	sqlite3 db.sqlite < schema/seed.sql
 
-.PHONY: clean develop run
+.PHONY: clean develop run build
