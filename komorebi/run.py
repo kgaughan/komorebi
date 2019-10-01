@@ -2,26 +2,19 @@
 
 import argparse
 import os
-
-import bjoern
+from wsgiref.simple_server import make_server
 
 from komorebi.app import app
 
 
 def main():
-    parser = argparse.ArgumentParser(description="A runner for bjoern.")
-    parser.add_argument(
-        "--unix",
-        help="Path to Unix domain socket",
-        default="/var/run/komorebi.sock",
-    )
+    parser = argparse.ArgumentParser(description="Run with wsgiref")
+    parser.add_argument("--host", help="Host to run on", default="")
+    parser.add_argument("--port", type=int, help="Port to run on", default=8000)
     args = parser.parse_args()
 
-    # This is a hack until I can find a better way to do the cleanup.
-    if os.path.exists(args.unix):
-        os.unlink(args.unix)
-
-    bjoern.run(app.wsgi_app, "unix:" + args.unix)
+    with make_server(args.host, args.port, app.wsgi_app) as server:
+        server.serve_forever()
 
 
 if __name__ == "__main__":
