@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+#
+# A simple application runner using wsgiref.
+#
 
 import argparse
 import os

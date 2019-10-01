@@ -31,6 +31,16 @@ Run::
 
     make run
 
+Deployment
+==========
+
+Under the *supervision* directory, you'll find ``run.py``, a small script for
+running the site using wsgiref_, and ``komorebi.ini``, a config file for
+Supervisor_ showing how to run the site.
+
+.. _wsgiref: https://docs.python.org/3.7/library/wsgiref.html
+.. _Supervisor: http://supervisord.org/
+
 TODO
 ====
 
