@@ -22,3 +22,5 @@ its corresponding entry doesn't exist in the config dict.
 ``last_request`` is a Unix timestamp corresponding to the 'since' parameter of
 the 'get' endpoint. If an entry doesn't exist, it's assumed to have a value of
 '0'.
+
+.. vim:set ft=rst:
