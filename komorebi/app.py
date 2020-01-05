@@ -69,7 +69,7 @@ def feed():
         with xml.within("author"):
             xml.name("Keith Gaughan")
         xml.id(FEED_ID)
-        xml.rights("Copyright (c) Keith Gaughan 2001-2019")
+        xml.rights("Copyright (c) Keith Gaughan 2001-2020")
         xml.link(
             rel="alternate",
             type="text/html",
