@@ -83,8 +83,8 @@ def feed():
         for entry in db.query_latest():
             with xml.within("entry"):
                 xml.title(entry["title"])
-                xml.published(parse_dt(entry["time_c"]).isoformat())
-                xml.updated(parse_dt(entry["time_m"]).isoformat())
+                xml.published(to_iso_date(entry["time_c"]))
+                xml.updated(to_iso_date(entry["time_m"]))
                 xml.id("{}:{}".format(FEED_ID, entry["id"]))
                 permalink = url_for("entry", entry_id=entry["id"], _external=True)
                 alternate = entry["link"] if entry["link"] else permalink
@@ -148,3 +148,7 @@ def parse_dt(dt):
     """
     parsed = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
     return parsed.replace(tzinfo=datetime.timezone.utc)
+
+
+def to_iso_date(dt):
+    return parse_dt(dt).isoformat()
