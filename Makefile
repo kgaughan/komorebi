@@ -1,7 +1,7 @@
 develop: .venv db.sqlite
 
 run: develop
-	FLASK_ENV=development .venv/bin/python -m komorebi
+	FLASK_ENV=development KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg .venv/bin/python -m komorebi
 
 build: .venv
 	find . -name \*.orig -delete

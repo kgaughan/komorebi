@@ -17,6 +17,7 @@ FEED_ID = "tag:talideon.com,2001:weblog"
 
 
 app = Flask(__name__)
+app.config.from_envvar("KOMOREBI_SETTINGS")
 app.wsgi_app = wsgiutils.ReverseProxied(app.wsgi_app)
 app.teardown_appcontext(db.close_connection)
 

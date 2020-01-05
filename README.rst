@@ -50,6 +50,8 @@ TODO
 * Some kind of simple admin backend to allow editing and posting of new
   entries. Or if I were feeling particularly inspired, I could implement
   Micropub__...
+* Remove hardwired stuff, such as the blog name, author, copyright notice,
+  feed ID prefix, &c.
 
 .. __: https://github.com/sh4nks/flask-caching
 .. __: https://www.w3.org/TR/micropub/
