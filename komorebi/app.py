@@ -23,28 +23,12 @@ app.teardown_appcontext(db.close_connection)
 
 @app.route("/")
 def latest():
-    sql = """
-        SELECT   id, time_c, time_m, link, title, via, note
-        FROM     links
-        ORDER BY time_c DESC
-        LIMIT    40
-        """
-    return render_template("latest.html", entries=db.query(sql))
+    return render_template("latest.html", entries=db.query_latest())
 
 
 @app.route("/archive")
 def archive():
-    # This is gross.
-    sql = """
-        SELECT   CAST(SUBSTR(time_c, 0, 5) AS INTEGER) AS "year",
-                 CAST(SUBSTR(time_c, 6, 2) AS INTEGER) AS "month",
-                 COUNT(*) AS n
-        FROM     links
-        GROUP BY SUBSTR(time_c, 0, 8)
-        ORDER BY SUBSTR(time_c, 0, 5) DESC,
-                 SUBSTR(time_c, 6, 2) ASC
-        """
-    return render_template("archive.html", entries=process_archive(db.query(sql)))
+    return render_template("archive.html", entries=process_archive(db.query_archive()))
 
 
 def process_archive(records):
@@ -70,17 +54,8 @@ def process_archive(records):
 
 @app.route("/feed")
 def feed():
-    modified = db.query_value("SELECT MAX(time_m) FROM links")
-    if modified:
-        modified = parse_dt(modified)
-        # TODO: ETag
-
-    sql = """
-        SELECT   id, time_c, time_m, link, title, via, note
-        FROM     links
-        ORDER BY time_m DESC
-        LIMIT    40
-        """
+    modified = db.query_last_modified()
+    # TODO: ETag
 
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
@@ -105,7 +80,7 @@ def feed():
             href=url_for("feed", _external=True),
         )
 
-        for entry in db.query(sql):
+        for entry in db.query_latest():
             with xml.within("entry"):
                 xml.title(entry["title"])
                 xml.published(parse_dt(entry["time_c"]).isoformat())
@@ -127,14 +102,7 @@ def feed():
 
 @app.route("/<string(length=4):year>-<string(length=2):month>")
 def month(year, month):
-    dt = datetime.date(int(year), int(month), 1)
-    sql = """
-        SELECT  id, time_c, time_m, link, title, via, note
-        FROM    links
-        WHERE   time_c BETWEEN ? AND DATE(?, '+1 month')
-        ORDER BY time_c ASC
-        """
-    entries = list(db.query(sql, (dt.isoformat(), dt.isoformat())))
+    entries = db.query_month(int(year), int(month))
     if not entries:
         abort(404)
     return render_template("month.html", entries=entries, dt=dt)
@@ -142,12 +110,7 @@ def month(year, month):
 
 @app.route("/<int:entry_id>")
 def entry(entry_id):
-    sql = """
-        SELECT   id, time_c, time_m, link, title, via, note
-        FROM     links
-        WHERE    id = ?
-        """
-    entry = db.query_row(sql, (entry_id,))
+    entry = db.query_entry(entry_id)
     if entry is None:
         abort(404)
     return render_template("entry.html", entry=entry)

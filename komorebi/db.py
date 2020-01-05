@@ -52,3 +52,58 @@ def query_value(sql, args=(), default=None):
     finally:
         cur.close()
     return default
+
+
+def query_latest():
+    return query(
+        """
+        SELECT   id, time_c, time_m, link, title, via, note
+        FROM     links
+        ORDER BY time_c DESC
+        LIMIT    40
+        """
+    )
+
+
+def query_archive():
+    # This is gross.
+    return query(
+        """
+        SELECT   CAST(SUBSTR(time_c, 0, 5) AS INTEGER) AS "year",
+                 CAST(SUBSTR(time_c, 6, 2) AS INTEGER) AS "month",
+                 COUNT(*) AS n
+        FROM     links
+        GROUP BY SUBSTR(time_c, 0, 8)
+        ORDER BY SUBSTR(time_c, 0, 5) DESC,
+                 SUBSTR(time_c, 6, 2) ASC
+        """
+    )
+
+
+def query_month(year, month):
+    sql = """
+        SELECT  id, time_c, time_m, link, title, via, note
+        FROM    links
+        WHERE   time_c BETWEEN ? AND DATE(?, '+1 month')
+        ORDER BY time_c ASC
+        """
+    dt = datetime.date(year, month, 1)
+    return list(query(sql, (dt.isoformat(), dt.isoformat())))
+
+
+def query_entry(entry_id):
+    return query_row(
+        """
+        SELECT   id, time_c, time_m, link, title, via, note
+        FROM     links
+        WHERE    id = ?
+        """,
+        (entry_id,),
+    )
+
+
+def query_last_modified():
+    modified = query_value("SELECT MAX(time_m) FROM links")
+    if modified:
+        modified = parse_dt(modified)
+    return modified
