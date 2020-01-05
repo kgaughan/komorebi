@@ -19,6 +19,18 @@ def close_connection(exception):
         db.close()
 
 
+def execute(sql, args=()):
+    con = get_db()
+    cur = con.cursor()
+    try:
+        cur.execute(sql, args)
+        result = cur.lastrowid
+        con.commit()
+        return result
+    finally:
+        cur.close()
+
+
 def query(sql, args=()):
     con = get_db()
     cur = con.cursor()
@@ -99,6 +111,43 @@ def query_entry(entry_id):
         WHERE    id = ?
         """,
         (entry_id,),
+    )
+
+
+def add_entry(link, title, via, note):
+    if link.strip() == "":
+        link = None
+    if via.strip() == "":
+        via = None
+    if note.strip() == "":
+        note = None
+
+    return execute(
+        """
+        INSERT
+        INTO    links (link, title, via, note)
+        VALUES  (?, ?, ?, ?)
+        """,
+        (link, title, via, note),
+    )
+
+
+def update_entry(entry_id, link, title, via, note):
+    if link.strip() == "":
+        link = None
+    if via.strip() == "":
+        via = None
+    if note.strip() == "":
+        note = None
+
+    return execute(
+        """
+        UPDATE  links
+        SET     link = ?, title = ?, via = ?, note = ?,
+                time_m = DATETIME('now')
+        WHERE   id = ?
+        """,
+        (link, title, via, note, entry_id),
     )
 
 

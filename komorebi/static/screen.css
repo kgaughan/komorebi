@@ -149,3 +149,25 @@ dl#archive-summary dd a {
 .empty {
   color: silver;
 }
+
+.form {
+}
+
+.form div {
+  display: flex;
+  margin-bottom: 0.25rem;
+}
+.form div label {
+  min-width: 10ch;
+  width: 10ch;
+  white-space: nowrap;
+  text-align: right;
+  padding-right: 1ch;
+}
+.form div label + * {
+  max-width: 100%;
+  flex: 1 0 auto;
+}
+.form div input[type=submit] {
+  margin-left: 11ch;
+}

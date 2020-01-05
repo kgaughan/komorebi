@@ -1,3 +1,4 @@
 # The versions are pegged with FreeBSD
 flask==1.0.2
+flask-wtf==0.14.2
 markdown==2.6.11

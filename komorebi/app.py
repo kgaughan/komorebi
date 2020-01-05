@@ -3,6 +3,8 @@ from urllib import parse
 
 from flask import (
     Flask,
+    redirect,
+    request,
     Response,
     abort,
     render_template,
@@ -10,7 +12,7 @@ from flask import (
 )
 import markdown
 
-from komorebi import db, wsgiutils, xmlutils
+from komorebi import db, forms, wsgiutils, xmlutils
 
 
 FEED_ID = "tag:talideon.com,2001:weblog"
@@ -115,6 +117,38 @@ def entry(entry_id):
     if entry is None:
         abort(404)
     return render_template("entry.html", entry=entry)
+
+
+@app.route("/add", methods=["GET", "POST"])
+def add_entry():
+    form = forms.EntryForm()
+    if form.validate_on_submit():
+        entry_id = db.add_entry(
+            link=form.link.data,
+            title=form.title.data,
+            via=form.via.data,
+            note=form.note.data,
+        )
+        return redirect(url_for("entry", entry_id=entry_id))
+    return render_template("entry_edit.html", form=form)
+
+
+@app.route("/<int:entry_id>/edit", methods=["GET", "POST"])
+def edit_entry(entry_id):
+    entry = db.query_entry(entry_id)
+    if entry is None:
+        abort(404)
+    form = forms.EntryForm(data=entry)
+    if form.validate_on_submit():
+        db.update_entry(
+            entry_id,
+            link=form.link.data,
+            title=form.title.data,
+            via=form.via.data,
+            note=form.note.data,
+        )
+        return redirect(url_for("entry", entry_id=entry_id))
+    return render_template("entry_edit.html", form=form)
 
 
 @app.errorhandler(404)
