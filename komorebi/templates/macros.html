@@ -17,6 +17,7 @@
 		{%- if entry.link -%}
 		; try the <a rel="nofollow" href="https://web.archive.org/web/*/{{ entry.link }}">Wayback Machine</a>
 		{% endif %}
+		| <a href="{{ url_for('edit_entry', entry_id=entry.id) }}">edit</a>
 		</div>
 	</header>
 
