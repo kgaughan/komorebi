@@ -10,7 +10,9 @@ from flask import (
     render_template,
     url_for,
 )
+from flask_httpauth import HTTPBasicAuth
 import markdown
+from passlib.apache import HtpasswdFile
 
 from komorebi import db, forms, wsgiutils, xmlutils
 
@@ -22,6 +24,16 @@ app = Flask(__name__)
 app.config.from_envvar("KOMOREBI_SETTINGS")
 app.wsgi_app = wsgiutils.ReverseProxied(app.wsgi_app)
 app.teardown_appcontext(db.close_connection)
+
+auth = HTTPBasicAuth()
+
+
+@auth.verify_password
+def verify_password(username, password):
+    htpasswd_path = app.config.get("HTPASSWD_PATH")
+    if htpasswd_path is not None:
+        return HtpasswdFile(htpasswd_path).check_password(username, password)
+    return False
 
 
 @app.route("/")
@@ -120,6 +132,7 @@ def entry(entry_id):
 
 
 @app.route("/add", methods=["GET", "POST"])
+@auth.login_required
 def add_entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
@@ -134,6 +147,7 @@ def add_entry():
 
 
 @app.route("/<int:entry_id>/edit", methods=["GET", "POST"])
+@auth.login_required
 def edit_entry(entry_id):
     entry = db.query_entry(entry_id)
     if entry is None:
