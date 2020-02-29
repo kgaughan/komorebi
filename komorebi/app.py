@@ -1,4 +1,3 @@
-import datetime
 from urllib import parse
 
 from flask import (
@@ -14,7 +13,7 @@ from flask_httpauth import HTTPBasicAuth
 import markdown
 from passlib.apache import HtpasswdFile
 
-from komorebi import db, forms, xmlutils
+from komorebi import db, forms, utils, xmlutils
 
 
 FEED_ID = "tag:talideon.com,2001:weblog"
@@ -97,8 +96,8 @@ def feed():
         for entry in db.query_latest():
             with xml.within("entry"):
                 xml.title(entry["title"])
-                xml.published(to_iso_date(entry["time_c"]))
-                xml.updated(to_iso_date(entry["time_m"]))
+                xml.published(utils.to_iso_date(entry["time_c"]))
+                xml.updated(utils.to_iso_date(entry["time_m"]))
                 xml.id("{}:{}".format(FEED_ID, entry["id"]))
                 permalink = url_for("entry", entry_id=entry["id"], _external=True)
                 alternate = entry["link"] if entry["link"] else permalink
@@ -188,15 +187,3 @@ def md(text):
 @app.template_filter()
 def extract_hostname(url):
     return parse.urlparse(url).netloc
-
-
-def parse_dt(dt):
-    """
-    Parse an SQLite datetime, treating it as UTC.
-    """
-    parsed = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
-    return parsed.replace(tzinfo=datetime.timezone.utc)
-
-
-def to_iso_date(dt):
-    return parse_dt(dt).isoformat()

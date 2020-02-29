@@ -1,7 +1,10 @@
+import datetime
 import os
 import sqlite3
 
 from flask import current_app, g
+
+from . import utils
 
 
 def get_db():
@@ -154,5 +157,5 @@ def update_entry(entry_id, link, title, via, note):
 def query_last_modified():
     modified = query_value("SELECT MAX(time_m) FROM links")
     if modified:
-        modified = parse_dt(modified)
+        modified = utils.parse_dt(modified)
     return modified
