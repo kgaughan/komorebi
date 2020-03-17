@@ -170,6 +170,8 @@ def page_not_found(e):
 
 @app.template_filter("markdown")
 def md(text):
+    if text is None:
+        return ""
     return markdown.markdown(
         text,
         output_format="html",

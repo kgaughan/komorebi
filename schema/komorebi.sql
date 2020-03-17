@@ -5,7 +5,7 @@ CREATE TABLE links (
 	via    TEXT    NULL,
 	time_c TEXT    NOT NULL DEFAULT (DATETIME('now')),
 	time_m TEXT    NOT NULL DEFAULT (DATETIME('now')),
-	note   TEXT    NOT NULL
+	note   TEXT    NULL
 );
 
 CREATE INDEX links_created ON links (time_c);
