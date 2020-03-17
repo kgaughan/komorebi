@@ -10,7 +10,7 @@
 			<h2>{{ entry.title }}</h2>
 		{% endif -%}
 		<div class="metadata">
-		<span title="Published">&#128337; <time>{{ entry.time_c }}</time></span>
+		<span title="Published">&#128337; <time datetime="{{ entry.time_c }}">{{ entry.time_c }}</time></span>
 		{%- if entry.via -%}
 		; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
 		{%- endif -%}

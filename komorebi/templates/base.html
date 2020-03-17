@@ -23,7 +23,16 @@
 			</nav>
 		</header>
 		<main>{% block content %}{% endblock %}</main>
-		<footer>
-		</footer>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
+		<script type="text/javascript">
+		// Humanise any timestamps
+		window.addEventListener("DOMContentLoaded", () => {
+			document.querySelectorAll("time").forEach((elem, _) => {
+				if (elem.dateTime != "") {
+					elem.innerText = moment(elem.dateTime).fromNow();
+				}
+			});
+		});
+		</script>
 	</body>
 </html>
