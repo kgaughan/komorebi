@@ -22,6 +22,7 @@ FEED_ID = "tag:talideon.com,2001:weblog"
 app = Flask(__name__)
 app.config.from_envvar("KOMOREBI_SETTINGS")
 app.teardown_appcontext(db.close_connection)
+app.jinja_env.filters["iso_date"] = utils.to_iso_date
 
 auth = HTTPBasicAuth()
 
