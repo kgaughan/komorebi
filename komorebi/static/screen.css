@@ -59,7 +59,7 @@ blockquote {
   font-style: italic;
 }
 blockquote em {
-  font-size: normal;
+  font-style: normal;
 }
 article .metadata {
   font-size: 80%;
