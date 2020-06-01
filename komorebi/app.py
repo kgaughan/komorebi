@@ -120,6 +120,7 @@ def month(year, month):
     entries = db.query_month(int(year), int(month))
     if not entries:
         abort(404)
+    dt = f"{year}-{month}"
     return render_template("month.html", entries=entries, dt=dt)
 
 
