@@ -1,6 +1,7 @@
 import datetime
 import os
 import sqlite3
+from sqlite3 import IntegrityError
 
 from flask import current_app, g
 

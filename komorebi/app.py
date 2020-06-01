@@ -2,6 +2,7 @@ from urllib import parse
 
 from flask import (
     Flask,
+    flash,
     redirect,
     request,
     Response,
@@ -135,13 +136,17 @@ def entry(entry_id):
 def add_entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
-        entry_id = db.add_entry(
-            link=form.link.data,
-            title=form.title.data,
-            via=form.via.data,
-            note=form.note.data,
-        )
-        return redirect(url_for("entry", entry_id=entry_id))
+        try:
+            entry_id = db.add_entry(
+                link=form.link.data,
+                title=form.title.data,
+                via=form.via.data,
+                note=form.note.data,
+            )
+        except db.IntegrityError:
+            flash("That links already exists", "error")
+        else:
+            return redirect(url_for("entry", entry_id=entry_id))
     return render_template("entry_edit.html", form=form)
 
 
