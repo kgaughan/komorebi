@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+
+{% block metadata %}
+{{ super() }}
+<meta name="robots" content="noindex, nofollow">
+{% endblock %}
+
 {% block content %}
 {% with messages = get_flashed_messages(with_categories=true) %}
 	{% if messages %}

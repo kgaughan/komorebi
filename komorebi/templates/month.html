@@ -3,6 +3,11 @@
 
 {% block title %}{{ dt }}{% endblock %}
 
+{% block metadata %}
+{{ super() }}
+<meta name="robots" content="noindex">
+{% endblock %}
+
 {% block content %}
 {% for entry in entries %}
 {{ macros.entry(entry) }}
