@@ -17,3 +17,13 @@ CREATE TABLE config (
 	key   TEXT NOT NULL,
 	value TEXT NOT NULL
 );
+
+-- oEmbed data associated with links, if fetched
+CREATE TABLE oembed (
+	-- Same ID as the matching link
+	id     INTEGER NOT NULL PRIMARY KEY,
+	-- We transform the image into HTML
+	html   TEXT    NOT NULL,
+	width  INTEGER NOT NULL,
+	height INTEGER NOT NULL
+);
