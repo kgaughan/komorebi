@@ -156,12 +156,14 @@ def add_entry():
         # Fetch the oEmbed data _first_ to prevent a database lockup
         data = fetch_oembed_data(form.link.data)
 
+        # Pull a default title from the oEmbed data if none is given
+        title = form.title.data.strip()
+        if title == "" and "title" in data:
+            title = data["title"]
+
         try:
             entry_id = db.add_entry(
-                link=form.link.data,
-                title=form.title.data,
-                via=form.via.data,
-                note=form.note.data,
+                link=form.link.data, title=title, via=form.via.data, note=form.note.data
             )
         except db.IntegrityError:
             flash("That links already exists", "error")
