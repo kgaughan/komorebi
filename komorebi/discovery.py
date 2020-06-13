@@ -97,5 +97,6 @@ def fetch_links(url, extractor=LinkExtractor):
     """
     Extract the <link> tags from the HTML document at the given URL.
     """
-    with request.urlopen(url) as fh:
+    req = request.Request(url, headers={"User-Agent": "adjunct-discovery/1.0"})
+    with request.urlopen(req) as fh:
         return extractor.extract(fh, url)

@@ -79,7 +79,10 @@ def fetch_oembed_document(url, max_width=None, max_height=None):
     want to constrain the dimensions of the thumbnail, specify the maximum
     width in `max_width` and the maximum height in `max_height`.
     """
-    headers = {"Accept": ", ".join(ACCEPTABLE_TYPES.keys())}
+    headers = {
+        "Accept": ", ".join(ACCEPTABLE_TYPES.keys()),
+        "User-Agent": "adjunct-oembed/1.0",
+    }
     req = request.Request(_build_url(url, max_width, max_height), headers=headers)
     with request.urlopen(req) as fh:
         info = fh.info()

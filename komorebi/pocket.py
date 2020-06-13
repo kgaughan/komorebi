@@ -27,6 +27,7 @@ class Client:
             headers={
                 "Content-Type": "application/json; charset=UTF8",
                 "X-Accept": "application/json",
+                "User-Agent": "komorebi-pocket-client/1.0",
             },
             method="POST",
         )
