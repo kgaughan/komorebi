@@ -148,6 +148,9 @@ def fetch_oembed_data(url):
 def add_entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
+        # Fetch the oEmbed data _first_ to prevent a database lockup
+        data = fetch_oembed_data(form.link.data)
+
         try:
             entry_id = db.add_entry(
                 link=form.link.data,
@@ -158,7 +161,6 @@ def add_entry():
         except db.IntegrityError:
             flash("That links already exists", "error")
         else:
-            data = fetch_oembed_data(form.link.data)
             if data:
                 db.add_oembed(entry_id, data["html"], data["width"], data["height"])
             return redirect(url_for("entry", entry_id=entry_id))
