@@ -31,6 +31,9 @@ Run::
 
     make run
 
+The username and password specified in ``dev/dev.htpasswd`` are *username* and
+*password* respectively.
+
 Deployment
 ==========
 

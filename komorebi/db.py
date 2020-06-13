@@ -73,10 +73,12 @@ def query_value(sql, args=(), default=None):
 def query_latest():
     return query(
         """
-        SELECT   id, time_c, time_m, link, title, via, note
-        FROM     links
-        ORDER BY time_c DESC
-        LIMIT    40
+        SELECT    links.id, time_c, time_m, link, title, via, note,
+                  html, width, height
+        FROM      links
+        LEFT JOIN oembed ON links.id = oembed.id
+        ORDER BY  time_c DESC
+        LIMIT     40
         """
     )
 
@@ -98,10 +100,12 @@ def query_archive():
 
 def query_month(year, month):
     sql = """
-        SELECT  id, time_c, time_m, link, title, via, note
-        FROM    links
-        WHERE   time_c BETWEEN ? AND DATE(?, '+1 month')
-        ORDER BY time_c ASC
+        SELECT    links.id, time_c, time_m, link, title, via, note,
+                  html, width, height
+        FROM      links
+        LEFT JOIN oembed ON links.id = oembed.id
+        WHERE     time_c BETWEEN ? AND DATE(?, '+1 month')
+        ORDER BY  time_c ASC
         """
     dt = datetime.date(year, month, 1)
     return list(query(sql, (dt.isoformat(), dt.isoformat())))
@@ -110,9 +114,11 @@ def query_month(year, month):
 def query_entry(entry_id):
     return query_row(
         """
-        SELECT   id, time_c, time_m, link, title, via, note
-        FROM     links
-        WHERE    id = ?
+        SELECT    links.id, time_c, time_m, link, title, via, note,
+                  html, width, height
+        FROM      links
+        LEFT JOIN oembed ON links.id = oembed.id
+        WHERE     links.id = ?
         """,
         (entry_id,),
     )
@@ -160,3 +166,14 @@ def query_last_modified():
     if modified:
         modified = utils.parse_dt(modified)
     return modified
+
+
+def add_oembed(entry_id, html, width, height):
+    execute(
+        """
+        INSERT
+        INTO    oembed (id, html, width, height)
+        VALUES  (?, ?, ?, ?)
+        """,
+        (entry_id, html, width, height),
+    )

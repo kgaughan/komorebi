@@ -21,6 +21,7 @@
 		</div>
 	</header>
 
+	{% if entry.html %}<div class="oembed">{{ entry.html | safe}}</div>{% endif %}
 	{{ entry.note | markdown | safe }}
 </article>
 {%- endmacro %}
