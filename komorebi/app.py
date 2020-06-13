@@ -14,7 +14,7 @@ from flask_httpauth import HTTPBasicAuth
 import markdown
 from passlib.apache import HtpasswdFile
 
-from komorebi import db, forms, utils, xmlutils
+from komorebi import db, forms, oembed, utils, xmlutils
 
 
 FEED_ID = "tag:talideon.com,2001:weblog"
@@ -132,6 +132,17 @@ def entry(entry_id):
     return render_template("entry.html", entry=entry)
 
 
+def fetch_oembed_data(url):
+    if url:
+        data = oembed.get_oembed(url)
+        if data:
+            if data["type"] == "image":
+                data = oembed.convert_image_to_rich(data)
+            if data["type"] in ["video", "rich"]:
+                return data
+    return None
+
+
 @app.route("/add", methods=["GET", "POST"])
 @auth.login_required
 def add_entry():
@@ -147,6 +158,9 @@ def add_entry():
         except db.IntegrityError:
             flash("That links already exists", "error")
         else:
+            data = fetch_oembed_data(form.link.data)
+            if data:
+                db.add_oembed(entry_id, data["html"], data["width"], data["height"])
             return redirect(url_for("entry", entry_id=entry_id))
     return render_template("entry_edit.html", form=form)
 

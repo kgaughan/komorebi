@@ -76,6 +76,15 @@ article > header .permalink {
   text-decoration: none;
   color: #870;
 }
+.oembed {
+  margin: 1rem 0;
+}
+.oembed > img,
+.oembed > object,
+.oembed > iframe {
+  margin: 0 auto;
+  display: block;
+}
 h1, h2 {
   font-weight: 400;
   margin-bottom: 0;

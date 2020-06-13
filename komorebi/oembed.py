@@ -5,6 +5,7 @@ An oEmbed_ client library.
 """
 
 import cgi
+import html
 import json
 from urllib import parse, request
 import xml.sax
@@ -136,3 +137,18 @@ def get_oembed(url, max_width=None, max_height=None):
     if oembed_url is None:
         return None
     return fetch_oembed_document(oembed_url, max_width, max_height)
+
+
+def convert_image_to_rich(data):
+    """
+    Turn an image oEmbed document into a generic 'rich' one.
+    """
+    data["type"] = "rich"
+    data["html"] = '<img src="{}" width="{}" height="{}" alt="{}">'.format(
+        html.escape(data["url"]),
+        data.get("width", ""),
+        data.get("height", ""),
+        html.escape(data.get("title", "")),
+    )
+    del data["url"]
+    return data
