@@ -69,8 +69,11 @@ def process_archive(records):
 
 @app.route("/feed")
 def feed():
+    response = Response(content_type="application/atom+xml; charset=UTF-8")
     modified = db.query_last_modified()
-    # TODO: ETag
+    response.last_modified = modified
+    if request.if_modified_since and modified <= request.if_modified_since:
+        return response.make_conditional(request)
 
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
@@ -116,8 +119,9 @@ def feed():
                         content += md(entry["note"])
                     attrs = {"type": "html", "xml:lang": "en", "xml:base": permalink}
                     xml.content(content, **attrs)
+    response.set_data(xml.as_string())
 
-    return Response(xml.as_string(), content_type="application/atom+xml; charset=UTF-8")
+    return response
 
 
 @app.route("/<string(length=4):year>-<string(length=2):month>")
