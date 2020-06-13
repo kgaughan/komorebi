@@ -108,9 +108,14 @@ def feed():
                     xml.link(rel="related", type="text/html", href=permalink)
                 if entry["via"]:
                     xml.link(rel="via", type="text/html", href=entry["via"])
-                if entry["note"]:
+                if entry["note"] or entry["html"]:
+                    content = ""
+                    if entry["html"]:
+                        content += f"<div>{entry['html']}</div>"
+                    if entry["note"]:
+                        content += md(entry["note"])
                     attrs = {"type": "html", "xml:lang": "en", "xml:base": permalink}
-                    xml.content(md(entry["note"]), **attrs)
+                    xml.content(content, **attrs)
 
     return Response(xml.as_string(), content_type="application/atom+xml; charset=UTF-8")
 
