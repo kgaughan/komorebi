@@ -25,3 +25,25 @@
 	{{ entry.note | markdown | safe }}
 </article>
 {%- endmacro %}
+
+{%- macro flash() %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+	{% if messages %}
+	<ul class="flashes">
+		{%- for category, message in messages %}
+		<li class="flash-{{ category }}">{{ message }}</li>
+		{% endfor -%}
+	</ul>
+	{% endif %}
+{% endwith %}
+{%- endmacro %}
+
+{%- macro errors(field) -%}
+{% if field.errors %}
+<ul class="errors">
+	{% for error in field.errors %}
+	<li>{{ error }}</li>
+	{% endfor %}
+</ul>
+{% endif %}
+{%- endmacro %}
