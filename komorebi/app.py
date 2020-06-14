@@ -1,12 +1,12 @@
 from urllib import parse
 
 from flask import (
+    abort,
     Flask,
     flash,
     redirect,
     request,
     Response,
-    abort,
     render_template,
     url_for,
 )
@@ -14,10 +14,7 @@ from flask_httpauth import HTTPBasicAuth
 import markdown
 from passlib.apache import HtpasswdFile
 
-from komorebi import db, forms, oembed, utils, xmlutils
-
-
-FEED_ID = "tag:talideon.com,2001:weblog"
+from . import db, forms, oembed, utils, xmlutils
 
 
 app = Flask(__name__)
@@ -75,16 +72,22 @@ def feed():
     if request.if_modified_since and modified <= request.if_modified_since:
         return response.make_conditional(request)
 
+    feed_id = app.config["FEED_ID"]
+
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
-        xml.title("Inklings")
-        xml.subtitle("A stream of random things")
+        xml.title(app.conig.get("BLOG_TITLE", "My Weblog"))
+        subtitle = app.conig.get("BLOG_SUBTITLE")
+        if subtitle:
+            xml.subtitle(subtitle)
         if modified:
             xml.modified(modified.isoformat())
         with xml.within("author"):
-            xml.name("Keith Gaughan")
-        xml.id(FEED_ID)
-        xml.rights("Copyright (c) Keith Gaughan 2001-2020")
+            xml.name(app.config["BLOG_AUTHOR"])
+        xml.id(feed_id)
+        rights = app.config.get("BLOG_RIGHTS")
+        if rights:
+            xml.rights(rights)
         xml.link(
             rel="alternate",
             type="text/html",
@@ -103,7 +106,7 @@ def feed():
                 xml.title(entry["title"])
                 xml.published(utils.to_iso_date(entry["time_c"]))
                 xml.updated(utils.to_iso_date(entry["time_m"]))
-                xml.id("{}:{}".format(FEED_ID, entry["id"]))
+                xml.id(f"{feed_id}:{entry['id']}")
                 permalink = url_for("entry", entry_id=entry["id"], _external=True)
                 alternate = entry["link"] if entry["link"] else permalink
                 xml.link(rel="alternate", type="text/html", href=alternate)
