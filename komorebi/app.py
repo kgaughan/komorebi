@@ -149,8 +149,8 @@ def fetch_oembed_data(url):
         data = oembed.get_oembed(url)
         if data:
             if data["type"] == "image":
-                data = oembed.convert_image_to_rich(data)
-            if data["type"] in ["video", "rich"]:
+                return oembed.convert_image_to_rich(data)
+            if data["type"] == "video":
                 return data
     return None
 
