@@ -76,8 +76,8 @@ def feed():
 
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
-        xml.title(app.conig.get("BLOG_TITLE", "My Weblog"))
-        subtitle = app.conig.get("BLOG_SUBTITLE")
+        xml.title(app.config.get("BLOG_TITLE", "My Weblog"))
+        subtitle = app.config.get("BLOG_SUBTITLE")
         if subtitle:
             xml.subtitle(subtitle)
         if modified:
