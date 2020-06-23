@@ -4,6 +4,7 @@
 #
 
 import argparse
+import logging
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 
 from komorebi.app import app
@@ -33,6 +34,7 @@ def main():
     class RH(RequestHandler):
         script_name = args.script_name
 
+    logging.basicConfig(level=logging.WARNING)
     with make_server(args.host, args.port, app.wsgi_app, handler_class=RH) as server:
         server.serve_forever()
 
