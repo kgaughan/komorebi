@@ -81,7 +81,7 @@ def feed():
         if subtitle:
             xml.subtitle(subtitle)
         if modified:
-            xml.modified(modified.isoformat())
+            xml.updated(modified.isoformat())
         with xml.within("author"):
             xml.name(app.config["BLOG_AUTHOR"])
         xml.id(feed_id)
