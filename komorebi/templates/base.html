@@ -5,8 +5,10 @@
 		<meta name="Author" content="Keith Gaughan">
 		<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2019">
 		<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('feed') }}">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:400,400i,600">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" integrity="sha256-oSrCnRYXvHG31SBifqP2PM1uje7SJUyX0nTwO2RJV54=" crossorigin="anonymous">
-		<link rel="stylesheet" type="text/css" media="screen" href="{{ url_for('static', filename='screen.css') }}">
+		<link rel="stylesheet" media="screen" href="{{ url_for('static', filename='screen.css') }}">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous" defer></script>
 		{% block metadata %}{% endblock %}
 	</head>
 	<body>
@@ -23,8 +25,7 @@
 			</nav>
 		</header>
 		<main>{% block content %}{% endblock %}</main>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>
-		<script type="text/javascript">
+		<script>
 		// Humanise any timestamps
 		window.addEventListener("DOMContentLoaded", () => {
 			document.querySelectorAll("time").forEach((elem, _) => {
