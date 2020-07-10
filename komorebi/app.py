@@ -67,6 +67,8 @@ def process_archive(records):
 @app.route("/feed")
 def feed():
     response = Response(content_type="application/atom+xml; charset=UTF-8")
+    response.cache_control.public = True
+    response.cache_control.max_age = 3600
     modified = db.query_last_modified()
     response.last_modified = modified
     if request.if_modified_since and modified <= request.if_modified_since:
