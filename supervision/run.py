@@ -7,6 +7,8 @@ import argparse
 import logging
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 
+from werkzeug.middleware.proxy_fix import ProxyFix
+
 from komorebi.app import app
 
 
@@ -31,11 +33,13 @@ def main():
     parser.add_argument("--script-name", help="Value to use for SCRIPT_NAME", default="/")
     args = parser.parse_args()
 
+    wrapped_app = ProxyFix(app.wsgi_app)
+
     class RH(RequestHandler):
         script_name = args.script_name
 
     logging.basicConfig(level=logging.WARNING)
-    with make_server(args.host, args.port, app.wsgi_app, handler_class=RH) as server:
+    with make_server(args.host, args.port, wrapped_app, handler_class=RH) as server:
         server.serve_forever()
 
 
