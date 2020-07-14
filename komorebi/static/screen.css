@@ -17,9 +17,7 @@ body > header {
   background-color: #802;
   color: white;
   padding: 2rem 0 1rem 0;
-  max-width: 40rem;
   margin: 0 auto;
-  border-radius: 0 0 1rem 1rem;
 }
 nav {
   margin-top: 1rem;
