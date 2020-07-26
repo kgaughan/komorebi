@@ -1,5 +1,5 @@
 # The versions are pegged with FreeBSD
-flask==1.1.1
+flask==1.1.2
 flask-httpauth==3.3.0
 flask-wtf==0.14.3
 markdown==2.6.11
