@@ -98,10 +98,21 @@ def fetch_links(url, extractor=LinkExtractor):
     """
     Extract the <link> tags from the HTML document at the given URL.
     """
+    links = []
+
     req = request.Request(url, headers={"User-Agent": "adjunct-discovery/1.0"})
     with request.urlopen(req) as fh:
-        content_type = fh.info().get("Content-Type", "application/octet-stream")
+        info = fh.info()
+        for name, value in info.items():
+            if name.lower() == "link":
+                href, attrs = cgi.parse_header(value)
+                attrs["href"] = parse.urljoin(url, href)
+                links.append(attrs)
+
+        content_type = info.get("Content-Type", "application/octet-stream")
         content_type, attrs = cgi.parse_header(content_type)
         if content_type in ("text/html", "application/xhtml+xml"):
-            return extractor.extract(fh, url, encoding=attrs.get("charset", "UTF-8"))
-    return []
+            encoding = attrs.get("charset", "UTF-8")
+            links.extend(extractor.extract(fh, url, encoding=encoding))
+
+    return links
