@@ -2,6 +2,7 @@
 Discovery via HTML <link> elements.
 """
 
+import cgi
 import contextlib
 from html.parser import HTMLParser
 from urllib import parse, request
@@ -55,7 +56,7 @@ class LinkExtractor(HTMLParser):
         return parse.urljoin(self.base, href)
 
     @classmethod
-    def extract(cls, fh, base="."):
+    def extract(cls, fh, base=".", encoding="UTF-8"):
         """
         Extract the link tags from header of a HTML document to be read from
         the file object, `fh`. The return value is a list of dicts where the
@@ -67,7 +68,7 @@ class LinkExtractor(HTMLParser):
                 chunk = fh.read(2048)
                 if not chunk:
                     break
-                parser.feed(chunk.decode("UTF-8"))
+                parser.feed(chunk.decode(encoding))
 
         # Canonicalise the URL paths.
         for link in parser.collected:
@@ -99,4 +100,8 @@ def fetch_links(url, extractor=LinkExtractor):
     """
     req = request.Request(url, headers={"User-Agent": "adjunct-discovery/1.0"})
     with request.urlopen(req) as fh:
-        return extractor.extract(fh, url)
+        content_type = fh.info().get("Content-Type", "application/octet-stream")
+        content_type, attrs = cgi.parse_header(content_type)
+        if content_type in ("text/html", "application/xhtml+xml"):
+            return extractor.extract(fh, url, encoding=attrs.get("charset", "UTF-8"))
+    return []
