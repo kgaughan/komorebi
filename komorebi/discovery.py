@@ -65,7 +65,12 @@ class LinkExtractor(HTMLParser):
         parser = cls(base)
         with contextlib.closing(parser):
             while not parser.finished:
-                chunk = fh.read(2048)
+                # I could probably do something to catch UnicodeDecodeError
+                # and recover is the chunk is on an awkward point, but I can't
+                # be bothered, so slurping as much up as possible will do for
+                # now. This is still likely to have issues if the server is
+                # trickling the data down.
+                chunk = fh.read()
                 if not chunk:
                     break
                 parser.feed(chunk.decode(encoding))
