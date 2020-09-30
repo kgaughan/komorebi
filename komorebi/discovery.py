@@ -64,16 +64,10 @@ class LinkExtractor(HTMLParser):
         """
         parser = cls(base)
         with contextlib.closing(parser):
-            while not parser.finished:
-                # I could probably do something to catch UnicodeDecodeError
-                # and recover is the chunk is on an awkward point, but I can't
-                # be bothered, so slurping as much up as possible will do for
-                # now. This is still likely to have issues if the server is
-                # trickling the data down.
-                chunk = fh.read()
-                if not chunk:
+            for chunk in safe_slurp(fh, encoding=encoding):
+                parser.feed(chunk)
+                if parser.finished:
                     break
-                parser.feed(chunk.decode(encoding))
 
         # Canonicalise the URL paths.
         for link in parser.collected:
@@ -81,6 +75,32 @@ class LinkExtractor(HTMLParser):
                 link["href"] = parser.fix_href(link["href"])
 
         return parser.collected
+
+
+def safe_slurp(fh, chunk_size=65536, encoding="UTF-8"):
+    """
+    Safely convert file object, converting it to the given file encoding.
+
+    This handles situations such as UTF-8 characters on chunk boundaries
+    gracefully.
+    """
+    prelude = None
+    while True:
+        chunk = fh.read(chunk_size)
+        if not chunk:
+            break
+        if prelude is not None:
+            chunk = prelude + chunk
+            prelude = None
+        try:
+            decoded = chunk.decode(encoding)
+        except UnicodeDecodeError as exc:
+            # If the error is at the start, there's a genuine issue.
+            if exc.start == 0:
+                raise
+            decoded = chunk[: exc.start].decode()
+            prelude = chunk[exc.start :]
+        yield decoded
 
 
 def fix_attributes(attrs):
