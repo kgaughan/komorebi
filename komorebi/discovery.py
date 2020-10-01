@@ -138,6 +138,6 @@ def fetch_links(url, extractor=LinkExtractor):
         content_type, attrs = cgi.parse_header(content_type)
         if content_type in ("text/html", "application/xhtml+xml"):
             encoding = attrs.get("charset", "UTF-8")
-            links.extend(extractor.extract(fh, url, encoding=encoding))
+            links += extractor.extract(fh, url, encoding=encoding)
 
     return links
