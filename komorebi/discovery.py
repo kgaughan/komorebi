@@ -8,14 +8,14 @@ from html.parser import HTMLParser
 from urllib import parse, request
 
 
-__all__ = ["LinkExtractor", "fetch_links", "fix_attributes"]
+__all__ = ["Extractor", "fetch_links", "fix_attributes"]
 
 
 # pylint: disable-msg=R0904
-class LinkExtractor(HTMLParser):
+class Extractor(HTMLParser):
     """
-    A simple subclass of `HTMLParser` for extracting <link> tags from the
-    header of a HTML document.
+    A simple subclass of `HTMLParser` for extracting metadata like from <meta>
+    and <link> tags from the header of a HTML document.
     """
 
     def __init__(self, base):
@@ -24,6 +24,7 @@ class LinkExtractor(HTMLParser):
         self.finished = False
         self.base = base
         self.collected = []
+        self.properties = []
 
     def handle_starttag(self, tag, attrs):
         tag = tag.lower()
@@ -35,6 +36,8 @@ class LinkExtractor(HTMLParser):
                 self.append(attrs)
             elif tag == "base" and "href" in attrs:
                 self.base = parse.urljoin(self.base, attrs["href"])
+            elif tag == "meta" and "property" in attrs and "content" in attrs:
+                self.properties.append((attrs["property"], attrs["content"]))
 
     def handle_endtag(self, tag):
         if tag.lower() == "head":
@@ -74,7 +77,7 @@ class LinkExtractor(HTMLParser):
             if "href" in link:
                 link["href"] = parser.fix_href(link["href"])
 
-        return parser.collected
+        return parser
 
 
 def safe_slurp(fh, chunk_size=65536, encoding="UTF-8"):
@@ -119,7 +122,7 @@ def fix_attributes(attrs):
     return result
 
 
-def fetch_links(url, extractor=LinkExtractor):
+def fetch_links(url, extractor=Extractor):
     """
     Extract the <link> tags from the HTML document at the given URL.
     """
@@ -138,6 +141,6 @@ def fetch_links(url, extractor=LinkExtractor):
         content_type, attrs = cgi.parse_header(content_type)
         if content_type in ("text/html", "application/xhtml+xml"):
             encoding = attrs.get("charset", "UTF-8")
-            links += extractor.extract(fh, url, encoding=encoding)
+            links += extractor.extract(fh, url, encoding=encoding).collected
 
     return links
