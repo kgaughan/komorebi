@@ -9,3 +9,7 @@ def parse_dt(dt, tz=datetime.timezone.utc):
     """
     parsed = datetime.datetime.strptime(dt, "%Y-%m-%d %H:%M:%S")
     return parsed if tz is None else parsed.replace(tzinfo=tz)
+
+
+def to_iso_date(dt):
+    return parse_dt(dt).isoformat()

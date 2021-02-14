@@ -20,7 +20,7 @@ from . import db, forms, oembed, time, xmlutils
 app = Flask(__name__)
 app.config.from_envvar("KOMOREBI_SETTINGS")
 app.teardown_appcontext(db.close_connection)
-app.jinja_env.filters["iso_date"] = lambda dt: time.parse_dt(dt).isoformat()
+app.jinja_env.filters["iso_date"] = time.to_iso_date
 
 auth = HTTPBasicAuth()
 
