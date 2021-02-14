@@ -1,3 +1,7 @@
+"""
+XML utilities.
+"""
+
 import contextlib
 import io
 from xml.sax import saxutils

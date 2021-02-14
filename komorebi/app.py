@@ -14,13 +14,13 @@ from flask_httpauth import HTTPBasicAuth
 import markdown
 from passlib.apache import HtpasswdFile
 
-from . import db, forms, oembed, utils, xmlutils
+from . import db, forms, oembed, time, xmlutils
 
 
 app = Flask(__name__)
 app.config.from_envvar("KOMOREBI_SETTINGS")
 app.teardown_appcontext(db.close_connection)
-app.jinja_env.filters["iso_date"] = utils.to_iso_date
+app.jinja_env.filters["iso_date"] = lambda dt: time.parse_dt(dt).isoformat()
 
 auth = HTTPBasicAuth()
 
@@ -106,8 +106,8 @@ def feed():
         for entry in db.query_latest():
             with xml.within("entry"):
                 xml.title(entry["title"])
-                xml.published(utils.to_iso_date(entry["time_c"]))
-                xml.updated(utils.to_iso_date(entry["time_m"]))
+                xml.published(time.to_iso_date(entry["time_c"]))
+                xml.updated(time.to_iso_date(entry["time_m"]))
                 xml.id(f"{feed_id}:{entry['id']}")
                 permalink = url_for("entry", entry_id=entry["id"], _external=True)
                 alternate = entry["link"] if entry["link"] else permalink

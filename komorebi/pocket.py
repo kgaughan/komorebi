@@ -44,7 +44,10 @@ class Client:
         return self.make_request("oauth/authorize", {"code": code})
 
     def add(self, url, title=None, tags=(), tweet_id=None):
-        params = {"url": url, "tags": ",".join(tags)}
+        params = {
+            "url": url,
+            "tags": ",".join(tags),
+        }
         for key, value in [("title", title), ("tweet_id", tweet_id)]:
             if value is not None:
                 params[key] = value

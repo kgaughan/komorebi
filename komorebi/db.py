@@ -5,7 +5,7 @@ from sqlite3 import IntegrityError
 
 from flask import current_app, g
 
-from . import utils
+from . import time
 
 
 def get_db():
@@ -164,7 +164,7 @@ def update_entry(entry_id, link, title, via, note):
 def query_last_modified():
     modified = query_value("SELECT MAX(time_m) FROM links")
     if modified:
-        modified = utils.parse_dt(modified)
+        modified = time.parse_dt(modified, tz=None)
     return modified
 
 

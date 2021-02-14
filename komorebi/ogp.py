@@ -117,3 +117,10 @@ class Root(SingleValue):
 
     def __str__(self):
         return self.to_meta()
+
+    @classmethod
+    def from_list(cls, lst):
+        root = cls()
+        for prop, content in lst:
+            root.insert(prop, content)
+        return root
