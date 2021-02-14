@@ -20,29 +20,19 @@ class Extractor(HTMLParser):
 
     def __init__(self, base):
         super().__init__()
-        self.active = False
-        self.finished = False
         self.base = base
         self.collected = []
         self.properties = []
 
     def handle_starttag(self, tag, attrs):
         tag = tag.lower()
-        if tag == "head":
-            self.active = True
-        elif self.active:
-            attrs = fix_attributes(attrs)
-            if tag == "link":
-                self.append(attrs)
-            elif tag == "base" and "href" in attrs:
-                self.base = parse.urljoin(self.base, attrs["href"])
-            elif tag == "meta" and "property" in attrs and "content" in attrs:
-                self.properties.append((attrs["property"], attrs["content"]))
-
-    def handle_endtag(self, tag):
-        if tag.lower() == "head":
-            self.active = False
-            self.finished = True
+        attrs = fix_attributes(attrs)
+        if tag == "link":
+            self.append(attrs)
+        elif tag == "base" and "href" in attrs:
+            self.base = parse.urljoin(self.base, attrs["href"])
+        elif tag == "meta" and "property" in attrs and "content" in attrs:
+            self.properties.append((attrs["property"], attrs["content"]))
 
     def append(self, attrs):
         """
@@ -69,8 +59,6 @@ class Extractor(HTMLParser):
         with contextlib.closing(parser):
             for chunk in safe_slurp(fh, encoding=encoding):
                 parser.feed(chunk)
-                if parser.finished:
-                    break
 
         # Canonicalise the URL paths.
         for link in parser.collected:
