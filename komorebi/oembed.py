@@ -155,3 +155,14 @@ def convert_image_to_rich(data):
     )
     del data["url"]
     return data
+
+
+def fetch_data(url):
+    if url:
+        data = get_oembed(url)
+        if data:
+            if data["type"] == "image":
+                return convert_image_to_rich(data)
+            if data["type"] == "video":
+                return data
+    return None
