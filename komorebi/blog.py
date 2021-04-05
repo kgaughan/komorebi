@@ -1,3 +1,5 @@
+from urllib import parse
+
 from flask import (
     abort,
     Blueprint,
@@ -16,6 +18,7 @@ from passlib.apache import HtpasswdFile
 from . import db, forms, oembed, time, xmlutils
 
 blog = Blueprint("blog", __name__)
+blog.add_app_template_filter(time.to_iso_date)
 
 auth = HTTPBasicAuth()
 
@@ -202,3 +205,8 @@ def md(text):
             "admonition",
         ],
     )
+
+
+@blog.app_template_filter()
+def extract_hostname(url):
+    return parse.urlparse(url).netloc
