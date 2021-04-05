@@ -1,20 +1,15 @@
-develop: .venv db.sqlite
+develop: db.sqlite
+	poetry update
 
 run: develop
-	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg .venv/bin/python -m komorebi
+	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run python -m komorebi
 
-build: .venv
+build:
 	find . -name \*.orig -delete
-	.venv/bin/flit build --format wheel
+	poetry build --format wheel
 
 clean:
-	rm -rf db.sqlite .venv
-
-.venv:
-	python3 -m venv .venv
-	.venv/bin/pip install --upgrade pip
-	.venv/bin/pip install -r requirements-dev.txt
-	.venv/bin/flit install --symlink
+	rm -rf db.sqlite
 
 db.sqlite:
 	sqlite3 db.sqlite < schema/komorebi.sql

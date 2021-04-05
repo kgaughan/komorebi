@@ -1,14 +1,22 @@
-[build-system]
-requires = ["flit"]
-build-backend = "flit.buildapi"
+[tool.poetry]
+name = "komorebi"
+version = "0.0.1"
+description = "Simple weblog/linklog engine"
+repository = "https://github.com/kgaughan/komorebi"
+authors = ["Keith Gaughan <keith@gaughan.ie>"]
+license = "MIT"
 
-[tool.flit.metadata]
-module = "komorebi"
-author = "Keith Gaughan"
-author-email = "k@stereochro.me"
-home-page = "https://github.com/kgaughan/komorebi"
-requires-python = ">=3.3"
-description-file = "README.rst"
-classifiers = [
-	"License :: OSI Approved :: MIT License",
-]
+[tool.poetry.dependencies]
+python = "^3.6"
+# The versions are pegged with FreeBSD
+flask = "1.1.2"
+flask-httpauth = "3.3.0"
+flask-wtf = "0.14.3"
+markdown = "2.6.11"
+passlib = "1.7.2"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
