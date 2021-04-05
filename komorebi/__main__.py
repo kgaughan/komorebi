@@ -2,10 +2,7 @@ import argparse
 import logging
 from wsgiref.simple_server import make_server, WSGIRequestHandler
 
-from flask import (
-    Flask,
-    render_template,
-)
+from flask import Flask, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from komorebi import blog
@@ -57,13 +54,13 @@ app.register_blueprint(blog.blog)
 
 
 @app.errorhandler(404)
-def page_not_found(e):
+def page_not_found(_e):
     return (render_template("404.html"), 404)
 
 
 args = make_parser().parse_args()
 if args.dev:
-    app.run(host=args.host, port=args.port)
+    app.run(host=args.host, port=args.port, debug=True)
 else:
     logging.basicConfig(level=logging.WARNING)
     with make_server(

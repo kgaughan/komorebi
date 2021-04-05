@@ -13,7 +13,6 @@ import xml.sax.handler
 
 from . import discovery
 
-
 __all__ = ["get_oembed"]
 
 

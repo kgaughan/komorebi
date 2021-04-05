@@ -1,3 +1,4 @@
+from sqlite3 import IntegrityError
 from urllib import parse
 
 from flask import (
@@ -6,9 +7,9 @@ from flask import (
     current_app,
     flash,
     redirect,
+    render_template,
     request,
     Response,
-    render_template,
     url_for,
 )
 from flask_httpauth import HTTPBasicAuth
@@ -128,8 +129,8 @@ def feed():
     return response
 
 
-@blog.route("/<string(length=4):year>-<string(length=2):month>")
-def month(year, month):
+@blog.route("/<string(length=4):year>-<string(length=2):month>", endpoint="month")
+def render_month(year, month):
     entries = db.query_month(int(year), int(month))
     if not entries:
         abort(404)
@@ -137,8 +138,8 @@ def month(year, month):
     return render_template("month.html", entries=entries, dt=dt)
 
 
-@blog.route("/<int:entry_id>")
-def entry(entry_id):
+@blog.route("/<int:entry_id>", endpoint="entry")
+def render_entry(entry_id):
     entry = db.query_entry(entry_id)
     if entry is None:
         abort(404)
@@ -162,7 +163,7 @@ def add_entry():
             entry_id = db.add_entry(
                 link=form.link.data, title=title, via=form.via.data, note=form.note.data
             )
-        except db.IntegrityError:
+        except IntegrityError:
             flash("That links already exists", "error")
         else:
             if data:

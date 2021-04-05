@@ -96,6 +96,7 @@ class Root(SingleValue):
         """
         prev = None
         node = self
+        key = None  # Keep pylint happy
         for key in prop.split(":"):
             prev, node = node, node.attrs[key]
         # This is safe: there will always be at least one previous node, namely
