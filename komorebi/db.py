@@ -11,9 +11,15 @@ def get_db():
     if db is None:
         db_path = current_app.config.get("DB_PATH", "db.sqlite")
         db = g._database = sqlite3.connect(db_path)
-        current_app.teardown_appcontext(lambda _: db.close())
         db.row_factory = sqlite3.Row
     return db
+
+
+def close_connection(req):
+    db = getattr(g, "_database", None)
+    if db is not None:
+        db.close()
+    return req
 
 
 def execute(sql, args=()):

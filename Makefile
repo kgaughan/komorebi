@@ -2,7 +2,7 @@ develop: db.sqlite
 	poetry update
 
 run: develop
-	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run python -m komorebi
+	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run python -m komorebi --dev
 
 build:
 	find . -name \*.orig -delete

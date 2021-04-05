@@ -19,6 +19,7 @@ from . import db, forms, oembed, time, xmlutils
 
 blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(time.to_iso_date)
+blog.after_request(db.close_connection)
 
 auth = HTTPBasicAuth()
 
