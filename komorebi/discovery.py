@@ -5,10 +5,12 @@ Discovery via HTML <link> elements.
 import cgi
 import contextlib
 from html.parser import HTMLParser
+import logging
 from urllib import parse, request
 
-
 __all__ = ["Extractor", "fetch_links", "fix_attributes"]
+
+logger = logging.getLogger(__name__)
 
 
 # pylint: disable-msg=R0904
@@ -66,6 +68,11 @@ class Extractor(HTMLParser):
                 link["href"] = parser.fix_href(link["href"])
 
         return parser
+
+    def error(self, message):
+        # This method is undocumented in HTMLParser, but pylint is moaning
+        # about it, so...
+        logger.error("Error in Extractor: %s", message)
 
 
 def safe_slurp(fh, chunk_size=65536, encoding="UTF-8"):

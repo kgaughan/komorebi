@@ -2,7 +2,7 @@ develop: db.sqlite
 	poetry update
 
 run: develop
-	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run python -m komorebi
+	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run python -m komorebi --dev
 
 build:
 	find . -name \*.orig -delete
@@ -15,4 +15,15 @@ db.sqlite:
 	sqlite3 db.sqlite < schema/komorebi.sql
 	sqlite3 db.sqlite < schema/seed.sql
 
-.PHONY: clean develop run build
+tidy:
+	poetry run black komorebi
+	poetry run isort komorebi
+
+lint: 
+	poetry run black --check komorebi
+	poetry run isort --check komorebi
+	@# This ignore if required by something black does with ':'
+	poetry run flake8 --max-line-length=105 --ignore=E203 --per-file-ignores="komorebi/oembed.py:N802" komorebi
+	poetry run pylint komorebi
+
+.PHONY: clean develop run build tidy lint

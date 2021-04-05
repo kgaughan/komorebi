@@ -15,10 +15,11 @@ def get_db():
     return db
 
 
-def close_connection(exception):
+def close_connection(req):
     db = getattr(g, "_database", None)
     if db is not None:
         db.close()
+    return req
 
 
 def execute(sql, args=()):
