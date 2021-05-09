@@ -37,9 +37,10 @@ The username and password specified in ``dev/dev.htpasswd`` are *username* and
 Deployment
 ==========
 
-Under the *supervision* directory, you'll find ``run.py``, a small script for
-running the site using wsgiref_, and ``komorebi.ini``, a config file for
-Supervisor_ showing how to run the site.
+The ``komorebi`` module containst a ``__main__.py`` file. This means that the
+module is executable. This default runner uses wsgiref_. Use the ``--help``
+flag for a list of options. Under the ``supevision`` directory is
+``komorebi.ini``, a config file for Supervisor_ showing how to run the site.
 
 .. _wsgiref: https://docs.python.org/3.7/library/wsgiref.html
 .. _Supervisor: http://supervisord.org/
