@@ -16,7 +16,7 @@ from flask_httpauth import HTTPBasicAuth
 import markdown
 from passlib.apache import HtpasswdFile
 
-from . import db, forms, oembed, time, xmlutils
+from . import db, forms, futz, oembed, time, xmlutils
 
 blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(time.to_iso_date)
@@ -51,14 +51,22 @@ def process_archive(records):
         if record["year"] != year:
             if last_month != 0:
                 for i in range(1, 13 - last_month):
-                    yield {"n": 0, "year": year, "month": last_month + i}
+                    yield {
+                        "n": 0,
+                        "year": year,
+                        "month": last_month + i,
+                    }
             year = record["year"]
             last_month = 0
 
         # Pad out between months in a year.
         if record["month"] - 1 != last_month:
             for i in range(1, record["month"] - last_month):
-                yield {"n": 0, "year": record["year"], "month": last_month + i}
+                yield {
+                    "n": 0,
+                    "year": record["year"],
+                    "month": last_month + i,
+                }
 
         yield record
         last_month = record["month"]
@@ -161,13 +169,22 @@ def add_entry():
 
         try:
             entry_id = db.add_entry(
-                link=form.link.data, title=title, via=form.via.data, note=form.note.data
+                link=form.link.data,
+                title=title,
+                via=form.via.data,
+                note=form.note.data,
             )
         except IntegrityError:
             flash("That links already exists", "error")
         else:
             if data:
-                db.add_oembed(entry_id, data["html"], data["width"], data["height"])
+                futzed, width, height = futz.futz(data["html"])
+                db.add_oembed(
+                    entry_id,
+                    futz.futz(data["html"]),
+                    width,
+                    height,
+                )
             return redirect(url_for(".entry", entry_id=entry_id))
     return render_template("entry_edit.html", form=form)
 
@@ -212,3 +229,9 @@ def md(text):
 @blog.app_template_filter()
 def extract_hostname(url):
     return parse.urlparse(url).netloc
+
+
+@blog.app_template_filter("futz")
+def futz_markup(markup):
+    futzed, _, _ = futz.futz(markup)
+    return futzed

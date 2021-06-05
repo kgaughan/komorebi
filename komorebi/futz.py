@@ -101,3 +101,31 @@ class Parser(HTMLParser):
     def handle_data(self, data):
         if data != "":
             self.top.children.append(data)
+
+
+def futz(markup):
+    """
+    Performs various kinds of cleanup on OEmbed data
+    """
+    parser = Parser()
+    parser.feed(markup)
+
+    width = 0
+    height = 0
+    for elem in parser.root:
+        if isinstance(elem, str) or elem.tag != "iframe":
+            continue
+        elem.attrs["loading"] = "lazy"
+        del elem.attrs["allowfullscreen"]
+        width = max(1, int(elem.attrs.get("width", "1")))
+        # Fix undersized YT embeds
+        if width < 560:
+            height = max(1, int(elem.attrs.get("height", "1")))
+            height = int(height * 560.0 / width)
+            elem.attrs["height"] = str(height)
+            width = 560
+            elem.attrs["width"] = "560"
+
+    with io.StringIO() as fo:
+        parser.root.serialize(fo)
+        return fo.getvalue(), width, height

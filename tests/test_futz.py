@@ -69,3 +69,15 @@ class TestElement(unittest.TestCase):
             "<a name>bar</a>",
             "<a name>bar</a>",
         )
+
+
+class TestFutz(unittest.TestCase):
+    def test_futz(self):
+        fixture = """\
+<iframe src="https://www.youtube.com/embed/W9qsxhhNUoU?feature=oembed" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" width="200" height="113" frameborder="0"></iframe>
+"""
+        result, width, height = futz.futz(fixture)
+        self.assertEquals(width, 560)
+        self.assertEquals(height, 316)
+        self.assertIn('loading="lazy"', result)
+        self.assertNotIn(" allowfullscreen", result)
