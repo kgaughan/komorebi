@@ -229,9 +229,3 @@ def md(text):
 @blog.app_template_filter()
 def extract_hostname(url):
     return parse.urlparse(url).netloc
-
-
-@blog.app_template_filter("futz")
-def futz_markup(markup):
-    futzed, _, _ = futz.futz(markup)
-    return futzed
