@@ -26,4 +26,7 @@ lint:
 	poetry run flake8 --max-line-length=105 --ignore=E203 --per-file-ignores="komorebi/oembed.py:N802" komorebi
 	poetry run pylint komorebi
 
-.PHONY: clean develop run build tidy lint
+test:
+	poetry run python -m unittest discover -bf tests
+
+.PHONY: clean develop run build tidy lint test
