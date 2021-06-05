@@ -10,7 +10,7 @@ def get_db():
     db = getattr(g, "_database", None)
     if db is None:
         db_path = current_app.config.get("DB_PATH", "db.sqlite")
-        db = g._database = sqlite3.connect(db_path)
+        db = g._database = sqlite3.connect(db_path)  # pylint: disable=E0237
         db.row_factory = sqlite3.Row
     return db
 

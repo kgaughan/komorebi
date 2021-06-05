@@ -6,6 +6,9 @@ import dataclasses
 import html
 from html.parser import HTMLParser
 import io
+import logging
+
+logger = logging.getLogger(__name__)
 
 # See: https://html.spec.whatwg.org/multipage/syntax.html#void-elements
 SELF_CLOSING = {
@@ -74,9 +77,6 @@ class Parser(HTMLParser):
         self.root = Element(tag=None)
         self.stack = [self.root]
 
-    def close(self):
-        super().close()
-
     @property
     def top(self):
         return self.stack[-1]
@@ -102,6 +102,11 @@ class Parser(HTMLParser):
         if data != "":
             self.top.children.append(data)
 
+    def error(self, message):
+        # This method is undocumented in HTMLParser, but pylint is moaning
+        # about it, so...
+        logger.error("Error in Parser: %s", message)
+
 
 def futz(markup):
     """
@@ -126,6 +131,6 @@ def futz(markup):
             width = 560
             elem.attrs["width"] = "560"
 
-    with io.StringIO() as fo:
-        parser.root.serialize(fo)
-        return fo.getvalue(), width, height
+    with io.StringIO() as fh:
+        parser.root.serialize(fh)
+        return fh.getvalue(), width, height

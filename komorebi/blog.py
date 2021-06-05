@@ -181,7 +181,7 @@ def add_entry():
                 futzed, width, height = futz.futz(data["html"])
                 db.add_oembed(
                     entry_id,
-                    futz.futz(data["html"]),
+                    futzed,
                     width,
                     height,
                 )
