@@ -177,3 +177,27 @@ dl#archive-summary dd a {
 .form div input[type=submit] {
   margin-left: 11ch;
 }
+
+.facade, .player {
+  margin: 0 auto;
+  display: block;
+}
+.facade {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+.facade img, .facade span {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+}
+.facade span {
+  height: 1.5em;
+  text-align: center;
+  font: 48px/1.5 sans-serif;
+  color: white;
+  text-shadow: 0 0 0.5em black;
+  width: 100%;
+}
