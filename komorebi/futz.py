@@ -121,7 +121,9 @@ def futz(markup):
         if isinstance(elem, str) or elem.tag != "iframe":
             continue
         elem.attrs["loading"] = "lazy"
-        del elem.attrs["allowfullscreen"]
+        elem.attrs["sandbox"] = "allow-same-origin allow-scripts"
+        for key in ["allowfullscreen", "allow"]:
+            elem.attrs.pop(key, None)
         width = max(1, int(elem.attrs.get("width", "1")))
         # Fix undersized YT embeds
         if width < 560:
