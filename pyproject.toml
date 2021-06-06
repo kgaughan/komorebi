@@ -37,7 +37,7 @@ order_by_type = false
 [tool.pylint.BASIC]
 # Good variable names which should always be accepted, separated by a comma
 good-names = "n,i,j,k,_,fh,fd,fn,ip,cb,ts,ch,dt,tz,db,md"
-max-line-length = "105"
+max-line-length = "120"
 exclude-protected = "_flatten"
 # There something broken with the import checks with this module. I think it's
 # because it contains a wildcard imporot from a C module.
