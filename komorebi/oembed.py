@@ -5,13 +5,10 @@ An oEmbed_ client library.
 """
 
 import cgi
-import html
 import json
 from urllib import parse, request
 import xml.sax
 import xml.sax.handler
-
-from . import discovery
 
 __all__ = ["get_oembed"]
 
@@ -131,37 +128,11 @@ def find_first_oembed_link(links):
     return None
 
 
-def get_oembed(url, max_width=None, max_height=None):
+def get_oembed(links, max_width=None, max_height=None):
     """
     Given a URL, fetch its associated oEmbed information.
     """
-    oembed_url = find_first_oembed_link(discovery.fetch_links(url))
-    if oembed_url is None:
-        return None
-    return fetch_oembed_document(oembed_url, max_width, max_height)
-
-
-def convert_image_to_rich(data):
-    """
-    Turn an image oEmbed document into a generic 'rich' one.
-    """
-    data["type"] = "rich"
-    data["html"] = '<img src="{}" width="{}" height="{}" alt="{}">'.format(
-        html.escape(data["url"]),
-        data.get("width", ""),
-        data.get("height", ""),
-        html.escape(data.get("title", "")),
-    )
-    del data["url"]
-    return data
-
-
-def fetch_data(url):
-    if url:
-        data = get_oembed(url)
-        if data:
-            if data["type"] == "image":
-                return convert_image_to_rich(data)
-            if data["type"] == "video":
-                return data
+    oembed_url = find_first_oembed_link(links)
+    if oembed_url:
+        return fetch_oembed_document(oembed_url, max_width, max_height)
     return None

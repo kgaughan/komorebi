@@ -16,11 +16,10 @@ from flask_httpauth import HTTPBasicAuth
 import markdown
 from passlib.apache import HtpasswdFile
 
-from . import db, forms, futz, oembed, time, xmlutils
+from . import db, embeds, forms, time, xmlutils
 
 blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(time.to_iso_date)
-blog.add_app_template_filter(futz.make_facade, "facade")
 blog.after_request(db.close_connection)
 
 auth = HTTPBasicAuth()
@@ -160,32 +159,22 @@ def render_entry(entry_id):
 def add_entry():
     form = forms.EntryForm()
     if form.validate_on_submit():
-        # Fetch the oEmbed data _first_ to prevent a database lockup
-        data = oembed.fetch_data(form.link.data)
-
-        # Pull a default title from the oEmbed data if none is given
-        title = form.title.data.strip()
-        if title == "" and "title" in data:
-            title = data["title"]
+        # Fetch the embed _first_ to prevent a database lockup
+        markup = embeds.fetch_embed(form.link.data)
 
         try:
             entry_id = db.add_entry(
                 link=form.link.data,
-                title=title,
+                title=form.title.data,
                 via=form.via.data,
                 note=form.note.data,
             )
         except IntegrityError:
             flash("That links already exists", "error")
         else:
-            if data:
-                futzed, width, height = futz.futz(data["html"])
-                db.add_oembed(
-                    entry_id,
-                    futzed,
-                    width,
-                    height,
-                )
+            if markup:
+                db.add_oembed(entry_id, markup)
+
             return redirect(url_for(".entry", entry_id=entry_id))
     return render_template("entry_edit.html", form=form)
 

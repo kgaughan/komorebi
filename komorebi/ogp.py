@@ -110,7 +110,7 @@ class Root(SingleValue):
         for item in node:
             yield item
 
-    def get(self, prop):
+    def get(self, prop) -> SingleValue:
         last = None
         for item in self.get_all(prop):
             last = item

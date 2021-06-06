@@ -5,9 +5,9 @@
 		<link rel="dns-prefetch" href="https://www.youtube.com/">
 		<link rel="preconnect" href="https://www.youtube.com/" crossorigin>
 		<meta name="Author" content="Keith Gaughan">
-		<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2019">
+		<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2021">
 		<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed') }}">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:400,400i,600&display=swap">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:400,400i,600&amp;display=swap">
 		<link rel="stylesheet" media="screen" href="{{ url_for('static', filename='screen.css') }}">
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous" defer></script>
 		{% block metadata %}{% endblock %}
@@ -39,16 +39,14 @@
 		// YouTube embed façade
 		window.addEventListener('DOMContentLoaded', () => {
 			document.querySelectorAll("div.facade").forEach((elem, _) => {
-				let url = new URL(elem.dataset.src);
-				url.searchParams.set('autoplay', '1');
-				let id = url.pathname.substr(url.pathname.lastIndexOf('/') + 1);
-
-				let thumb = document.createElement("img");
-				thumb.src = "https://i.ytimg.com/vi/" + id + "/hqdefault.jpg";
-				thumb.width = elem.dataset.width;
-				thumb.height = elem.dataset.height;
-				thumb.loading = "lazy";
-				elem.appendChild(thumb);
+				if ("thumb" in elem.dataset) {
+					let thumb = document.createElement("img");
+					thumb.src = elem.dataset.thumb;
+					thumb.width = elem.dataset.width;
+					thumb.height = elem.dataset.height;
+					thumb.loading = "lazy";
+					elem.appendChild(thumb);
+				}
 
 				let play = document.createElement("span");
 				play.innerText = "▶";
@@ -58,6 +56,10 @@
 				elem.style.width = elem.dataset.width + "px";
 
 				elem.addEventListener("click", () => {
+					let url = new URL(elem.dataset.src);
+					// A YouTube-ism that might be supported elsewehre...
+					url.searchParams.set('autoplay', '1');
+
 					let iframe = document.createElement('iframe');
 					iframe.className = "player";
 					iframe.src = url.href;
@@ -65,6 +67,7 @@
 					iframe.height = elem.dataset.height;
 					iframe.frameBorder = "0";
 					iframe.sandbox = "allow-same-origin allow-scripts";
+					iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture";
 
 					elem.parentNode.replaceChild(iframe, elem);
 				}, {"once": true, "capture": true});

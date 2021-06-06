@@ -22,8 +22,8 @@ CREATE TABLE config (
 CREATE TABLE oembed (
 	-- Same ID as the matching link
 	id     INTEGER NOT NULL PRIMARY KEY,
+	-- The original oEmbed data
+	oembed TEXT    NOT NULL,
 	-- We transform the image into HTML
-	html   TEXT    NOT NULL,
-	width  INTEGER NOT NULL,
-	height INTEGER NOT NULL
+	html   TEXT    NOT NULL
 );

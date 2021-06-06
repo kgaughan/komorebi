@@ -73,7 +73,7 @@ def query_latest():
     return query(
         """
         SELECT    links.id, time_c, time_m, link, title, via, note,
-                  html, width, height
+                  html
         FROM      links
         LEFT JOIN oembed ON links.id = oembed.id
         ORDER BY  time_c DESC
@@ -99,8 +99,7 @@ def query_archive():
 
 def query_month(year, month):
     sql = """
-        SELECT    links.id, time_c, time_m, link, title, via, note,
-                  html, width, height
+        SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
         LEFT JOIN oembed ON links.id = oembed.id
         WHERE     time_c BETWEEN ? AND DATE(?, '+1 month')
@@ -113,8 +112,7 @@ def query_month(year, month):
 def query_entry(entry_id):
     return query_row(
         """
-        SELECT    links.id, time_c, time_m, link, title, via, note,
-                  html, width, height
+        SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
         LEFT JOIN oembed ON links.id = oembed.id
         WHERE     links.id = ?
@@ -167,12 +165,12 @@ def query_last_modified():
     return modified
 
 
-def add_oembed(entry_id, html, width, height):
+def add_oembed(entry_id, html):
     execute(
         """
         INSERT
-        INTO    oembed (id, html, width, height)
-        VALUES  (?, ?, ?, ?)
+        INTO    oembed (id, html)
+        VALUES  (?, ?)
         """,
-        (entry_id, html, width, height),
+        (entry_id, html),
     )

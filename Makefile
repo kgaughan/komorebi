@@ -27,6 +27,6 @@ lint:
 	poetry run pylint komorebi
 
 test:
-	poetry run python -m unittest discover -bf tests
+	test -d tests && poetry run python -m unittest discover -bf tests || :
 
 .PHONY: clean develop run build tidy lint test
