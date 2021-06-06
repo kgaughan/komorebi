@@ -136,3 +136,16 @@ def futz(markup):
     with io.StringIO() as fh:
         parser.root.serialize(fh)
         return fh.getvalue(), width, height
+
+
+def make_facade(markup):
+    parser = Parser()
+    parser.feed(markup)
+    for elem in parser.root:
+        if isinstance(elem, str) or elem.tag != "iframe":
+            continue
+        width = elem.attrs.get("width", "1")
+        height = elem.attrs.get("height", "1")
+        src = html.escape(elem.attrs["src"], quote=True)
+        return f'<div class="facade" data-width="{width}" data-height="{height}" data-src="{src}"></div>'
+    return markup

@@ -20,6 +20,7 @@ from . import db, forms, futz, oembed, time, xmlutils
 
 blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(time.to_iso_date)
+blog.add_app_template_filter(futz.make_facade, "facade")
 blog.after_request(db.close_connection)
 
 auth = HTTPBasicAuth()
