@@ -90,9 +90,6 @@ FACADE_MAKERS = {
 
 
 def make_markup_from_oembed(doc: dict) -> str:
-    if doc["type"] == "rich":
-        return doc["html"]
-
     title = doc.get("title")
 
     if doc["type"] == "photo":
