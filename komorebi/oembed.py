@@ -6,7 +6,7 @@ An oEmbed_ client library.
 
 import cgi
 import json
-from urllib import parse, request
+from urllib import error, parse, request
 import xml.sax
 import xml.sax.handler
 
@@ -79,15 +79,20 @@ def fetch_oembed_document(url, max_width=None, max_height=None):
         "Accept": ", ".join(ACCEPTABLE_TYPES.keys()),
         "User-Agent": "adjunct-oembed/1.0",
     }
-    req = request.Request(_build_url(url, max_width, max_height), headers=headers)
-    with request.urlopen(req) as fh:
-        info = fh.info()
-        content_type, _ = cgi.parse_header(
-            info.get("content-type", "application/octet-stream")
-        )
-        if content_type in ACCEPTABLE_TYPES:
-            parser = ACCEPTABLE_TYPES[content_type]
-            return parser(fh)
+    try:
+        req = request.Request(_build_url(url, max_width, max_height), headers=headers)
+        with request.urlopen(req, timeout=5) as fh:
+            info = fh.info()
+            content_type, _ = cgi.parse_header(
+                info.get("content-type", "application/octet-stream")
+            )
+            if content_type in ACCEPTABLE_TYPES:
+                parser = ACCEPTABLE_TYPES[content_type]
+                return parser(fh)
+    except error.HTTPError as exc:
+        if exc.code in [404]:
+            return None
+        raise
     return None
 
 
