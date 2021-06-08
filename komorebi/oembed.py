@@ -90,7 +90,7 @@ def fetch_oembed_document(url, max_width=None, max_height=None):
                 parser = ACCEPTABLE_TYPES[content_type]
                 return parser(fh)
     except error.HTTPError as exc:
-        if exc.code in [404]:
+        if 400 <= exc.code < 500:
             return None
         raise
     return None

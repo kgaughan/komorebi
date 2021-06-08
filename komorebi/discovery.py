@@ -125,7 +125,7 @@ def fetch_meta(url, extractor=Extractor):
     properties = []
 
     req = request.Request(url, headers={"User-Agent": "adjunct-discovery/1.0"})
-    with request.urlopen(req) as fh:
+    with request.urlopen(req, timeout=5) as fh:
         info = fh.info()
         for name, value in info.items():
             if name.lower() == "link":
