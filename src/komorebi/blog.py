@@ -162,6 +162,11 @@ def edit_entry(entry_id):
     return render_template("entry_edit.html", form=form)
 
 
+@blog.route("/micropub", methods=["GET", "POST"])
+def micropub():
+    return ""
+
+
 @blog.app_template_filter()
 def extract_hostname(url):
     return parse.urlparse(url).netloc
