@@ -61,7 +61,7 @@
 
 				elem.addEventListener("click", () => {
 					let url = new URL(elem.dataset.src);
-					// A YouTube-ism that might be supported elsewehre...
+					// A YouTube-ism that might be supported elsewhere...
 					url.searchParams.set('autoplay', '1');
 
 					let iframe = document.createElement('iframe');
