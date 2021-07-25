@@ -1,32 +1,36 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Inklings: {% block title %}a tumblelog{% endblock %}</title>
-		<link rel="dns-prefetch" href="https://www.youtube.com/">
-		<link rel="preconnect" href="https://www.youtube.com/" crossorigin>
-		<meta name="Author" content="Keith Gaughan">
-		<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2021">
-		<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed') }}">
-		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:400,400i,600&amp;display=swap">
-		<link rel="stylesheet" media="screen" href="{{ url_for('static', filename='screen.css') }}">
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous" defer></script>
-		{% block metadata %}{% endblock %}
-	</head>
-	<body>
-		<header>
-			<h1>Inklings: a tumblelog</h1>
-			<nav>
-				<a href="{{ url_for('blog.latest') }}">Home</a> &#x2055;
-				<a href="{{ url_for('blog.archive') }}">Archive</a> &#x2055;
-				<a href="{{ url_for('blog.add_entry') }}">Add</a> &#x2055;
-				<a href="https://keith.gaughan.ie/about/">About Me</a> &#x2055;
-				<a href="https://keith.gaughan.ie/">Weblog</a> &#x2055;
-				<a href="https://github.com/kgaughan">Github</a> &#x2055;
-				<a rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed') }}">Feed</a>
-			</nav>
-		</header>
-		<main>{% block content %}{% endblock %}</main>
-		<script>
+
+<head>
+	<title>Inklings: {% block title %}a tumblelog{% endblock %}</title>
+	<link rel="dns-prefetch" href="https://www.youtube.com/">
+	<link rel="preconnect" href="https://www.youtube.com/" crossorigin>
+	<meta name="Author" content="Keith Gaughan">
+	<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2021">
+	<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed', _external=True) }}">
+	<link rel="stylesheet"
+		href="https://fonts.googleapis.com/css?family=Inconsolata:400,700|Raleway:400,400i,600&amp;display=swap">
+	<link rel="stylesheet" media="screen" href="{{ url_for('static', filename='screen.css') }}">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
+		integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous" defer></script>
+	{%- block metadata %}{% endblock %}
+</head>
+
+<body>
+	<header>
+		<h1>Inklings: a tumblelog</h1>
+		<nav>
+			<a href="{{ url_for('blog.latest') }}">Home</a> &#x2055;
+			<a href="{{ url_for('blog.archive') }}">Archive</a> &#x2055;
+			<a href="{{ url_for('blog.add_entry') }}">Add</a> &#x2055;
+			<a href="https://keith.gaughan.ie/about/">About Me</a> &#x2055;
+			<a href="https://keith.gaughan.ie/">Weblog</a> &#x2055;
+			<a href="https://github.com/kgaughan">Github</a> &#x2055;
+			<a rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed', _external=True) }}">Feed</a>
+		</nav>
+	</header>
+	<main>{% block content %}{% endblock %}</main>
+	<script>
 		// Humanise any timestamps
 		window.addEventListener("DOMContentLoaded", () => {
 			document.querySelectorAll("time").forEach((elem, _) => {
@@ -57,7 +61,7 @@
 
 				elem.addEventListener("click", () => {
 					let url = new URL(elem.dataset.src);
-					// A YouTube-ism that might be supported elsewehre...
+					// A YouTube-ism that might be supported elsewhere...
 					url.searchParams.set('autoplay', '1');
 
 					let iframe = document.createElement('iframe');
@@ -70,9 +74,10 @@
 					iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture";
 
 					elem.parentNode.replaceChild(iframe, elem);
-				}, {"once": true, "capture": true});
+				}, { "once": true, "capture": true });
 			});
 		});
-		</script>
-	</body>
+	</script>
+</body>
+
 </html>

@@ -4,3 +4,4 @@
 *.sqlite
 /dist/
 /*.lock
+.vscode/settings.json
