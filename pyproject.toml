@@ -11,7 +11,7 @@ authors = ["Keith Gaughan <keith@gaughan.ie>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.6.2"
 # The versions are pegged with FreeBSD
 flask = "1.1.2"
 flask-httpauth = "3.3.0"
@@ -20,11 +20,11 @@ markdown = "2.6.11"
 passlib = "1.7.4"
 
 [tool.poetry.dev-dependencies]
-black = "^20.8b1"
+black = "^21.7b0"
 coverage = "^5.5"
 flake8 = "^3.9.0"
 flake8-bugbear = "^21.3.2"
-isort = "^5.8.0"
+isort = "^5.9.2"
 pep8-naming = "^0.11.1"
 pylint = "^2.7.4"
 

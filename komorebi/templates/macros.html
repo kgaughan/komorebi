@@ -5,19 +5,20 @@
 		<div class="permalink"><a title="Permalink" href="{{ url_for('.entry', entry_id=entry.id) }}">&infin;</a></div>
 
 		{% if entry.link %}
-			<h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
+		<h2><a href="{{ entry.link }}">{{ entry.title }}</a></h2>
 		{% else %}
-			<h2>{{ entry.title }}</h2>
+		<h2>{{ entry.title }}</h2>
 		{% endif -%}
 		<div class="metadata">
-		<span title="Published">&#128337; <time datetime="{{ entry.time_c | to_iso_date }}">{{ entry.time_c | to_iso_date }}</time></span>
-		{%- if entry.via -%}
-		; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
-		{%- endif -%}
-		{%- if entry.link -%}
-		; try the <a rel="nofollow" href="https://web.archive.org/web/*/{{ entry.link }}">Wayback Machine</a>
-		{% endif %}
-		| <a rel="nofollow" href="{{ url_for('.edit_entry', entry_id=entry.id) }}">edit</a>
+			<span title="Published">&#128337; <time
+					datetime="{{ entry.time_c | to_iso_date }}">{{ entry.time_c | to_iso_date }}</time></span>
+			{%- if entry.via -%}
+			; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
+			{%- endif -%}
+			{%- if entry.link -%}
+			; try the <a rel="nofollow" href="https://web.archive.org/web/*/{{ entry.link }}">Wayback Machine</a>
+			{% endif %}
+			| <a rel="nofollow" href="{{ url_for('.edit_entry', entry_id=entry.id) }}">edit</a>
 		</div>
 	</header>
 
@@ -28,13 +29,13 @@
 
 {%- macro flash() %}
 {% with messages = get_flashed_messages(with_categories=true) %}
-	{% if messages %}
-	<ul class="flashes">
-		{%- for category, message in messages %}
-		<li class="flash-{{ category }}">{{ message }}</li>
-		{% endfor -%}
-	</ul>
-	{% endif %}
+{% if messages %}
+<ul class="flashes">
+	{%- for category, message in messages %}
+	<li class="flash-{{ category }}">{{ message }}</li>
+	{% endfor -%}
+</ul>
+{% endif %}
 {% endwith %}
 {%- endmacro %}
 
