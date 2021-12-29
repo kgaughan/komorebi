@@ -7,18 +7,23 @@ from . import time
 
 
 def get_db():
-    db = getattr(g, "_database", None)
-    if db is None:
+    con = getattr(g, "_database", None)
+    if con is None:
         db_path = current_app.config.get("DB_PATH", "db.sqlite")
-        db = g._database = sqlite3.connect(db_path)  # pylint: disable=E0237
-        db.row_factory = sqlite3.Row
-    return db
+        con = g._database = sqlite3.connect(db_path)  # pylint: disable=E0237
+        con.row_factory = sqlite3.Row
+    return con
 
 
 def close_connection(req):
-    db = getattr(g, "_database", None)
-    if db is not None:
-        db.close()
+    con = getattr(g, "_database", None)
+    if con is not None:
+        cur = con.cursor()
+        try:
+            cur.execute("PRAGMA optimize")
+        finally:
+            cur.close()
+        con.close()
     return req
 
 
