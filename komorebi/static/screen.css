@@ -2,6 +2,7 @@
 
 body {
   font-family: 'Raleway', sans-serif;
+  font-display: swap;
   display: block;
   position: relative;
   width: 100%;
@@ -14,6 +15,7 @@ a {
 }
 pre, code {
   font-family: 'Inconsolata', monospace;
+  font-display: swap;
 }
 body > header {
   background-color: #802;

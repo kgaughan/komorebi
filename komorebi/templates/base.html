@@ -1,19 +1,26 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
 	<title>Inklings: {% block title %}a tumblelog{% endblock %}</title>
+
 	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
 	<link rel="dns-prefetch" href="https://www.youtube.com/">
-	<link rel="preconnect" href="https://www.youtube.com/" crossorigin>
 	<meta name="Author" content="Keith Gaughan">
 	<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2021">
-	<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed', _external=True) }}">
-	<link rel="stylesheet"
-		href="https://fonts.googleapis.com/css?family=Inconsolata:400,700%7CRaleway:400,400i,600&amp;display=swap">
+
 	<link rel="stylesheet" media="screen" href="{{ url_for('static', filename='screen.css') }}">
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"
-		integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous" defer></script>
+	<link rel="stylesheet"
+		  crossorigin="anonymous" referrerpolicy="no-referrer" media="screen"
+		  href="https://fonts.googleapis.com/css?family=Inconsolata:400,700%7CRaleway:400,400i,600&amp;display=swap">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
+			integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ=="
+			crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+
+	<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed', _external=True) }}">
 	{%- block metadata %}{% endblock %}
 </head>
 
