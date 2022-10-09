@@ -8,13 +8,13 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
 
 	<link rel="dns-prefetch" href="https://www.youtube.com/">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<meta name="Author" content="Keith Gaughan">
 	<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2021">
 
-	<link rel="stylesheet" media="screen" href="{{ url_for('static', filename='screen.css') }}">
 	<link rel="stylesheet"
 		  crossorigin="anonymous" referrerpolicy="no-referrer" media="screen"
-		  href="https://fonts.googleapis.com/css?family=Inconsolata:400,700%7CRaleway:400,400i,600&amp;display=swap">
+		  href="{{ url_for('static', filename='screen.css') }}">
 
 	<script src="{{ url_for('static', filename='luxon.min.js') }}" defer></script>
 
