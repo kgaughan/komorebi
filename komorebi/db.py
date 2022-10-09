@@ -166,7 +166,7 @@ def update_entry(entry_id, link, title, via, note):
 def query_last_modified():
     modified = query_value("SELECT MAX(time_m) FROM links")
     if modified:
-        modified = time.parse_dt(modified, tz=None)
+        modified = time.parse_dt(modified)
     return modified
 
 
