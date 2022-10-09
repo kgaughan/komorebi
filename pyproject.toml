@@ -29,6 +29,8 @@ flake8-bugbear = "^21.11.29"
 isort = "^5.10.1"
 pep8-naming = "^0.11.1"
 pylint = "^2.13.7"
+mypy = "^0.961"
+types-Markdown = "^3.3.28"
 
 [tool.isort]
 profile = "black"
