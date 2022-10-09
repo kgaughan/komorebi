@@ -11,11 +11,16 @@ window.addEventListener("DOMContentLoaded", () => {
 // YouTube embed façade
 window.addEventListener('DOMContentLoaded', () => {
 	document.querySelectorAll("div.facade").forEach((elem, _) => {
+		// Because YouTube has stupid black bars above and below each thumbnail
+		const ytSux = /\/i\.ytimg\.com\//;
 		if ("thumb" in elem.dataset) {
 			let thumb = document.createElement("img");
 			thumb.src = elem.dataset.thumb;
 			thumb.width = elem.dataset.width;
-			thumb.height = elem.dataset.height;
+			if ("height" in elem.dataset && !ytSux.test(elem.dataset.thumb)) {
+				thumb.height = elem.dataset.height;
+			}
+			thumb.referrerPolicy = "no-referrer";
 			thumb.loading = "lazy";
 			elem.appendChild(thumb);
 		}

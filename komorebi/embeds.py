@@ -14,13 +14,15 @@ def make_video_facade(src, title, thumb, width, height):
         "title": title,
         "data-src": src,
         "data-thumb": thumb,
-        "data-width": str(width),
-        "data-height": str(height),
+        "data-width": width,
+        "data-height": height,
     }
-    # Remove anything that's empty
+    # Remove anything that's empty; cast the rest
     for key, value in list(attrs.items()):
         if value is None:
             del attrs[key]
+        else:
+            attrs[key] = str(value)
     return html.make("div", attrs=attrs)
 
 
