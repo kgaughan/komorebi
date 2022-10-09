@@ -2,26 +2,43 @@
 name: Tests
 on:
   push:
-    branches: [ master ]
+    branches:
+      - master
   pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
   workflow_dispatch:
 
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: poetry
+      - name: Install dependencies
+        run: |
+          poetry install
+      - name: Run linters
+        run: make lint
+
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: poetry
       - name: Install dependencies
         run: |
-          pip install -U pip
-          pip install poetry
           poetry install
-        env:
-          POETRY_VIRTUALENVS_CREATE: false
       - name: Run tests
         run: make test
-      - name: Run linters
-        run: make lint
