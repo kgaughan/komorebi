@@ -16,7 +16,7 @@
 		  crossorigin="anonymous" referrerpolicy="no-referrer" media="screen"
 		  href="{{ url_for('static', filename='screen.css') }}">
 
-	<script src="{{ url_for('static', filename='luxon.min.js') }}" defer></script>
+	<script src="{{ url_for('static', filename='luxon.min.js') }}" integrity="sha384-Z/CjPPwcFtY/yzyek5pMDDeLyIIgPlUht1Ycq6QFB+wgzeBAaPMMDjwS1r1YCED9" defer></script>
 
 	<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed', _external=True) }}">
 	{%- block metadata %}{% endblock %}
@@ -36,55 +36,7 @@
 		</nav>
 	</header>
 	<main>{% block content %}{% endblock %}</main>
-	<script>
-		// Humanise any timestamps
-		window.addEventListener("DOMContentLoaded", () => {
-			let humanise = (dt) => luxon.DateTime.fromISO(dt).toRelative();
-			document.querySelectorAll("time").forEach((elem, _) => {
-				if (elem.dateTime != "") {
-					elem.innerText = humanise(elem.dateTime);
-				}
-			});
-		});
-
-		// YouTube embed façade
-		window.addEventListener('DOMContentLoaded', () => {
-			document.querySelectorAll("div.facade").forEach((elem, _) => {
-				if ("thumb" in elem.dataset) {
-					let thumb = document.createElement("img");
-					thumb.src = elem.dataset.thumb;
-					thumb.width = elem.dataset.width;
-					thumb.height = elem.dataset.height;
-					thumb.loading = "lazy";
-					elem.appendChild(thumb);
-				}
-
-				let play = document.createElement("span");
-				play.innerText = "▶";
-				elem.appendChild(play);
-
-				elem.style.height = elem.dataset.height + "px";
-				elem.style.width = elem.dataset.width + "px";
-
-				elem.addEventListener("click", () => {
-					let url = new URL(elem.dataset.src);
-					// A YouTube-ism that might be supported elsewhere...
-					url.searchParams.set('autoplay', '1');
-
-					let iframe = document.createElement('iframe');
-					iframe.className = "player";
-					iframe.src = url.href;
-					iframe.width = elem.dataset.width;
-					iframe.height = elem.dataset.height;
-					iframe.frameBorder = "0";
-					iframe.sandbox = "allow-same-origin allow-scripts";
-					iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture";
-
-					elem.parentNode.replaceChild(iframe, elem);
-				}, { "once": true, "capture": true });
-			});
-		});
-	</script>
+	<script src="{{ url_for('static', filename='common.js') }}" integrity="sha384-i+Sq7+9ipA3zTD4IduxsKAQvm4dk/yNScggIWwd5mM0pZXbf2D/2ZhuGv23A9Nqn"></script>
 </body>
 
 </html>

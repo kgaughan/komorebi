@@ -45,6 +45,16 @@ flag for a list of options. Under the ``supevision`` directory is
 .. _wsgiref: https://docs.python.org/3.7/library/wsgiref.html
 .. _Supervisor: http://supervisord.org/
 
+Regenerating subresource integrity hashes
+=========================================
+
+Run::
+
+    openssl dgst -sha384 -binary < FILENAME.js | openssl base64 -A
+
+SRI is less trouble than dealing with CSP. I should add something to generate a
+manifest of this stuff to avoid manual updates.
+
 TODO
 ====
 
