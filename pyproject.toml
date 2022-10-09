@@ -13,13 +13,13 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = "^3.9.0"
 # The versions are pegged with FreeBSD
-flask = "2.1.2"
-flask-httpauth = "4.4.0"
+flask = "2.2.2"
+flask-httpauth = "4.7.0"
 flask-wtf = "0.15.1"
 wtforms = "2.1"
 markdown = "3.3.7"
 passlib = "1.7.4"
-itsdangerous = "2.0.1"
+itsdangerous = "2.1.2"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3.0"
