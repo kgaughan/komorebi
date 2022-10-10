@@ -23,7 +23,10 @@ class RequestHandler(WSGIRequestHandler):
 
 
 def make_parser():
-    parser = argparse.ArgumentParser(description="Run with wsgiref")
+    parser = argparse.ArgumentParser(
+        description="Run with wsgiref or with the built-in dev server",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument(
         "--host",
         help="Host to run on",
@@ -35,18 +38,22 @@ def make_parser():
         help="Port to run on",
         default=8000,
     )
-    parser.add_argument(
+
+    grp = parser.add_mutually_exclusive_group()
+    grp.add_argument(
         "--script-name",
         help="Value to use for SCRIPT_NAME",
         default="/",
     )
-    parser.add_argument(
+    grp.add_argument(
         "--dev",
         help="Run using the Flask development server",
         action="store_true",
     )
     return parser
 
+
+args = make_parser().parse_args()
 
 app = Flask(__name__)
 app.config.from_envvar("KOMOREBI_SETTINGS")
@@ -58,7 +65,6 @@ def page_not_found(_e):
     return (render_template("404.html"), 404)
 
 
-args = make_parser().parse_args()
 if args.dev:
     app.run(host=args.host, port=args.port, debug=True)
 else:
