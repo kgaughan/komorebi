@@ -30,6 +30,7 @@ def close_connection(req):
 def execute(sql, args=()):
     con = get_db()
     cur = con.cursor()
+    cur.arraysize = 50
     try:
         cur.execute(sql, args)
         result = cur.lastrowid
