@@ -15,6 +15,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		const ytSux = /\/i\.ytimg\.com\//;
 		if ("thumb" in elem.dataset) {
 			let thumb = document.createElement("img");
+			thumb.alt = "Video: " + elem.title;
 			thumb.src = elem.dataset.thumb;
 			thumb.width = elem.dataset.width;
 			if ("height" in elem.dataset && !ytSux.test(elem.dataset.thumb)) {
