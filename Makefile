@@ -2,7 +2,7 @@ develop: db.sqlite
 	poetry update
 
 run: develop
-	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run python -m komorebi --dev
+	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run flask --app komorebi --debug run
 
 build:
 	find . -name \*.orig -delete
