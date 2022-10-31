@@ -3,12 +3,19 @@ Extract build embeds based on target page metadata.
 """
 
 import re
+from typing import Optional
 import urllib.error
 
 from . import discovery, html, oembed, ogp
 
 
-def make_video_facade(src, title, thumb, width, height):
+def make_video_facade(
+    src: Optional[str],
+    title: Optional[str],
+    thumb: Optional[str],
+    width: Optional[int],
+    height: Optional[int],
+) -> str:
     attrs = {
         "class": "facade",
         "title": title,
@@ -26,14 +33,14 @@ def make_video_facade(src, title, thumb, width, height):
     return html.make("div", attrs=attrs)
 
 
-def find_iframe(elems) -> html.Element:
+def find_iframe(elems: html.Element) -> Optional[html.Element]:
     for elem in elems:
         if isinstance(elem, html.Element) and elem.tag == "iframe":
             return elem
     return None
 
 
-def make_default_facade(doc):
+def make_default_facade(doc: dict) -> str:
     return doc["html"]
 
 
@@ -42,7 +49,7 @@ RE_VIMEO_THUMB = re.compile(
 )
 
 
-def make_vimeo_facade(doc: dict):
+def make_vimeo_facade(doc: dict) -> str:
     iframe = find_iframe(html.parse(doc["html"]))
     # Fallback to provided HTML if we've no choice
     if iframe is None:
@@ -65,7 +72,7 @@ def make_vimeo_facade(doc: dict):
     )
 
 
-def make_youtube_facade(doc: dict):
+def make_youtube_facade(doc: dict) -> str:
     iframe = find_iframe(html.parse(doc["html"]))
     # Fallback to provided HTML if we've no choice
     if iframe is None:
@@ -91,7 +98,7 @@ FACADE_MAKERS = {
 }
 
 
-def make_markup_from_oembed(doc: dict) -> str:
+def make_markup_from_oembed(doc: dict) -> Optional[str]:
     title = doc.get("title")
 
     if doc["type"] == "photo":
@@ -105,14 +112,15 @@ def make_markup_from_oembed(doc: dict) -> str:
         return html.make("img", attrs)
 
     if doc["type"] == "video":
-        make_facade = FACADE_MAKERS.get(doc.get("provider_name"), make_default_facade)
-        return make_facade(doc)
+        provider = doc.get("provider_name")
+        if provider is not None:
+            return FACADE_MAKERS.get(provider, make_default_facade)(doc)
 
     # Unsupported oEmbed type
     return None
 
 
-def make_markup_from_ogp(root: ogp.Root) -> str:
+def make_markup_from_ogp(root: ogp.Root) -> Optional[str]:
     title = root.get("og:title")
     if title.content is None:
         return None
@@ -138,7 +146,7 @@ def make_markup_from_ogp(root: ogp.Root) -> str:
     return None
 
 
-def fetch_embed(url):
+def fetch_embed(url: str) -> Optional[str]:
     try:
         links, meta = discovery.fetch_meta(url)
     except urllib.error.HTTPError:
