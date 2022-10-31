@@ -1,6 +1,16 @@
 import base64
 import hashlib
 import io
+import json
+import os
+
+import click
+
+# File extensions to generate SRI hashes for
+SUFFIXES = (
+    ".css",
+    ".js",
+)
 
 
 def generate_sri(
@@ -21,3 +31,18 @@ def generate_sri(
         hashed.update(blk)
     digest = base64.b64encode(hashed.digest()).decode("UTF-8")
     return f"{alg}-{digest}"
+
+
+@click.command("sri", help="Generate SRI cache")
+def generate_hashes():
+    static_root = os.path.join(os.path.dirname(__file__), "static")
+    hashes = {}
+    for root, dirs, files in os.walk(static_root):
+        for filename in files:
+            if filename.endswith(SUFFIXES):
+                filepath = os.path.join(root, filename)
+                with open(filepath, "rb") as fh:
+                    hashes[filepath[len(static_root) + 1 :]] = generate_sri(fh)
+    with open(os.path.join(os.path.dirname(__file__), "sri.json"), "w") as fh:
+        json.dump(hashes, fh, indent=2, sort_keys=True)
+        fh.write("\n")

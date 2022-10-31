@@ -1,8 +1,13 @@
+export KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg
+
 develop: db.sqlite
 	poetry update
 
 run: develop
-	KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg poetry run flask --app komorebi --debug run
+	poetry run flask --app komorebi --debug run
+
+sri: develop
+	poetry run flask --app komorebi sri
 
 build:
 	find . -name \*.orig -delete
