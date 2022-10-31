@@ -3,6 +3,7 @@ import hashlib
 import io
 import json
 import os
+from typing import Dict
 
 import click
 
@@ -31,6 +32,14 @@ def generate_sri(
         hashed.update(blk)
     digest = base64.b64encode(hashed.digest()).decode("UTF-8")
     return f"{alg}-{digest}"
+
+
+def load_sris() -> Dict[str, str]:
+    sris_path = os.path.join(os.path.dirname(__file__), "sri.json")
+    if not os.path.exists(sris_path):
+        return {}
+    with open(sris_path, "r", encoding="UTF-8") as fh:
+        return json.load(fh)
 
 
 @click.command("sri", help="Generate SRI cache")
