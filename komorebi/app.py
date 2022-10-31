@@ -40,6 +40,12 @@ def create_app():
     def page_not_found(_e):
         return (render_template("404.html"), 404)
 
+    sris = sri.load_sris()
+
+    @app.template_global("sri")
+    def get_sri(filename):
+        return sris.get(filename, "")
+
     return app
 
 

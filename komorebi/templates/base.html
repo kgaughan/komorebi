@@ -12,12 +12,10 @@
 	<meta name="Author" content="Keith Gaughan">
 	<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2022">
 
-	<link rel="stylesheet"
-		  crossorigin="anonymous" referrerpolicy="no-referrer" media="screen"
-		  href="{{ url_for('static', filename='screen.css') }}">
+	<link rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer" media="screen" href="{{ url_for('static', filename='screen.css') }}" integrity="{{ sri('screen.css') }}">
 
-	<script src="{{ url_for('static', filename='luxon.min.js') }}" integrity="sha384-Z/CjPPwcFtY/yzyek5pMDDeLyIIgPlUht1Ycq6QFB+wgzeBAaPMMDjwS1r1YCED9" defer></script>
-	<script src="{{ url_for('static', filename='common.js') }}" integrity="sha384-RaHAuWfETJCGmfhA6Bn65/RJX/58hjVHNFY02bhOLNKcZrxkFrRVnp8V6nKe8mFy" defer></script>
+	<script src="{{ url_for('static', filename='luxon.min.js') }}" integrity="{{ sri('luxon.min.js') }}" defer></script>
+	<script src="{{ url_for('static', filename='common.js') }}" integrity="{{ sri('common.js') }}" defer></script>
 
 	<link title="Feed" rel="alternate" type="application/atom+xml" href="{{ url_for('blog.feed', _external=True) }}">
 	{%- block metadata %}{% endblock %}
