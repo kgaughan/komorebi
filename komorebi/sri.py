@@ -35,14 +35,15 @@ def generate_sri(
 
 @click.command("sri", help="Generate SRI cache")
 def generate_hashes():
-    static_root = os.path.join(os.path.dirname(__file__), "static")
+    app_root = os.path.dirname(__file__)
+    static_root = os.path.join(app_root, "static")
     hashes = {}
-    for root, dirs, files in os.walk(static_root):
+    for root, _, files in os.walk(static_root):
         for filename in files:
             if filename.endswith(SUFFIXES):
                 filepath = os.path.join(root, filename)
                 with open(filepath, "rb") as fh:
                     hashes[filepath[len(static_root) + 1 :]] = generate_sri(fh)
-    with open(os.path.join(os.path.dirname(__file__), "sri.json"), "w") as fh:
+    with open(os.path.join(app_root, "sri.json"), "w", encoding="UTF-8") as fh:
         json.dump(hashes, fh, indent=2, sort_keys=True)
         fh.write("\n")
