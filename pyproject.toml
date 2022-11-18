@@ -11,7 +11,7 @@ authors = ["Keith Gaughan <keith@gaughan.ie>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9.0"
+python = "^3.8"
 # The versions are pegged with FreeBSD
 flask = "2.2.2"
 flask-httpauth = "4.7.0"
