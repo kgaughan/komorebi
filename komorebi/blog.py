@@ -87,16 +87,14 @@ def feed():
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
         xml.title(current_app.config.get("BLOG_TITLE", "My Weblog"))
-        subtitle = current_app.config.get("BLOG_SUBTITLE")
-        if subtitle:
+        if subtitle := current_app.config.get("BLOG_SUBTITLE"):
             xml.subtitle(subtitle)
         if modified:
             xml.updated(modified.isoformat())
         with xml.within("author"):
             xml.name(current_app.config["BLOG_AUTHOR"])
         xml.id(feed_id)
-        rights = current_app.config.get("BLOG_RIGHTS")
-        if rights:
+        if rights := current_app.config.get("BLOG_RIGHTS"):
             xml.rights(rights)
         xml.link(
             rel="alternate",
@@ -118,7 +116,7 @@ def feed():
                 xml.updated(time.to_iso_date(entry["time_m"]))
                 xml.id(f"{feed_id}:{entry['id']}")
                 permalink = url_for(".entry", entry_id=entry["id"], _external=True)
-                alternate = entry["link"] if entry["link"] else permalink
+                alternate = entry["link"] or permalink
                 xml.link(rel="alternate", type="text/html", href=alternate)
                 if entry["link"]:
                     xml.link(rel="related", type="text/html", href=permalink)

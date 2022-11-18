@@ -26,10 +26,10 @@ def generate_sri(
     """
     hashed = hashlib.new(alg)
     while True:
-        blk = fh.read(block_size)
-        if not blk:
+        if blk := fh.read(block_size):
+            hashed.update(blk)
+        else:
             break
-        hashed.update(blk)
     digest = base64.b64encode(hashed.digest()).decode("UTF-8")
     return f"{alg}-{digest}"
 

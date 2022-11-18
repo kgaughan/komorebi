@@ -72,9 +72,7 @@ class XMLBuilder:
         """
         If using the built-in buffer, get its current contents.
         """
-        if self.buffer is None:
-            return None
-        return self.buffer.getvalue()
+        return None if self.buffer is None else self.buffer.getvalue()
 
     def close(self):
         """

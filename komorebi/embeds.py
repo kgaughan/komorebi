@@ -34,10 +34,14 @@ def make_video_facade(
 
 
 def find_iframe(elems: html.Element) -> Optional[html.Element]:
-    for elem in elems:
-        if isinstance(elem, html.Element) and elem.tag == "iframe":
-            return elem
-    return None
+    return next(
+        (
+            elem
+            for elem in elems
+            if isinstance(elem, html.Element) and elem.tag == "iframe"
+        ),
+        None,
+    )
 
 
 def make_default_facade(doc: dict) -> str:
@@ -60,8 +64,7 @@ def make_vimeo_facade(doc: dict) -> str:
     # Adjust the thumbnail size to match the video
     thumb = doc.get("thumbnail_url")
     if thumb:
-        match = RE_VIMEO_THUMB.match(thumb)
-        if match:
+        if match := RE_VIMEO_THUMB.match(thumb):
             thumb = f"{match.group('prefix')}{width}x{height}"
     return make_video_facade(
         src=iframe.attrs["src"],
@@ -152,7 +155,6 @@ def fetch_embed(url: str) -> Optional[str]:
     except urllib.error.HTTPError:
         return None
     if links:
-        doc = oembed.get_oembed(links)
-        if doc:
+        if doc := oembed.get_oembed(links):
             return make_markup_from_oembed(doc)
     return make_markup_from_ogp(ogp.Root.from_list(meta))

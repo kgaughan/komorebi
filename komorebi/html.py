@@ -74,9 +74,9 @@ class Element:
         if dest is None:
             dest = io.StringIO()
         if self.tag is not None:
-            dest.write("<" + self.tag)
+            dest.write(f"<{self.tag}")
             for key, value in self.attrs.items():
-                dest.write(" " + key)
+                dest.write(f" {key}")
                 if value is not None:
                     dest.write('="' + escape(value, quote=True) + '"')
             dest.write(">")
@@ -86,7 +86,7 @@ class Element:
             elif isinstance(child, Element):
                 child.serialize(dest)
         if self.tag is not None and self.tag not in SELF_CLOSING:
-            dest.write("</" + self.tag + ">")
+            dest.write(f"</{self.tag}>")
 
         return dest
 
