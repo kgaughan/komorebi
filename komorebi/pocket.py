@@ -19,7 +19,7 @@ class Client:
         if self.access_token is not None:
             data["access_token"] = self.access_token
         if params is not None:
-            data.update(params)
+            data |= params
 
         req = request.Request(
             parse.urljoin(self.PREFIX, method),

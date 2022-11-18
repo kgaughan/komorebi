@@ -39,8 +39,7 @@ class SingleValue:
 
     def flatten(self):
         for key, value in self.attrs.items():
-            for pair in value._flatten(key):
-                yield pair
+            yield from value._flatten(key)
 
     def to_meta(self):
         return "\n".join(
@@ -52,8 +51,7 @@ class SingleValue:
         if self.content is not None:
             yield (prefix, self.content)
         for key, value in self.attrs.items():
-            for pair in value._flatten(prefix + ":" + key):
-                yield pair
+            yield from value._flatten(f"{prefix}:{key}")
 
 
 class MultiValue:
@@ -85,8 +83,7 @@ class MultiValue:
 
     def _flatten(self, prefix):
         for value in self._values:
-            for pair in value._flatten(prefix):
-                yield pair
+            yield from value._flatten(prefix)
 
 
 class Root(SingleValue):
@@ -107,8 +104,7 @@ class Root(SingleValue):
         node = self
         for key in prop.split(":"):
             node = node.attrs[key]
-        for item in node:
-            yield item
+        yield from node
 
     def get(self, prop) -> SingleValue:
         last = None

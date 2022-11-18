@@ -60,12 +60,12 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
 
 
 def _build_url(url, max_width, max_height):
-    additional = []
-    for key, value in (("maxwidth", max_width), ("maxheight", max_height)):
-        if value is not None:
-            additional.append((key, value))
-    if len(additional) > 0:
-        url += "&" + parse.urlencode(additional)
+    if additional := [
+        (key, value)
+        for key, value in (("maxwidth", max_width), ("maxheight", max_height))
+        if value is not None
+    ]:
+        url += f"&{parse.urlencode(additional)}"
     return url
 
 
@@ -137,7 +137,6 @@ def get_oembed(links, max_width=None, max_height=None):
     """
     Given a URL, fetch its associated oEmbed information.
     """
-    oembed_url = find_first_oembed_link(links)
-    if oembed_url:
+    if oembed_url := find_first_oembed_link(links):
         return fetch_oembed_document(oembed_url, max_width, max_height)
     return None

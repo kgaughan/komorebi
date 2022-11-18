@@ -45,8 +45,7 @@ def query(sql, args=()):
     cur = con.cursor()
     try:
         cur.execute(sql, args)
-        for row in iter(cur.fetchone, None):
-            yield row
+        yield from iter(cur.fetchone, None)
     finally:
         cur.close()
 
