@@ -1,7 +1,7 @@
 export KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg
 
 develop: db.sqlite
-	poetry update
+	poetry update --no-ansi -n
 
 run: develop
 	poetry run flask --app komorebi --debug run
@@ -28,7 +28,7 @@ lint:
 	poetry run black --check komorebi
 	poetry run isort --check komorebi
 	@# This ignore if required by something black does with ':'
-	poetry run flake8 --max-line-length=120 --ignore=E203 --per-file-ignores="komorebi/oembed.py:N802" komorebi
+	poetry run flake8 --max-line-length=120 --ignore=E203,W503 --per-file-ignores="komorebi/oembed.py:N802" komorebi
 	poetry run pylint komorebi
 
 test:
