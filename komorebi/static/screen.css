@@ -146,6 +146,7 @@ body > footer {
 }
 article {
   border-bottom: 1px dashed #FEE;
+  padding-left: 1em;
 }
 blockquote:before {
   content: "\275d";
@@ -173,11 +174,9 @@ article > header {
 article > header .permalink {
   position: absolute;
   left: -1em;
-  font-weight: bold;
 }
 .permalink a {
   text-decoration: none;
-  color: #870;
 }
 .oembed {
   margin: 1rem 0;
