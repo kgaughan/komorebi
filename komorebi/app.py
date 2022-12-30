@@ -44,6 +44,8 @@ def create_app():
 
     @app.template_global("sri")
     def get_sri(filename):
+        if app.debug:
+            return ""
         return sris.get(filename, "")
 
     return app
