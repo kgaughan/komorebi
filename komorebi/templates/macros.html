@@ -41,6 +41,7 @@
 
 {%- macro errors(field) -%}
 {% if field.errors %}
+<span></span>
 <ul class="errors">
 	{% for error in field.errors %}
 	<li>{{ error }}</li>

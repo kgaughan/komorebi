@@ -11,14 +11,15 @@
 {{ macros.flash() }}
 <form method="post" class="form">
 	{{ form.hidden_tag() }}
-	<div>{{ form.title.label }}{{ form.title() }}</div>
+	{{ form.title.label }}{{ form.title() }}
 	{{ macros.errors(form.title) }}
-	<div>{{ form.link.label }}{{ form.link() }}</div>
+	{{ form.link.label }}{{ form.link() }}
 	{{ macros.errors(form.link) }}
-	<div>{{ form.via.label }}{{ form.via() }}</div>
+	{{ form.via.label }}{{ form.via() }}
 	{{ macros.errors(form.via) }}
-	<div>{{ form.note.label }}{{ form.note(rows=8) }}</div>
+	{{ form.note.label }}{{ form.note(rows=8) }}
 	{{ macros.errors(form.note) }}
-	<div><input type="submit" value="Post entry"></div>
+	<span></span>
+	<span><input type="submit" value="Post entry"></span>
 </form>
 {% endblock %}
