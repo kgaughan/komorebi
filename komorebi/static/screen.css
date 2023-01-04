@@ -131,6 +131,9 @@ nav a {
   color: white;
   text-decoration: none;
 }
+svg {
+  vertical-align: middle;
+}
 nav svg path {
   fill: white;
 }
@@ -146,7 +149,7 @@ body > footer {
 }
 article {
   border-bottom: 1px dashed #FEE;
-  padding-left: 1em;
+  padding-left: 1.25em;
 }
 blockquote:before {
   content: "\275d";
@@ -173,7 +176,10 @@ article > header {
 }
 article > header .permalink {
   position: absolute;
-  left: -1em;
+  left: -1.25em;
+}
+.permalink svg path {
+  fill: #802;
 }
 .permalink a {
   text-decoration: none;
