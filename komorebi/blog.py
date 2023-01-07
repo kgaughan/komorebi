@@ -13,10 +13,10 @@ from flask import (
     url_for,
 )
 from flask_httpauth import HTTPBasicAuth
-import markdown
 from passlib.apache import HtpasswdFile
 
-from . import db, embeds, forms, time, xmlutils
+from . import db, embeds, forms, time
+from .feed import generate_feed
 
 blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(time.to_iso_date)
@@ -79,58 +79,21 @@ def feed():
     response.cache_control.max_age = 3600
     modified = db.query_last_modified()
     response.last_modified = modified
+
     if request.if_modified_since and modified <= request.if_modified_since:
         return response.make_conditional(request)
 
-    feed_id = current_app.config["FEED_ID"]
-
-    xml = xmlutils.XMLBuilder()
-    with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
-        xml.title(current_app.config.get("BLOG_TITLE", "My Weblog"))
-        if subtitle := current_app.config.get("BLOG_SUBTITLE"):
-            xml.subtitle(subtitle)
-        if modified:
-            xml.updated(modified.isoformat())
-        with xml.within("author"):
-            xml.name(current_app.config["BLOG_AUTHOR"])
-        xml.id(feed_id)
-        if rights := current_app.config.get("BLOG_RIGHTS"):
-            xml.rights(rights)
-        xml.link(
-            rel="alternate",
-            type="text/html",
-            hreflang="en",
-            href=url_for(".latest", _external=True),
+    response.set_data(
+        generate_feed(
+            feed_id=current_app.config["FEED_ID"],
+            title=current_app.config.get("BLOG_TITLE", "My Weblog"),
+            subtitle=current_app.config.get("BLOG_SUBTITLE"),
+            author=current_app.config["BLOG_AUTHOR"],
+            rights=current_app.config.get("BLOG_RIGHTS"),
+            modified=modified,
+            entries=db.query_latest(),
         )
-        xml.link(
-            rel="self",
-            type="text/html",
-            hreflang="en",
-            href=url_for(".feed", _external=True),
-        )
-
-        for entry in db.query_latest():
-            with xml.within("entry"):
-                xml.title(entry["title"])
-                xml.published(time.to_iso_date(entry["time_c"]))
-                xml.updated(time.to_iso_date(entry["time_m"]))
-                xml.id(f"{feed_id}:{entry['id']}")
-                permalink = url_for(".entry", entry_id=entry["id"], _external=True)
-                alternate = entry["link"] or permalink
-                xml.link(rel="alternate", type="text/html", href=alternate)
-                if entry["link"]:
-                    xml.link(rel="related", type="text/html", href=permalink)
-                if entry["via"]:
-                    xml.link(rel="via", type="text/html", href=entry["via"])
-                if entry["note"] or entry["html"]:
-                    content = ""
-                    if entry["html"]:
-                        content += f"<div>{entry['html']}</div>"
-                    if entry["note"]:
-                        content += md(entry["note"])
-                    attrs = {"type": "html", "xml:lang": "en", "xml:base": permalink}
-                    xml.content(content, **attrs)
-    response.set_data(xml.as_string())
+    )
 
     return response
 
@@ -194,24 +157,6 @@ def edit_entry(entry_id):
         )
         return redirect(url_for(".entry", entry_id=entry_id))
     return render_template("entry_edit.html", form=form)
-
-
-@blog.app_template_filter("markdown")
-def md(text):
-    if text is None:
-        return ""
-    return markdown.markdown(
-        text,
-        output_format="html",
-        extensions=[
-            "smarty",
-            "tables",
-            "attr_list",
-            "def_list",
-            "fenced_code",
-            "admonition",
-        ],
-    )
 
 
 @blog.app_template_filter()

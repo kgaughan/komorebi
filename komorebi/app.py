@@ -3,7 +3,7 @@ import os
 from flask import Flask, render_template
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from komorebi import blog, sri
+from . import blog, formatting, sri
 
 
 def adjust_app_prefix(app, prefix="/"):
@@ -35,6 +35,7 @@ def create_app():
     app.config.from_envvar("KOMOREBI_SETTINGS")
     app.register_blueprint(blog.blog)
     app.cli.add_command(sri.generate_hashes)
+    app.add_template_filter(formatting.render_markdown, "markdown")
 
     @app.errorhandler(404)
     def page_not_found(_e):
