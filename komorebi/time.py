@@ -13,3 +13,7 @@ def parse_dt(dt, tz=datetime.timezone.utc):
 
 def to_iso_date(dt):
     return parse_dt(dt).isoformat()
+
+
+def to_wayback_date(dt):
+    return parse_dt(dt).strftime("%Y%m%d%H*")

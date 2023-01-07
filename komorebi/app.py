@@ -2,7 +2,7 @@ import os
 
 from flask import Flask, render_template
 
-from . import blog, formatting, sri
+from . import blog, sri
 
 
 def create_app():
@@ -10,7 +10,6 @@ def create_app():
     app.config.from_envvar("KOMOREBI_SETTINGS")
     app.register_blueprint(blog.blog)
     app.cli.add_command(sri.generate_hashes)
-    app.add_template_filter(formatting.render_markdown, "markdown")
 
     @app.errorhandler(404)
     def page_not_found(_e):

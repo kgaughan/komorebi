@@ -16,7 +16,7 @@
 			; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
 			{%- endif -%}
 			{%- if entry.link -%}
-			; try the <a rel="nofollow" href="https://web.archive.org/web/*/{{ entry.link }}">Wayback Machine</a>
+			; try the <a rel="nofollow" href="https://web.archive.org/web/{{ entry.time_c | to_wayback_date }}/{{ entry.link }}">Wayback Machine</a>
 			{% endif %}
 			| <a rel="nofollow" href="{{ url_for('.edit_entry', entry_id=entry.id) }}">edit</a>
 		</div>
