@@ -15,7 +15,7 @@ from flask import (
 from flask_httpauth import HTTPBasicAuth
 from passlib.apache import HtpasswdFile
 
-from . import db, embeds, forms, formatting, time
+from . import db, embeds, formatting, forms, time
 from .feed import generate_feed
 
 blog = Blueprint("blog", __name__)
