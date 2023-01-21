@@ -15,14 +15,19 @@ window.addEventListener('DOMContentLoaded', () => {
 		const ytSux = /\/i\.ytimg\.com\//;
 		if ("thumb" in elem.dataset) {
 			let thumb = document.createElement("img");
+			// This should come first to avoid NS_BINDING_ABORTED errors, which
+			// could cause multiple attempted requests in the browser, slowing
+			// rendering.
+			thumb.loading = "lazy";
+			thumb.referrerPolicy = "no-referrer";
 			thumb.alt = "Video: " + elem.title;
-			thumb.src = elem.dataset.thumb;
 			thumb.width = elem.dataset.width;
 			if ("height" in elem.dataset && !ytSux.test(elem.dataset.thumb)) {
 				thumb.height = elem.dataset.height;
 			}
-			thumb.referrerPolicy = "no-referrer";
-			thumb.loading = "lazy";
+			// This should come last to defer attempts by the browser to fetch
+			// the image too early. Also see the message on lazy loading above.
+			thumb.src = elem.dataset.thumb;
 			elem.appendChild(thumb);
 		}
 
