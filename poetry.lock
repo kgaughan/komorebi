@@ -1,6 +1,6 @@
 [[package]]
 name = "astroid"
-version = "2.15.0"
+version = "2.15.1"
 description = "An abstract syntax tree for Python with inference support."
 category = "dev"
 optional = false
@@ -381,15 +381,15 @@ python-versions = ">=3.7"
 
 [[package]]
 name = "tomlkit"
-version = "0.11.6"
+version = "0.11.7"
 description = "Style preserving TOML library"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [[package]]
 name = "types-markdown"
-version = "3.4.2.5"
+version = "3.4.2.6"
 description = "Typing stubs for Markdown"
 category = "dev"
 optional = false
@@ -397,7 +397,7 @@ python-versions = "*"
 
 [[package]]
 name = "types-passlib"
-version = "1.7.7.10"
+version = "1.7.7.11"
 description = "Typing stubs for passlib"
 category = "dev"
 optional = false
@@ -463,8 +463,8 @@ content-hash = "ae46c25606eb52763e7f3b04d4a7219a245630bfde597f2b0a2434895d4de9ba
 
 [metadata.files]
 astroid = [
-    {file = "astroid-2.15.0-py3-none-any.whl", hash = "sha256:e3e4d0ffc2d15d954065579689c36aac57a339a4679a679579af6401db4d3fdb"},
-    {file = "astroid-2.15.0.tar.gz", hash = "sha256:525f126d5dc1b8b0b6ee398b33159105615d92dc4a17f2cd064125d57f6186fa"},
+    {file = "astroid-2.15.1-py3-none-any.whl", hash = "sha256:89860bda98fe2bbd1f5d262229be7629d778ce280de68d95d4a73d1f592ad268"},
+    {file = "astroid-2.15.1.tar.gz", hash = "sha256:af4e0aff46e2868218502789898269ed95b663fba49e65d91c1e09c966266c34"},
 ]
 attrs = [
     {file = "attrs-22.2.0-py3-none-any.whl", hash = "sha256:29e95c7f6778868dbd49170f98f8818f78f3dc5e0e37c0b1f474e3561b240836"},
@@ -735,16 +735,16 @@ tomli = [
     {file = "tomli-2.0.1.tar.gz", hash = "sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f"},
 ]
 tomlkit = [
-    {file = "tomlkit-0.11.6-py3-none-any.whl", hash = "sha256:07de26b0d8cfc18f871aec595fda24d95b08fef89d147caa861939f37230bf4b"},
-    {file = "tomlkit-0.11.6.tar.gz", hash = "sha256:71b952e5721688937fb02cf9d354dbcf0785066149d2855e44531ebdd2b65d73"},
+    {file = "tomlkit-0.11.7-py3-none-any.whl", hash = "sha256:5325463a7da2ef0c6bbfefb62a3dc883aebe679984709aee32a317907d0a8d3c"},
+    {file = "tomlkit-0.11.7.tar.gz", hash = "sha256:f392ef70ad87a672f02519f99967d28a4d3047133e2d1df936511465fbb3791d"},
 ]
 types-markdown = [
-    {file = "types-Markdown-3.4.2.5.tar.gz", hash = "sha256:e76a2a07166f7c69aadf5fa51ef954d2baaed35eb8fa30c36f10877d8403fcef"},
-    {file = "types_Markdown-3.4.2.5-py3-none-any.whl", hash = "sha256:6707853d2478f6ae9e298db497c93c38fe40d8f89e1d90872d992c3934aa76d7"},
+    {file = "types-Markdown-3.4.2.6.tar.gz", hash = "sha256:8c6a834f207c621dbdc3aac5728006ae1b1d2ffea0b9f877b8ef26f4c10f4fc4"},
+    {file = "types_Markdown-3.4.2.6-py3-none-any.whl", hash = "sha256:00d7105ea9cdff57432494a7e4bf760a56a9ba8073bc5a9a4766844caa1094e2"},
 ]
 types-passlib = [
-    {file = "types-passlib-1.7.7.10.tar.gz", hash = "sha256:a01f7aa35f513cd230f47ad263abb98c7b3c2b02a65aba3c6fb68406c1b8d29f"},
-    {file = "types_passlib-1.7.7.10-py3-none-any.whl", hash = "sha256:f3b2c24e1a2b8a23eeb5fdb3d7068efafb0abb0077311d61823120cba019845b"},
+    {file = "types-passlib-1.7.7.11.tar.gz", hash = "sha256:1fb7ce4a242a65df53331bbd37a044985ab4e1a0fc560be71d5d2ee6c40a0136"},
+    {file = "types_passlib-1.7.7.11-py3-none-any.whl", hash = "sha256:088f327ef07bd0b1d6fa6d175f2aef5133e52b8b69abd751faf3c2cc65e2fb5d"},
 ]
 typing-extensions = [
     {file = "typing_extensions-4.5.0-py3-none-any.whl", hash = "sha256:fb33085c39dd998ac16d1431ebc293a8b3eedd00fd4a32de0ff79002c19511b4"},
