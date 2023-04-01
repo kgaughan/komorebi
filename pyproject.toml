@@ -4,7 +4,7 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
 name = "komorebi"
-version = "0.3.3"
+version = "0.3.11"
 description = "A tumblelog engine"
 repository = "https://github.com/kgaughan/komorebi"
 authors = ["Keith Gaughan <keith@gaughan.ie>"]
