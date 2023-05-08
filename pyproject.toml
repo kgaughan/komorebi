@@ -80,3 +80,6 @@ ignored-modules = "sqlite3"
 
 [tool.pylint."MESSAGE CONTROL"]
 disable = "R,C0114,C0115,C0116"
+
+[tool.mypy]
+ignore_missing_imports = true
