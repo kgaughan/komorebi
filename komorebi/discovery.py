@@ -2,11 +2,12 @@
 Discovery via HTML <link> elements.
 """
 
-import cgi
 import contextlib
 from html.parser import HTMLParser
 import logging
 from urllib import parse, request
+
+from .compat import parse_header
 
 __all__ = ["Extractor", "fetch_meta", "fix_attributes"]
 
@@ -129,7 +130,7 @@ def fetch_meta(url, extractor=Extractor):
         info = fh.info()
         for name, value in info.items():
             if name.lower() == "link":
-                href, attrs = cgi.parse_header(value)
+                href, attrs = parse_header(value)
                 if not href.startswith("<") or not href.endswith(">"):
                     continue
                 href = href[1:-1]
@@ -137,7 +138,7 @@ def fetch_meta(url, extractor=Extractor):
                 links.append(attrs)
 
         content_type = info.get("Content-Type", "application/octet-stream")
-        content_type, attrs = cgi.parse_header(content_type)
+        content_type, attrs = parse_header(content_type)
         if content_type in ("text/html", "application/xhtml+xml"):
             encoding = attrs.get("charset", "UTF-8")
             extracted = extractor.extract(fh, url, encoding=encoding)

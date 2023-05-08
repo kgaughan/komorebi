@@ -1,17 +1,16 @@
 export KOMOREBI_SETTINGS=$(CURDIR)/dev/dev.cfg
 
 develop: db.sqlite
-	poetry update --no-ansi -n
 
 run: develop
-	poetry run flask --app komorebi --debug run
+	hatch run flask --app komorebi --debug run
 
 sri: develop
-	poetry run flask --app komorebi sri
+	hatch run flask --app komorebi sri
 
 build:
 	find . -name \*.orig -delete
-	poetry build --format wheel
+	hatch build
 
 clean:
 	rm -rf db.sqlite
@@ -21,17 +20,12 @@ db.sqlite:
 	sqlite3 db.sqlite < schema/seed.sql
 
 tidy:
-	poetry run black komorebi
-	poetry run isort komorebi
+	hatch run style:fmt
 
-lint: 
-	poetry run black --check komorebi
-	poetry run isort --check komorebi
-	@# This ignore if required by something black does with ':'
-	poetry run flake8 --max-line-length=120 --ignore=E203,W503 --per-file-ignores="komorebi/oembed.py:N802" komorebi
-	poetry run pylint komorebi
+lint:
+	hatch run style:check
 
 test:
-	test -d tests && poetry run python -m unittest discover -bf tests || :
+	hatch run test:unit
 
 .PHONY: clean develop run build tidy lint test

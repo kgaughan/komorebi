@@ -1,7 +1,7 @@
-from komorebi import sri
-
 import io
 import unittest
+
+from komorebi import sri
 
 
 class TestSRI(unittest.TestCase):
