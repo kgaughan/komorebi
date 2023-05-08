@@ -16,7 +16,7 @@ readme = "README.rst"
 dependencies = [
 	"flask==2.3.2",
 	"flask-httpauth==4.7.0",
-	"flask-wtf==0.15.1",
+	"flask-wtf~=1.1.0",
 	"wtforms==2.1",
 	"markdown==3.3.7",
 	"passlib==1.7.4",
