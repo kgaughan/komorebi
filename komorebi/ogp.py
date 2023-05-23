@@ -4,119 +4,63 @@ An intensely pragmatic implementation of the Open Graph Protocol.
 This follows `the specification <https://opengraphprotocol.org/>`_ rather than
 attempting to implement RDFa.
 
-In spite of the name, it's really just a tree with named edges.
+# Theory of Operation
+
+The metadata consists of a list of properties. A property may be unstructured
+(a string) or structured (a list of properties). A property may appear more
+than once. Properties has the form "ns:name", while a metadata field to be
+attached to a property (thus making it structured) has the form "ns:name:meta".
+
+Metadata should be implemented as a multimap, but I'll be treating it as a map.
 """
 
-import collections
+import dataclasses
 import html
 import typing as t
 
 
-class SingleValue:
-    __slots__ = [
-        "content",
-        "attrs",
-    ]
+@dataclasses.dataclass
+class Property:
+    type_: str
+    value: str
+    metadata: t.Dict[str, str]
 
-    def __init__(self, content=None):
-        self.content = content
-        self.attrs = collections.defaultdict(SingleValue)
-
-    def append(self, content):
-        if self.content is None:
-            self.content = content
-            return self
-        return MultiValue(self, content)
-
-    def __len__(self):
-        return 1
-
-    def __str__(self):
-        return self.content
-
-    def __iter__(self):
-        return iter([self])
-
-    def flatten(self):
-        for key, value in self.attrs.items():
-            yield from value._flatten(key)
-
-    def to_meta(self):
-        return "\n".join(
-            f'<meta property="{html.escape(key)}" content="{html.escape(value)}">'
-            for key, value in self.flatten()
+    def to_meta(self) -> str:
+        lines = [
+            f'<meta property="og:{html.escape(self.type_)}" content="{html.escape(self.value)}">',
+        ]
+        lines.extend(
+            f'<meta property="og:{html.escape(self.type_)}:{html.escape(key)}" content="{html.escape(value)}">'
+            for key, value in self.metadata.items()
         )
-
-    def _flatten(self, prefix):
-        if self.content is not None:
-            yield (prefix, self.content)
-        for key, value in self.attrs.items():
-            yield from value._flatten(f"{prefix}:{key}")
+        return "\n".join(lines)
 
 
-class MultiValue:
-    __slots__ = [
-        "_values",
-    ]
-
-    def __init__(self, orig, appended):
-        self._values = [orig]
-        self.append(appended)
-
-    def append(self, content):
-        self._values.append(SingleValue(content))
-        return self
-
-    def __len__(self):
-        return len(self._values)
-
-    def __str__(self):
-        return ", ".join(self._values)
-
-    def __iter__(self):
-        return iter(self._values)
-
-    @property
-    def attrs(self):
-        return self._values[-1].attrs
-
-    def _flatten(self, prefix):
-        for value in self._values:
-            yield from value._flatten(prefix)
+def parse(properties: t.Sequence[t.Tuple[str, str]]) -> t.Sequence[Property]:
+    result = []
+    for name, value in properties:
+        name_parts = name.split(":", 2)
+        if len(name_parts) == 2:
+            result.append(Property(name_parts[1], value, {}))
+        if len(name_parts) == 3:
+            # Skip any bad metadata
+            if not result or result[-1].type_ != name_parts[1]:
+                continue
+            result[-1].metadata[name_parts[2]] = value
+    return result
 
 
-class Root(SingleValue):
-    def insert(self, prop, content):
-        """
-        Break apart a property name and insert the content into the 'graph'.
-        """
-        prev = None
-        node = self
-        key = None  # Keep pylint happy
-        for key in prop.split(":"):
-            prev, node = node, node.attrs[key]
-        # This is safe: there will always be at least one previous node, namely
-        # the root.
-        prev.attrs[key] = node.append(content)
+def to_meta(props: t.Union[Property, t.Sequence[Property]]) -> str:
+    if isinstance(props, Property):
+        return props.to_meta()
+    return "\n".join(prop.to_meta() for prop in props)
 
-    def get_all(self, prop):
-        node = self
-        for key in prop.split(":"):
-            node = node.attrs[key]
-        yield from node
 
-    def get(self, prop) -> t.Optional[SingleValue]:
-        last = None
-        for item in self.get_all(prop):
-            last = item
-        return last
-
-    def __str__(self):
-        return self.to_meta()
-
-    @classmethod
-    def from_list(cls, lst):
-        root = cls()
-        for prop, content in lst:
-            root.insert(prop, content)
-        return root
+def find(
+    props: t.Sequence[Property],
+    type_: str,
+    value: t.Optional[str] = None,
+) -> t.Iterable[Property]:
+    for prop in props:
+        if prop.type_ == type_ and (value is None or prop.value == value):
+            yield prop
