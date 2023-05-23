@@ -3,18 +3,18 @@ Extract build embeds based on target page metadata.
 """
 
 import re
-from typing import Optional
+import typing as t
 import urllib.error
 
 from . import discovery, html, oembed, ogp
 
 
 def make_video_facade(
-    src: Optional[str],
-    title: Optional[str],
-    thumb: Optional[str],
-    width: Optional[int],
-    height: Optional[int],
+    src: t.Optional[str],
+    title: t.Optional[str],
+    thumb: t.Optional[str],
+    width: t.Optional[int],
+    height: t.Optional[int],
 ) -> str:
     attrs = {
         "class": "facade",
@@ -33,7 +33,7 @@ def make_video_facade(
     return html.make("div", attrs=attrs)
 
 
-def find_iframe(elems: html.Element) -> Optional[html.Element]:
+def find_iframe(elems: html.Element) -> t.Optional[html.Element]:
     return next(
         (
             elem
@@ -101,7 +101,7 @@ FACADE_MAKERS = {
 }
 
 
-def make_markup_from_oembed(doc: dict) -> Optional[str]:
+def make_markup_from_oembed(doc: dict) -> t.Optional[str]:
     title = doc.get("title")
 
     if doc["type"] == "photo":
@@ -123,13 +123,9 @@ def make_markup_from_oembed(doc: dict) -> Optional[str]:
     return None
 
 
-def make_markup_from_ogp(root: ogp.Root) -> Optional[str]:
-    title = root.get("og:title")
-    if title.content is None:
-        return None
-
+def make_markup_from_ogp(root: ogp.Root) -> t.Optional[str]:
     video = root.get("og:video")
-    if video.content is not None:
+    if video and video.content:
         mimetype = video.attrs["type"].content
         # Currently, only iframe embeds are supported
         if mimetype == "text/html":
@@ -149,7 +145,7 @@ def make_markup_from_ogp(root: ogp.Root) -> Optional[str]:
     return None
 
 
-def fetch_embed(url: str) -> Optional[str]:
+def fetch_embed(url: str) -> t.Optional[str]:
     try:
         links, meta = discovery.fetch_meta(url)
     except urllib.error.HTTPError:

@@ -29,6 +29,15 @@ Source = "https://github.com/kgaughan/komorebi"
 [tool.hatch.version]
 path = "komorebi/__init__.py"
 
+[tool.hatch.build]
+exclude = [
+	".coveragerc",
+	"Makefile",
+	".github/",
+	".*_cache/",
+	"tests/",
+]
+
 [tool.hatch.envs.test]
 
 [tool.hatch.envs.test.scripts]

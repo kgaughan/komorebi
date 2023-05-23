@@ -5,6 +5,7 @@ Discovery via HTML <link> elements.
 import contextlib
 from html.parser import HTMLParser
 import logging
+import typing as t
 from urllib import parse, request
 
 from .compat import parse_header
@@ -118,7 +119,10 @@ def fix_attributes(attrs):
     return result
 
 
-def fetch_meta(url, extractor=Extractor):
+def fetch_meta(
+    url: str,
+    extractor=Extractor,
+) -> t.Tuple[t.Sequence[t.Mapping[str, str]], t.Sequence[t.Tuple[str, str]]]:
     """
     Extract the <link> tags from the HTML document at the given URL.
     """
