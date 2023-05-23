@@ -9,10 +9,10 @@ In spite of the name, it's really just a tree with named edges.
 
 import collections
 import html
+import typing as t
 
 
 class SingleValue:
-
     __slots__ = [
         "content",
         "attrs",
@@ -55,7 +55,6 @@ class SingleValue:
 
 
 class MultiValue:
-
     __slots__ = [
         "_values",
     ]
@@ -106,7 +105,7 @@ class Root(SingleValue):
             node = node.attrs[key]
         yield from node
 
-    def get(self, prop) -> SingleValue:
+    def get(self, prop) -> t.Optional[SingleValue]:
         last = None
         for item in self.get_all(prop):
             last = item

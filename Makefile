@@ -9,7 +9,6 @@ sri: develop
 	hatch run flask --app komorebi sri
 
 build:
-	find . -name \*.orig -delete
 	hatch build
 
 clean:
