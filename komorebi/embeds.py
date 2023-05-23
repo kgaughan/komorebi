@@ -124,10 +124,9 @@ def make_markup_from_oembed(doc: dict) -> t.Optional[str]:
 
 
 def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> t.Optional[str]:
-    for video in ogp.find(props, "video"):
-        # Currently, only iframe embeds are supported
-        if video.metadata["type"] == "text/html":
-            return html.make(
+    return next(
+        (
+            html.make(
                 "iframe",
                 attrs={
                     "src": video.value,
@@ -139,7 +138,11 @@ def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> t.Optional[str]:
                     "class": "player",
                 },
             )
-    return None
+            for video in ogp.find(props, "video")
+            if video.metadata["type"] == "text/html"
+        ),
+        None,
+    )
 
 
 def fetch_embed(url: str) -> t.Optional[str]:
