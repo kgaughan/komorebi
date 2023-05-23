@@ -123,25 +123,22 @@ def make_markup_from_oembed(doc: dict) -> t.Optional[str]:
     return None
 
 
-def make_markup_from_ogp(root: ogp.Root) -> t.Optional[str]:
-    video = root.get("og:video")
-    if video and video.content:
-        mimetype = video.attrs["type"].content
+def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> t.Optional[str]:
+    for video in ogp.find(props, "video"):
         # Currently, only iframe embeds are supported
-        if mimetype == "text/html":
+        if video.metadata["type"] == "text/html":
             return html.make(
                 "iframe",
                 attrs={
-                    "src": video.content,
-                    "width": video.attrs["width"].content,
-                    "height": video.attrs["height"].content,
+                    "src": video.value,
+                    "width": video.metadata["width"],
+                    "height": video.metadata["height"],
                     "frameborder": "0",
                     "sandbox": "allow-same-origin allow-scripts",
                     "allow": "autoplay; clipboard-write; encrypted-media; picture-in-picture",
                     "class": "player",
                 },
             )
-
     return None
 
 
@@ -153,4 +150,4 @@ def fetch_embed(url: str) -> t.Optional[str]:
     if links:
         if doc := oembed.get_oembed(links):
             return make_markup_from_oembed(doc)
-    return make_markup_from_ogp(ogp.Root.from_list(meta))
+    return make_markup_from_ogp(ogp.parse(meta))
