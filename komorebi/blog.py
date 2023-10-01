@@ -121,7 +121,7 @@ def render_entry(entry_id):
 @auth.login_required
 def add_entry():
     form = forms.EntryForm()
-    if form.validate_on_submit():
+    if form.is_submitted() and form.validate():
         # Fetch the embed _first_ to prevent a database lockup
         markup = embeds.fetch_embed(form.link.data)
 
@@ -149,7 +149,7 @@ def edit_entry(entry_id):
     if entry is None:
         abort(404)
     form = forms.EntryForm(data=entry)
-    if form.validate_on_submit():
+    if form.is_submitted() and form.validate():
         db.update_entry(
             entry_id,
             link=form.link.data,
