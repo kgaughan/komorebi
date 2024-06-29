@@ -149,7 +149,7 @@ def edit_entry(entry_id):
     if entry is None:
         abort(404)
     form = forms.EntryForm(data=entry)
-    if form.is_submitted() and form.validate():
+    if form.validate_on_submit():
         db.update_entry(
             entry_id,
             link=form.link.data,
