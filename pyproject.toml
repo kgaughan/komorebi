@@ -1,3 +1,5 @@
+#:schema https://json.schemastore.org/pyproject.json
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
@@ -7,18 +9,16 @@ name = "komorebi"
 dynamic = ["version"]
 description = "A tumblelog engine"
 license = "MIT"
-authors = [
-	{name = "Keith Gaughan", email = "keith@gaughan.ie"},
-]
+authors = [{ name = "Keith Gaughan", email = "keith@gaughan.ie" }]
 requires-python = ">=3.8"
 readme = "README.rst"
 # The versions are pegged with FreeBSD
 dependencies = [
-	"flask==2.3.2",
-	"flask-httpauth==4.7.0",
-	"flask-wtf~=1.1.0",
-	"wtforms==2.1",
-	"markdown==3.3.7",
+	"flask==3.0.3",
+	"flask-httpauth==4.8.0",
+	"flask-wtf~=1.1.2",
+	"wtforms==3.1.2",
+	"markdown==3.5.2",
 	"passlib==1.7.4",
 	"itsdangerous==2.1.2",
 ]
@@ -30,20 +30,12 @@ Source = "https://github.com/kgaughan/komorebi"
 path = "komorebi/__init__.py"
 
 [tool.hatch.build]
-exclude = [
-	".coveragerc",
-	"Makefile",
-	".github/",
-	".*_cache/",
-	"tests/",
-]
+exclude = [".coveragerc", "Makefile", ".github/", ".*_cache/", "tests/"]
 
 [tool.hatch.envs.test]
 
 [tool.hatch.envs.test.scripts]
-unit = [
-	"python -m unittest discover -bf tests",
-]
+unit = ["python -m unittest discover -bf tests"]
 
 [tool.hatch.envs.style]
 dependencies = [
@@ -67,10 +59,7 @@ check = [
 	"pylint komorebi",
 	"mypy .",
 ]
-fmt = [
-	"isort .",
-	"black .",
-]
+fmt = ["isort .", "black ."]
 
 [tool.isort]
 profile = "black"
