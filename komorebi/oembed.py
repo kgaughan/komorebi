@@ -5,8 +5,8 @@ An oEmbed_ client library.
 """
 
 import json
-from urllib import error, parse, request
 import typing as t
+from urllib import error, parse, request
 import xml.sax
 import xml.sax.handler
 
