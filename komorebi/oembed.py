@@ -58,7 +58,7 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
 
     def characters(self, content):
         if self.depth == 2:
-            self.current_value += content
+            self.current_value.append(content)
 
 
 def _build_url(

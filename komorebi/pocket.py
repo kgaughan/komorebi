@@ -31,9 +31,9 @@ class Actions:
         url: str,
         title: t.Optional[str] = None,
         tags: t.Sequence[str] = (),
-        tweet_id: t.Optional[str] = None,
+        ref_id: t.Optional[str] = None,
     ):
-        self._append(action="add", url=url, title=title, tags=tags, ref_id=tweet_id)
+        self._append(action="add", url=url, title=title, tags=tags, ref_id=ref_id)
 
     def archive(self, item_id: str):
         self._append(action="archive", item_id=item_id)

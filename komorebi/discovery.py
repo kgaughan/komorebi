@@ -38,7 +38,7 @@ class Extractor(HTMLParser):
         elif tag == "meta" and "property" in attrs and "content" in attrs:
             self.properties.append((attrs["property"], attrs["content"]))
 
-    def append(self, attrs: t.Dict[str, str]):
+    def append(self, attrs: t.Mapping[str, str]):
         """
         Append the given set of attributes onto our list.
 
