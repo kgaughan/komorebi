@@ -1,7 +1,10 @@
 import datetime
 
 
-def parse_dt(dt, tz=datetime.timezone.utc):
+def parse_dt(
+    dt: str,
+    tz: datetime.timezone = datetime.timezone.utc,
+) -> datetime.datetime:
     """
     Parse an SQLite datetime, treating it as UTC.
 
@@ -11,9 +14,9 @@ def parse_dt(dt, tz=datetime.timezone.utc):
     return parsed if tz is None else parsed.replace(tzinfo=tz)
 
 
-def to_iso_date(dt):
+def to_iso_date(dt: str) -> str:
     return parse_dt(dt).isoformat()
 
 
-def to_wayback_date(dt):
+def to_wayback_date(dt: str) -> str:
     return parse_dt(dt).strftime("%Y%m%d%H*")

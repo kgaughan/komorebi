@@ -13,6 +13,7 @@ build:
 
 clean:
 	rm -rf db.sqlite
+	find . -name \*.orig -delete
 
 db.sqlite:
 	sqlite3 db.sqlite < schema/komorebi.sql

@@ -36,7 +36,7 @@ class Property:
         return "\n".join(lines)
 
 
-def parse(properties: t.Sequence[t.Tuple[str, str]]) -> t.Sequence[Property]:
+def parse(properties: t.Collection[t.Tuple[str, str]]) -> t.Sequence[Property]:
     result = []
     for name, value in properties:
         name_parts = name.split(":", 2)

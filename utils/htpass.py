@@ -8,7 +8,7 @@ import sys
 from passlib import apache, pwd
 
 
-def make_parser():
+def make_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="htpasswd editor")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--list", action="store_true", help="List users")

@@ -5,6 +5,7 @@ An oEmbed_ client library.
 """
 
 import json
+import typing as t
 from urllib import error, parse, request
 import xml.sax
 import xml.sax.handler
@@ -40,7 +41,7 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
     def __init__(self):
         super().__init__()
         self.current_field = None
-        self.current_value = None
+        self.current_value = []
         self.depth = 0
         self.fields = {}
 
@@ -48,19 +49,23 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
         self.depth += 1
         if self.depth == 2:
             self.current_field = name
-            self.current_value = ""
+            self.current_value = []
 
     def endElement(self, name):
         if self.depth == 2 and self.current_field in self.valid_fields:
-            self.fields[self.current_field] = self.current_value
+            self.fields[self.current_field] = "".join(self.current_value)
         self.depth -= 1
 
     def characters(self, content):
         if self.depth == 2:
-            self.current_value += content
+            self.current_value.append(content)
 
 
-def _build_url(url, max_width, max_height):
+def _build_url(
+    url: str,
+    max_width: t.Optional[int],
+    max_height: t.Optional[int],
+) -> str:
     if additional := [
         (key, value)
         for key, value in (("maxwidth", max_width), ("maxheight", max_height))
@@ -70,7 +75,11 @@ def _build_url(url, max_width, max_height):
     return url
 
 
-def fetch_oembed_document(url, max_width=None, max_height=None):
+def fetch_oembed_document(
+    url: str,
+    max_width: t.Optional[int] = None,
+    max_height: t.Optional[int] = None,
+) -> t.Optional[dict]:
     """
     Fetch the oEmbed document for a resource at `url` from the provider. If you
     want to constrain the dimensions of the thumbnail, specify the maximum
@@ -83,13 +92,12 @@ def fetch_oembed_document(url, max_width=None, max_height=None):
     try:
         req = request.Request(_build_url(url, max_width, max_height), headers=headers)
         with request.urlopen(req, timeout=5) as fh:
-            info = fh.info()
             content_type, _ = parse_header(
-                info.get("content-type", "application/octet-stream")
+                fh.headers.get("content-type", "application/octet-stream"),
             )
             if content_type in ACCEPTABLE_TYPES:
                 parser = ACCEPTABLE_TYPES[content_type]
-                return parser(fh)
+                return parser(fh)  # type: ignore
     except error.HTTPError as exc:
         if 400 <= exc.code < 500:
             return None
@@ -97,7 +105,7 @@ def fetch_oembed_document(url, max_width=None, max_height=None):
     return None
 
 
-def parse_xml_oembed_response(fh):
+def _parse_xml_oembed_response(fh: t.TextIO) -> dict[str, str | int]:
     """
     Parse the fields from an XML OEmbed document.
     """
@@ -113,16 +121,16 @@ def parse_xml_oembed_response(fh):
 ACCEPTABLE_TYPES = {
     "application/json": json.load,
     "application/json+oembed": json.load,
-    "application/xml": parse_xml_oembed_response,
-    "application/xml+oembed": parse_xml_oembed_response,
-    "text/xml": parse_xml_oembed_response,
-    "text/xml+oembed": parse_xml_oembed_response,
+    "application/xml": _parse_xml_oembed_response,
+    "application/xml+oembed": _parse_xml_oembed_response,
+    "text/xml": _parse_xml_oembed_response,
+    "text/xml+oembed": _parse_xml_oembed_response,
 }
 
 LINK_TYPES = [key for key in ACCEPTABLE_TYPES if key.endswith("+oembed")]
 
 
-def find_first_oembed_link(links):
+def find_first_oembed_link(links: t.Collection[dict]) -> t.Optional[str]:
     """
     Search for the first valid oEmbed link.
     """
@@ -134,7 +142,11 @@ def find_first_oembed_link(links):
     return None
 
 
-def get_oembed(links, max_width=None, max_height=None):
+def get_oembed(
+    links: t.Collection[dict],
+    max_width: t.Optional[int] = None,
+    max_height: t.Optional[int] = None,
+) -> t.Optional[dict]:
     """
     Given a URL, fetch its associated oEmbed information.
     """

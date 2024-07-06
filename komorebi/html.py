@@ -7,6 +7,7 @@ from html import escape
 from html.parser import HTMLParser
 import io
 import logging
+import typing as t
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,11 @@ SELF_CLOSING = {
 }
 
 
-def make(tag, attrs, close=None):
+def make(
+    tag: str,
+    attrs: t.Mapping[str, t.Optional[str]],
+    close: t.Optional[bool] = None,
+) -> str:
     """
     Helper for quickly constructing a HTML tag.
     """
@@ -57,11 +62,11 @@ def make(tag, attrs, close=None):
 
 @dataclasses.dataclass
 class Element:
-    tag: str
+    tag: t.Optional[str]
     attrs: dict = dataclasses.field(default_factory=dict)
     children: list = dataclasses.field(default_factory=list)
 
-    def __getitem__(self, i):
+    def __getitem__(self, i: int):
         return self.children[i]
 
     def __len__(self):
@@ -70,7 +75,7 @@ class Element:
     def __iter__(self):
         return iter(self.children)
 
-    def serialize(self, dest=None) -> io.TextIOBase:
+    def serialize(self, dest: t.Optional[io.TextIOBase] = None) -> io.TextIOBase:
         if dest is None:
             dest = io.StringIO()
         if self.tag is not None:
@@ -126,13 +131,13 @@ class Parser(HTMLParser):
         if data != "":
             self.top.children.append(data)
 
-    def error(self, message):
+    def error(self, message: str):
         # This method is undocumented in HTMLParser, but pylint is moaning
         # about it, so...
         logger.error("Error in Parser: %s", message)  # pragma: no cover
 
 
-def parse(markup) -> Element:
+def parse(markup: str) -> Element:
     parser = Parser()
     parser.feed(markup)
     parser.close()

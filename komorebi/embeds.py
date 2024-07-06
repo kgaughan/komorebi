@@ -9,6 +9,10 @@ import urllib.error
 from . import discovery, html, oembed, ogp
 
 
+def _scrub(attrs: dict[str, str | int | None]) -> t.Mapping[str, str]:
+    return {key: str(value) for key, value in attrs.items() if value is not None}
+
+
 def make_video_facade(
     src: t.Optional[str],
     title: t.Optional[str],
@@ -24,13 +28,7 @@ def make_video_facade(
         "data-width": width,
         "data-height": height,
     }
-    # Remove anything that's empty; cast the rest
-    for key, value in list(attrs.items()):
-        if value is None:
-            del attrs[key]
-        else:
-            attrs[key] = str(value)
-    return html.make("div", attrs=attrs)
+    return html.make("div", attrs=_scrub(attrs))
 
 
 def find_iframe(elems: html.Element) -> t.Optional[html.Element]:
