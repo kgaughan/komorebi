@@ -24,7 +24,7 @@ class XMLBuilder:
     <root xmlns="tag:talideon.com,2013:test">Before<leaf>Within</leaf>After<leaf>Another</leaf></root>
     """
 
-    def __init__(self, out=None, encoding="utf-8"):
+    def __init__(self, out=None, encoding: str = "utf-8"):
         """
         `out` should be a file-like object to write the document to. If none
         is provided, a buffer is created.
@@ -41,7 +41,7 @@ class XMLBuilder:
         self.generator.startDocument()
 
     @contextlib.contextmanager
-    def within(self, tag, **attrs):
+    def within(self, tag: str, **attrs):
         """
         Generates an element containing nested elements.
         """
@@ -49,7 +49,7 @@ class XMLBuilder:
         yield
         self.generator.endElement(tag)
 
-    def tag(self, tag, *values, **attrs):
+    def tag(self, tag: str, *values, **attrs):
         """
         Generates a simple element.
         """
@@ -58,21 +58,21 @@ class XMLBuilder:
             self.generator.characters(value)
         self.generator.endElement(tag)
 
-    def __getattr__(self, tag):
+    def __getattr__(self, tag: str):
         return lambda *values, **attrs: self.tag(tag, *values, **attrs)
 
-    def append(self, other):
+    def append(self, other: str):
         """
         Append the string to this document.
         """
         self.generator.characters(other)
         return self
 
-    def as_string(self):
+    def as_string(self) -> str:
         """
         If using the built-in buffer, get its current contents.
         """
-        return None if self.buffer is None else self.buffer.getvalue()
+        return "" if self.buffer is None else self.buffer.getvalue()
 
     def close(self):
         """

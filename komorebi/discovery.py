@@ -22,7 +22,7 @@ class Extractor(HTMLParser):
     and <link> tags from the header of a HTML document.
     """
 
-    def __init__(self, base):
+    def __init__(self, base: str):
         super().__init__()
         self.base = base
         self.collected = []
@@ -38,7 +38,7 @@ class Extractor(HTMLParser):
         elif tag == "meta" and "property" in attrs and "content" in attrs:
             self.properties.append((attrs["property"], attrs["content"]))
 
-    def append(self, attrs):
+    def append(self, attrs: t.Dict[str, str]):
         """
         Append the given set of attributes onto our list.
 
@@ -46,14 +46,14 @@ class Extractor(HTMLParser):
         """
         self.collected.append(attrs)
 
-    def fix_href(self, href):
+    def fix_href(self, href: str) -> str:
         """
         Make the given href absolute to any previously discovered <base> tag.
         """
         return parse.urljoin(self.base, href)
 
     @classmethod
-    def extract(cls, fh, base=".", encoding="UTF-8"):
+    def extract(cls, fh, base: str = ".", encoding: str = "UTF-8"):
         """
         Extract the link tags from header of a HTML document to be read from
         the file object, `fh`. The return value is a list of dicts where the
@@ -71,13 +71,13 @@ class Extractor(HTMLParser):
 
         return parser
 
-    def error(self, message):
+    def error(self, message: str):
         # This method is undocumented in HTMLParser, but pylint is moaning
         # about it, so...
         logger.error("Error in Extractor: %s", message)  # pragma: no cover
 
 
-def safe_slurp(fh, chunk_size=65536, encoding="UTF-8"):
+def safe_slurp(fh, chunk_size: int = 65536, encoding: str = "UTF-8") -> t.Iterator[str]:
     """
     Safely convert file object, converting it to the given file encoding.
 
@@ -103,7 +103,9 @@ def safe_slurp(fh, chunk_size=65536, encoding="UTF-8"):
         yield decoded
 
 
-def fix_attributes(attrs):
+def fix_attributes(
+    attrs: t.Sequence[t.Tuple[str, t.Optional[str]]],
+) -> t.Dict[str, str]:
     """
     Normalise and clean up the attributes, and put them in a dict.
     """
@@ -111,7 +113,7 @@ def fix_attributes(attrs):
     for attr, value in attrs:
         attr = attr.lower()
         if value is None:
-            result[attr] = True  # The attribute is present, but has no value
+            result[attr] = ""  # The attribute is present, but has no value
             continue
         if attr in ("rel", "type"):
             value = value.lower()

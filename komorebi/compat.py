@@ -1,4 +1,7 @@
-def parse_header(line):
+import typing as t
+
+
+def parse_header(line: str) -> t.Tuple[str, t.Dict[str, str]]:
     """
     Parse a Content-type like header.
 
@@ -22,7 +25,7 @@ def parse_header(line):
     return key, pdict
 
 
-def _parseparam(seg):
+def _parseparam(seg: str) -> t.Iterator[str]:
     while seg[:1] == ";":
         seg = seg[1:]
         end = seg.find(";")

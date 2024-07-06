@@ -82,7 +82,11 @@ def feed():
     modified = db.query_last_modified()
     response.last_modified = modified
 
-    if request.if_modified_since and modified <= request.if_modified_since:
+    if (
+        request.if_modified_since
+        and modified is not None
+        and modified <= request.if_modified_since
+    ):
         return response.make_conditional(request)
 
     response.set_data(

@@ -3,5 +3,4 @@
 .venv/
 *.sqlite
 /dist/
-.vscode/settings.json
 *.bak

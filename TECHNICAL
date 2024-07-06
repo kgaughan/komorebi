@@ -9,7 +9,7 @@ The config table contains a ``dict`` called 'pocket', which can contain the
 following:
 
 ============ ==================================================
-Key          Value                                             
+Key          Value
 ============ ==================================================
 consumer_key API key obtained from Pocket.
 access_token Obtained from the oauth/authorize request.

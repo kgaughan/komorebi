@@ -1,21 +1,21 @@
 from datetime import datetime
-from typing import Iterable, Optional, TypedDict
+import typing as t
 
 from flask import url_for
 
 from . import formatting, time, xmlutils
 
-Entry = TypedDict(
+Entry = t.TypedDict(
     "Entry",
     {
         "id": str,
         "title": str,
         "time_c": str,
         "time_m": str,
-        "link": Optional[str],
-        "via": Optional[str],
-        "html": Optional[str],
-        "note": Optional[str],
+        "link": t.Optional[str],
+        "via": t.Optional[str],
+        "html": t.Optional[str],
+        "note": t.Optional[str],
     },
 )
 
@@ -24,11 +24,11 @@ def generate_feed(
     title: str,
     author: str,
     feed_id: str,
-    entries: Iterable[Entry],
-    subtitle: Optional[str] = None,
-    rights: Optional[str] = None,
-    modified: Optional[datetime] = None,
-):
+    entries: t.Iterable[Entry],
+    subtitle: t.Optional[str] = None,
+    rights: t.Optional[str] = None,
+    modified: t.Optional[datetime] = None,
+) -> str:
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
         xml.title(title)
