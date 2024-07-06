@@ -40,7 +40,7 @@ SELF_CLOSING = {
 
 def make(
     tag: str,
-    attrs: dict[str, t.Optional[str]],
+    attrs: t.Mapping[str, t.Optional[str]],
     close: t.Optional[bool] = None,
 ) -> str:
     """

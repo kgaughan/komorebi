@@ -25,8 +25,8 @@ class Extractor(HTMLParser):
     def __init__(self, base: str):
         super().__init__()
         self.base = base
-        self.collected = []
-        self.properties = []
+        self.collected: list[dict[str, str]] = []
+        self.properties: list[tuple[str, str]] = []
 
     def handle_starttag(self, tag, attrs):
         tag = tag.lower()
@@ -38,7 +38,7 @@ class Extractor(HTMLParser):
         elif tag == "meta" and "property" in attrs and "content" in attrs:
             self.properties.append((attrs["property"], attrs["content"]))
 
-    def append(self, attrs: t.Mapping[str, str]):
+    def append(self, attrs: dict[str, str]):
         """
         Append the given set of attributes onto our list.
 
@@ -124,7 +124,7 @@ def fix_attributes(
 def fetch_meta(
     url: str,
     extractor=Extractor,
-) -> t.Tuple[t.Sequence[t.Mapping[str, str]], t.Sequence[t.Tuple[str, str]]]:
+) -> t.Tuple[t.Collection[dict[str, str]], t.Collection[t.Tuple[str, str]]]:
     """
     Extract the <link> tags from the HTML document at the given URL.
     """

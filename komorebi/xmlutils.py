@@ -32,11 +32,10 @@ class XMLBuilder:
         Note that if you provide your own, `as_string()` will return `None`
         as no other sensible value can be returned.
         """
+        self.buffer = None
         if out is None:
             self.buffer = io.StringIO()
             out = self.buffer
-        else:
-            self.buffer = None
         self.generator = saxutils.XMLGenerator(out, encoding)
         self.generator.startDocument()
 
@@ -45,7 +44,7 @@ class XMLBuilder:
         """
         Generates an element containing nested elements.
         """
-        self.generator.startElement(tag, attrs)
+        self.generator.startElement(tag, attrs)  # type: ignore
         yield
         self.generator.endElement(tag)
 
@@ -53,7 +52,7 @@ class XMLBuilder:
         """
         Generates a simple element.
         """
-        self.generator.startElement(tag, attrs)
+        self.generator.startElement(tag, attrs)  # type: ignore
         for value in values:
             self.generator.characters(value)
         self.generator.endElement(tag)

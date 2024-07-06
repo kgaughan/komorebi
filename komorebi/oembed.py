@@ -97,7 +97,7 @@ def fetch_oembed_document(
             )
             if content_type in ACCEPTABLE_TYPES:
                 parser = ACCEPTABLE_TYPES[content_type]
-                return parser(fh)
+                return parser(fh)  # type: ignore
     except error.HTTPError as exc:
         if 400 <= exc.code < 500:
             return None
@@ -105,7 +105,7 @@ def fetch_oembed_document(
     return None
 
 
-def _parse_xml_oembed_response(fh) -> dict[str, t.Union[str, int]]:
+def _parse_xml_oembed_response(fh: t.TextIO) -> dict[str, str | int]:
     """
     Parse the fields from an XML OEmbed document.
     """

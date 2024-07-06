@@ -45,21 +45,21 @@ dependencies = [
 	"flake8-bugbear~=22.12.6",
 	"isort~=5.11.4",
 	"pep8-naming~=0.13.3",
-	"pylint~=2.15.9",
-	"mypy~=0.991",
+	"pylint~=3.2.5",
+	"mypy~=1.10.1",
 	"types-Markdown~=3.3.28",
 	"types-passlib~=1.7.7.3",
 ]
 
 [tool.hatch.envs.style.scripts]
 check = [
-	"flake8 --max-line-length=120 --ignore=E203,W503 --per-file-ignores='komorebi/oembed.py:N802' .",
-	"black --check --diff .",
-	"isort --check-only --diff .",
+	"flake8 --max-line-length=120 --ignore=E231,E203,W503 --per-file-ignores='komorebi/oembed.py:N802' komorebi",
+	"black --check --diff komorebi",
+	"isort --check-only --diff komorebi",
 	"pylint komorebi",
-	"mypy .",
+	"mypy komorebi",
 ]
-fmt = ["isort .", "black ."]
+fmt = ["isort komorebi", "black komorebi"]
 
 [tool.isort]
 profile = "black"
