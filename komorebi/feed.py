@@ -24,7 +24,7 @@ def generate_feed(
     title: str,
     author: str,
     feed_id: str,
-    entries: t.Sequence[Entry],
+    entries: t.Iterable[Entry],
     subtitle: t.Optional[str] = None,
     rights: t.Optional[str] = None,
     modified: t.Optional[datetime] = None,
