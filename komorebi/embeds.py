@@ -9,7 +9,7 @@ import urllib.error
 from . import discovery, html, oembed, ogp
 
 
-def _scrub(attrs: dict[str, str | int | None]) -> t.Mapping[str, str]:
+def _scrub(attrs: dict[str, t.Union[str, int, None]]) -> t.Mapping[str, str]:
     return {key: str(value) for key, value in attrs.items() if value is not None}
 
 

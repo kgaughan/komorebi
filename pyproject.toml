@@ -10,7 +10,7 @@ dynamic = ["version"]
 description = "A tumblelog engine"
 license = "MIT"
 authors = [{ name = "Keith Gaughan", email = "keith@gaughan.ie" }]
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 readme = "README.rst"
 # The versions are pegged with FreeBSD
 dependencies = [
@@ -26,58 +26,30 @@ dependencies = [
 [project.urls]
 Source = "https://github.com/kgaughan/komorebi"
 
+[tool.rye]
+dev-dependencies = [
+    "pytest>=8.2.2",
+    "mypy>=1.10.1",
+    "types-markdown>=3.6.0.20240316",
+    "types-passlib>=1.7.7.20240327",
+]
+universal = true
+generate-hashes = true
+managed = true
+
+[tool.rye.scripts.devserver]
+cmd = "flask --app komorebi --debug run"
+env = { KOMOREBI_SETTINGS = "../dev/dev.cfg" }
+
+[tool.rye.scripts.sri]
+cmd = "flask --app komorebi sri"
+env = { KOMOREBI_SETTINGS = "../dev/dev.cfg" }
+
 [tool.hatch.version]
 path = "komorebi/__init__.py"
 
 [tool.hatch.build]
 exclude = [".coveragerc", "Makefile", ".github/", ".*_cache/", "tests/"]
-
-[tool.hatch.envs.test]
-
-[tool.hatch.envs.test.scripts]
-unit = ["python -m unittest discover -bf tests"]
-
-[tool.hatch.envs.style]
-dependencies = [
-	"black~=22.12.0",
-	"coverage~=5.5",
-	"flake8~=5.0.4",
-	"flake8-bugbear~=22.12.6",
-	"isort~=5.11.4",
-	"pep8-naming~=0.13.3",
-	"pylint~=3.2.5",
-	"mypy~=1.10.1",
-	"types-Markdown~=3.3.28",
-	"types-passlib~=1.7.7.3",
-]
-
-[tool.hatch.envs.style.scripts]
-check = [
-	"flake8 --max-line-length=120 --ignore=E231,E203,W503 --per-file-ignores='komorebi/oembed.py:N802' komorebi",
-	"black --check --diff komorebi",
-	"isort --check-only --diff komorebi",
-	"pylint komorebi",
-	"mypy komorebi",
-]
-fmt = ["isort komorebi", "black komorebi"]
-
-[tool.isort]
-profile = "black"
-force_sort_within_sections = true
-include_trailing_comma = true
-order_by_type = false
-
-[tool.pylint.BASIC]
-# Good variable names which should always be accepted, separated by a comma
-good-names = "n,i,j,k,_,fh,fd,fn,ip,cb,ts,ch,dt,tz,db,md"
-max-line-length = "120"
-exclude-protected = "_flatten"
-# There something broken with the import checks with this module. I think it's
-# because it contains a wildcard imporot from a C module.
-ignored-modules = "sqlite3"
-
-[tool.pylint."MESSAGE CONTROL"]
-disable = "R,C0114,C0115,C0116"
 
 [tool.mypy]
 ignore_missing_imports = true
