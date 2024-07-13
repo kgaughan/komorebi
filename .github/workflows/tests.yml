@@ -13,28 +13,22 @@ on:
 jobs:
   lint:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: 
-          - "3.12"
-
     steps:
       - uses: actions/checkout@v3
-      - name: Install hatch
-        run: pipx install hatch
-      - name: Install Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: eifinger/setup-rye@v4
+        id: setup-rye
         with:
-          python-version: ${{ matrix.python-version }}
+          version: "0.36.0"
+          enable-cache: true
+          cache-prefix: "rye"
       - name: Run linters
-        run: hatch run style:check
+        run: rye lint
 
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: 
-          - "3.8"
           - "3.9"
           - "3.10"
           - "3.11"
@@ -42,11 +36,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: Install hatch
-        run: pipx install hatch
-      - name: Install Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4
+      - uses: eifinger/setup-rye@v4
+        id: setup-rye
         with:
-          python-version: ${{ matrix.python-version }}
+          version: "0.36.0"
+          enable-cache: true
+          cache-prefix: "rye"
+      - name: Install Python ${{ matrix.python-version }}
+        run: rye pin ${{ matrix.python-version }}
       - name: Run tests
-        run: hatch run test:unit
+        run: rye test

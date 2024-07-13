@@ -105,7 +105,7 @@ def fetch_oembed_document(
     return None
 
 
-def _parse_xml_oembed_response(fh: t.TextIO) -> dict[str, str | int]:
+def _parse_xml_oembed_response(fh: t.TextIO) -> dict[str, t.Union[str, int]]:
     """
     Parse the fields from an XML OEmbed document.
     """
