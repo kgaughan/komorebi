@@ -10,7 +10,7 @@ def parse_header(line: str) -> t.Tuple[str, t.Dict[str, str]]:
     Copied, with _parseparam, from Python's cgi module until I can find a
     better alternative.
     """
-    parts = _parseparam(";" + line)
+    parts = _parseparam(f";{line}")
     key = parts.__next__()
     pdict = {}
     for part in parts:

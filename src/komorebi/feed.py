@@ -3,21 +3,19 @@ import typing as t
 
 from flask import url_for
 
-from . import formatting, time, xmlutils
+from . import formatting
+from .adjunct import time, xmlutils
 
-Entry = t.TypedDict(
-    "Entry",
-    {
-        "id": str,
-        "title": str,
-        "time_c": str,
-        "time_m": str,
-        "link": t.Optional[str],
-        "via": t.Optional[str],
-        "html": t.Optional[str],
-        "note": t.Optional[str],
-    },
-)
+
+class Entry(t.TypedDict):
+    id: str
+    title: str
+    time_c: str
+    time_m: str
+    link: t.Optional[str]
+    via: t.Optional[str]
+    html: t.Optional[str]
+    note: t.Optional[str]
 
 
 def generate_feed(

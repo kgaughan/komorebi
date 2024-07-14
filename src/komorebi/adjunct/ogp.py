@@ -12,6 +12,12 @@ than once. Properties has the form "ns:name", while a metadata field to be
 attached to a property (thus making it structured) has the form "ns:name:meta".
 
 Metadata should be implemented as a multimap, but I'll be treating it as a map.
+
+Example of prefix with multiple entries:
+<body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
+
+If this is present: vocab="http://www.w3.org/2011/rdfa-context/rdfa-1.1"
+An initial context is set up consisting of the namespaces given on that page.
 """
 
 import dataclasses

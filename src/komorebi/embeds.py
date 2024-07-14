@@ -6,7 +6,7 @@ import re
 import typing as t
 import urllib.error
 
-from . import discovery, html, oembed, ogp
+from .adjunct import discovery, html, oembed, ogp
 
 
 def _scrub(attrs: dict[str, t.Union[str, int, None]]) -> t.Mapping[str, str]:
@@ -33,11 +33,7 @@ def make_video_facade(
 
 def find_iframe(elems: html.Element) -> t.Optional[html.Element]:
     return next(
-        (
-            elem
-            for elem in elems
-            if isinstance(elem, html.Element) and elem.tag == "iframe"
-        ),
+        (elem for elem in elems if isinstance(elem, html.Element) and elem.tag == "iframe"),
         None,
     )
 

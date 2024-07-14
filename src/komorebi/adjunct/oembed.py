@@ -21,7 +21,7 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
     Pulls the fields out of an XML oEmbed document.
     """
 
-    valid_fields = [
+    valid_fields: t.ClassVar[t.List[str]] = [
         "type",
         "version",
         "title",
@@ -45,13 +45,13 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
         self.depth = 0
         self.fields = {}
 
-    def startElement(self, name, attrs):
+    def startElement(self, name, attrs):  # noqa: N802, ARG002
         self.depth += 1
         if self.depth == 2:
             self.current_field = name
             self.current_value = []
 
-    def endElement(self, name):
+    def endElement(self, name):  # noqa: N802, ARG002
         if self.depth == 2 and self.current_field in self.valid_fields:
             self.fields[self.current_field] = "".join(self.current_value)
         self.depth -= 1
@@ -67,9 +67,7 @@ def _build_url(
     max_height: t.Optional[int],
 ) -> str:
     if additional := [
-        (key, value)
-        for key, value in (("maxwidth", max_width), ("maxheight", max_height))
-        if value is not None
+        (key, value) for key, value in (("maxwidth", max_width), ("maxheight", max_height)) if value is not None
     ]:
         url += f"&{parse.urlencode(additional)}"
     return url
@@ -105,7 +103,7 @@ def fetch_oembed_document(
     return None
 
 
-def _parse_xml_oembed_response(fh: t.TextIO) -> dict[str, t.Union[str, int]]:
+def _parse_xml_oembed_response(fh: t.TextIO) -> t.Dict[str, t.Union[str, int]]:
     """
     Parse the fields from an XML OEmbed document.
     """

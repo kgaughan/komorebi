@@ -4,7 +4,7 @@ import typing as t
 
 from flask import current_app, g
 
-from . import time
+from .adjunct import time
 
 
 def get_db():
