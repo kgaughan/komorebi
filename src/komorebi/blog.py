@@ -2,14 +2,14 @@ from sqlite3 import IntegrityError
 from urllib import parse
 
 from flask import (
-    abort,
     Blueprint,
+    Response,
+    abort,
     current_app,
     flash,
     redirect,
     render_template,
     request,
-    Response,
     url_for,
 )
 from flask_httpauth import HTTPBasicAuth
@@ -82,11 +82,7 @@ def feed():
     modified = db.query_last_modified()
     response.last_modified = modified
 
-    if (
-        request.if_modified_since
-        and modified is not None
-        and modified <= request.if_modified_since
-    ):
+    if request.if_modified_since and modified is not None and modified <= request.if_modified_since:
         return response.make_conditional(request)
 
     response.set_data(

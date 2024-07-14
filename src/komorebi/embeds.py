@@ -33,11 +33,7 @@ def make_video_facade(
 
 def find_iframe(elems: html.Element) -> t.Optional[html.Element]:
     return next(
-        (
-            elem
-            for elem in elems
-            if isinstance(elem, html.Element) and elem.tag == "iframe"
-        ),
+        (elem for elem in elems if isinstance(elem, html.Element) and elem.tag == "iframe"),
         None,
     )
 

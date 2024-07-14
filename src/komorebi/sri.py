@@ -38,7 +38,7 @@ def load_sris() -> Dict[str, str]:
     sris_path = os.path.join(os.path.dirname(__file__), "sri.json")
     if not os.path.exists(sris_path):
         return {}
-    with open(sris_path, "r", encoding="UTF-8") as fh:
+    with open(sris_path, encoding="UTF-8") as fh:
         return json.load(fh)
 
 
