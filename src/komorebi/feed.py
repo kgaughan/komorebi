@@ -3,7 +3,8 @@ import typing as t
 
 from flask import url_for
 
-from . import formatting, time, xmlutils
+from . import formatting
+from .adjunct import time, xmlutils
 
 
 class Entry(t.TypedDict):

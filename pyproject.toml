@@ -107,6 +107,10 @@ addopts = "-ra -q --cov=src/komorebi --junitxml=tests/results.xml --cov-report h
 junit_logging = "out-err"
 junit_family = "xunit2"
 
+[tool.coverage.run]
+branch = true
+omit = ["src/komorebi/adjunct/*"]
+
 [tool.hatch.version]
 path = "src/komorebi/__init__.py"
 

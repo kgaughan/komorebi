@@ -6,7 +6,7 @@ import re
 import typing as t
 import urllib.error
 
-from . import discovery, html, oembed, ogp
+from .adjunct import discovery, html, oembed, ogp
 
 
 def _scrub(attrs: dict[str, t.Union[str, int, None]]) -> t.Mapping[str, str]:
