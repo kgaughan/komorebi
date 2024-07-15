@@ -47,7 +47,7 @@ def generate_feed(
         )
         xml.link(
             rel="self",
-            type="text/html",
+            type="application/atom+xml",
             hreflang="en",
             href=url_for(".feed", _external=True),
         )
