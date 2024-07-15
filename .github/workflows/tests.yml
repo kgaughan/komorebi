@@ -37,11 +37,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: eifinger/setup-rye@v4.2.0
-        id: setup-rye
-        with:
-          version: "0.36.0"
-          enable-cache: true
-          cache-prefix: "rye-${{ matrix.python-version }}-test"
       - name: Install Python ${{ matrix.python-version }}
         run: rye pin ${{ matrix.python-version }}
       - name: Run tests

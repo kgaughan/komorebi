@@ -1,7 +1,7 @@
 #:schema https://json.schemastore.org/pyproject.json
 
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
@@ -112,7 +112,10 @@ branch = true
 omit = ["src/komorebi/adjunct/*"]
 
 [tool.hatch.version]
-path = "src/komorebi/__init__.py"
+source = "vcs"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/komorebi/_version.py"
 
 [tool.mypy]
 ignore_missing_imports = true
