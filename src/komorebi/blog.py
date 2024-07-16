@@ -1,4 +1,5 @@
 from sqlite3 import IntegrityError
+import typing as t
 from urllib import parse
 
 from flask import (
@@ -46,7 +47,7 @@ def archive():
     return render_template("archive.html", entries=process_archive(db.query_archive()))
 
 
-def process_archive(records):
+def process_archive(records: t.List[dict]) -> t.Iterator[dict]:
     year = None
     last_month = 0
     for record in records:

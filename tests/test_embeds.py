@@ -26,6 +26,10 @@ class TestEmbeds(unittest.TestCase):
             '<div class="facade" title="Foo" data-src="http://example.com/" data-thumb="http://example.com/thumb.jpg" data-width="8" data-height="8"></div>',
         )
 
+    def test_make_youtube_facade_missing_html(self):
+        with self.assertRaises(KeyError):
+            embeds.make_youtube_facade({})
+
     def test_make_youtube_facade_fallback(self):
         self.assertEqual(
             embeds.make_youtube_facade({"html": "<span>HTML</span>"}),
