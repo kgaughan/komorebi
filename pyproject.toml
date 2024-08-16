@@ -18,7 +18,7 @@ dependencies = [
   "flask-httpauth==4.8.0",
   "flask-wtf~=1.1.2",
   "wtforms==3.1.2",
-  "markdown==3.5.2",
+  "markdown==3.6",
   "passlib==1.7.4",
   "itsdangerous==2.1.2",
 ]
