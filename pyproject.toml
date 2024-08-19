@@ -114,6 +114,15 @@ junit_family = "xunit2"
 branch = true
 omit = ["src/komorebi/adjunct/*"]
 
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src/komorebi",
+  "/schema/",
+  "/supervision/",
+  "/requirements.lock",
+]
+
 [tool.hatch.version]
 source = "vcs"
 
