@@ -7,5 +7,5 @@
 /.coverage
 /tests/results.xml
 *.orig
-
 /src/komorebi/_version.py
+.*_cache/
