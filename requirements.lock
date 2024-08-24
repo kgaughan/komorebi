@@ -36,7 +36,7 @@ flask-wtf==1.1.2 \
     --hash=sha256:134f45f3155ebdbb2b44fe8e5b498a0956d34a16b10a53fadcb7a865c0b3cea2 \
     --hash=sha256:b51cfa7ad14e03de432a6268e8341354939d0beebf30fce66f8617a93e55e2a0
     # via komorebi
-importlib-metadata==8.0.0 ; python_version < '3.10' \
+importlib-metadata==8.0.0 ; python_full_version < '3.10' \
     --hash=sha256:15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f \
     --hash=sha256:188bd24e4c346d3f0a933f275c2fec67050326a856b9a359881d7c2a697e8812
     # via flask
@@ -132,7 +132,7 @@ wtforms==3.1.2 \
     --hash=sha256:f8d76180d7239c94c6322f7990ae1216dae3659b7aa1cee94b6318bdffb474b9
     # via flask-wtf
     # via komorebi
-zipp==3.19.2 ; python_version < '3.10' \
+zipp==3.19.2 ; python_full_version < '3.10' \
     --hash=sha256:bf1dcf6450f873a13e952a29504887c89e6de7506209e5b1bcc3460135d4de19 \
     --hash=sha256:f091755f667055f2d02b32c53771a7a6c8b47e1fdbc4b72a8b9072b3eef8015c
     # via importlib-metadata
