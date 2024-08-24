@@ -18,7 +18,7 @@ click==8.1.7 \
     --hash=sha256:ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28 \
     --hash=sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de
     # via flask
-colorama==0.4.6 ; platform_system == 'Windows' or sys_platform == 'win32' \
+colorama==0.4.6 ; sys_platform == 'win32' or platform_system == 'Windows' \
     --hash=sha256:08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44 \
     --hash=sha256:4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6
     # via click
@@ -77,7 +77,7 @@ coverage==7.6.0 \
     --hash=sha256:f2501d60d7497fd55e391f423f965bbe9e650e9ffc3c627d5f0ac516026000b8 \
     --hash=sha256:f7db0b6ae1f96ae41afe626095149ecd1b212b424626175a6633c2999eaad45b
     # via pytest-cov
-exceptiongroup==1.2.2 ; python_version < '3.11' \
+exceptiongroup==1.2.2 ; python_full_version < '3.11' \
     --hash=sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b \
     --hash=sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc
     # via pytest
@@ -95,7 +95,7 @@ flask-wtf==1.1.2 \
     --hash=sha256:134f45f3155ebdbb2b44fe8e5b498a0956d34a16b10a53fadcb7a865c0b3cea2 \
     --hash=sha256:b51cfa7ad14e03de432a6268e8341354939d0beebf30fce66f8617a93e55e2a0
     # via komorebi
-importlib-metadata==8.0.0 ; python_version < '3.10' \
+importlib-metadata==8.0.0 ; python_full_version < '3.10' \
     --hash=sha256:15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f \
     --hash=sha256:188bd24e4c346d3f0a933f275c2fec67050326a856b9a359881d7c2a697e8812
     # via flask
@@ -233,7 +233,7 @@ pytest==8.2.2 \
 pytest-cov==5.0.0 \
     --hash=sha256:4f0764a1219df53214206bf1feea4633c3b558a2925c8b59f144f682861ce652 \
     --hash=sha256:5837b58e9f6ebd335b0f8060eecce69b662415b16dc503883a02f45dfeb14857
-tomli==2.0.1 ; python_full_version <= '3.11.0a6' or python_version < '3.11' \
+tomli==2.0.1 ; python_full_version <= '3.11' \
     --hash=sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc \
     --hash=sha256:de526c12914f0c550d15924c62d72abc48d6fe7364aa87328337a31007fe8a4f
     # via coverage
@@ -258,7 +258,7 @@ wtforms==3.1.2 \
     --hash=sha256:f8d76180d7239c94c6322f7990ae1216dae3659b7aa1cee94b6318bdffb474b9
     # via flask-wtf
     # via komorebi
-zipp==3.19.2 ; python_version < '3.10' \
+zipp==3.19.2 ; python_full_version < '3.10' \
     --hash=sha256:bf1dcf6450f873a13e952a29504887c89e6de7506209e5b1bcc3460135d4de19 \
     --hash=sha256:f091755f667055f2d02b32c53771a7a6c8b47e1fdbc4b72a8b9072b3eef8015c
     # via importlib-metadata

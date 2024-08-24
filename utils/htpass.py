@@ -28,13 +28,13 @@ def main():
 
     if args.list:
         for user in ht.users():
-            print(user)
+            print(user)  # noqa: T201
     elif args.remove:
         ht.delete(args.user)
     elif args.add:
         if args.gen:
             passwd = pwd.genword(entropy="secure", charset="ascii_72", length=16)
-            print("Password:", passwd)
+            print("Password:", passwd)  # noqa: T201
         else:
             passwd = getpass.getpass()
         ht.set_password(args.user, passwd)

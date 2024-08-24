@@ -1,11 +1,33 @@
-.*.sw?
-*~
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Environments
 .venv/
-*.sqlite
-/dist/
-*.bak
-/.coverage
-/tests/results.xml
-*.orig
-/src/komorebi/_version.py
+
+# Distribution/packaging
+dist/
+
+# Unit test / coverage reports
+.coverage
+htmlcov/
+tests/results.xml
 .*_cache/
+
+# General detritus
+*~
+.*.sw?
+*.orig
+*.bak
+*.log
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Mkdocs
+/site/
+
+# Other
+_version.py
