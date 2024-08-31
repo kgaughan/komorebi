@@ -32,9 +32,9 @@ flask-httpauth==4.8.0 \
     --hash=sha256:66568a05bc73942c65f1e2201ae746295816dc009edd84b482c44c758d75097a \
     --hash=sha256:a58fedd09989b9975448eef04806b096a3964a7feeebc0a78831ff55685b62b0
     # via komorebi
-flask-wtf==1.1.2 \
-    --hash=sha256:134f45f3155ebdbb2b44fe8e5b498a0956d34a16b10a53fadcb7a865c0b3cea2 \
-    --hash=sha256:b51cfa7ad14e03de432a6268e8341354939d0beebf30fce66f8617a93e55e2a0
+flask-wtf==1.2.1 \
+    --hash=sha256:8bb269eb9bb46b87e7c8233d7e7debdf1f8b74bf90cc1789988c29b37a97b695 \
+    --hash=sha256:fa6793f2fb7e812e0fe9743b282118e581fb1b6c45d414b8af05e659bd653287
     # via komorebi
 importlib-metadata==8.0.0 ; python_full_version < '3.10' \
     --hash=sha256:15584cf2b1bf449d98ff8a6ff1abef57bf20f3ac6454f431736cd3e660921b2f \
