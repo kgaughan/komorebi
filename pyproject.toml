@@ -27,13 +27,13 @@ classifiers = [
 ]
 # The versions are pegged with FreeBSD
 dependencies = [
-  "flask==3.0.3",
-  "flask-httpauth==4.8.0",
+  "flask>=3.0.3,<4",
+  "flask-httpauth>=4.8.0,<5",
   "flask-wtf~=1.2.1",
-  "wtforms==3.1.2",
-  "markdown==3.6",
+  "wtforms>=3.1.2,<4",
+  "markdown>=3.6,<4",
   "passlib==1.7.4",
-  "itsdangerous==2.1.2",
+  "itsdangerous>=2.1.2,<3",
 ]
 
 [project.urls]
