@@ -41,25 +41,16 @@ Documentation = "https://github.com/kgaughan/komorebi#readme"
 Issues = "https://github.com/kgaughan/komorebi/issues"
 Source = "https://github.com/kgaughan/komorebi"
 
-[tool.rye]
+[tool.uv]
 dev-dependencies = [
+  "python-dotenv>=1.1.0",
   "mypy>=1.10.1",
   "pytest>=8.2.2",
   "pytest-cov>=2.12.1",
   "types-markdown>=3.6.0.20240316",
   "types-passlib>=1.7.7.20240327",
 ]
-universal = true
-generate-hashes = true
 managed = true
-
-[tool.rye.scripts.devserver]
-cmd = "flask --app komorebi --debug run"
-env = { KOMOREBI_SETTINGS = "../dev/dev.cfg" }
-
-[tool.rye.scripts.sri]
-cmd = "flask --app komorebi sri"
-env = { KOMOREBI_SETTINGS = "../dev/dev.cfg" }
 
 [tool.hatch.build.targets.sdist]
 include = [

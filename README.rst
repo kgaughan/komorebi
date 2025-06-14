@@ -22,14 +22,14 @@ Prep
 
 Run::
 
-    make develop
+    uv sync
 
 Development server
 ==================
 
 Run::
 
-    make run
+    uv run flask --app komorebi --debug run
 
 The username and password specified in ``dev/dev.htpasswd`` are *username* and
 *password* respectively.
@@ -50,7 +50,7 @@ Regenerating subresource integrity hashes
 
 Run::
 
-    openssl dgst -sha384 -binary < FILENAME.js | openssl base64 -A
+    uv run flask --app komorebi sri
 
 SRI is less trouble than dealing with CSP. I should add something to generate a
 manifest of this stuff to avoid manual updates.
