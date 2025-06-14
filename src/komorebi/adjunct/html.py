@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 
 __all__ = [
     "Element",
-    "escape",
     "Parser",
+    "escape",
 ]
 
 # See: https://html.spec.whatwg.org/multipage/syntax.html#void-elements
