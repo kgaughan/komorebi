@@ -10,15 +10,13 @@ dynamic = ["version"]
 description = "A tumblelog engine"
 license = { file = "LICENSE" }
 authors = [{ name = "Keith Gaughan", email = "keith@gaughan.ie" }]
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 readme = "README.rst"
 classifiers = [
   "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
@@ -27,13 +25,13 @@ classifiers = [
 ]
 # The versions are pegged with FreeBSD
 dependencies = [
-  "flask>=3.0.3,<4",
+  "flask>=3.1.1,<4",
   "flask-httpauth>=4.8.0,<5",
   "flask-wtf~=1.2.1",
   "wtforms>=3.1.2,<4",
-  "markdown>=3.6,<4",
+  "markdown>=3.8.2,<4",
   "passlib==1.7.4",
-  "itsdangerous>=2.1.2,<3",
+  "itsdangerous>=2.2.0,<3",
 ]
 
 [project.urls]
