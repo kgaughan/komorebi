@@ -14,3 +14,7 @@ dev-server:
 # regenerate SRI hashes
 sri:
 	@uv run flask --app {{app}} sri
+
+# run the test suite
+tests:
+	@uv run pytest
