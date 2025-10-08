@@ -8,17 +8,16 @@ build-backend = "hatchling.build"
 name = "komorebi"
 dynamic = ["version"]
 description = "A tumblelog engine"
-license = { file = "LICENSE" }
-authors = [{ name = "Keith Gaughan", email = "keith@gaughan.ie" }]
-requires-python = ">=3.9"
 readme = "README.rst"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Keith Gaughan", email = "keith@gaughan.ie" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.9",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
@@ -27,13 +26,13 @@ classifiers = [
 ]
 # The versions are pegged with FreeBSD
 dependencies = [
-  "flask>=3.0.3,<4",
+  "flask>=3.1.1,<4",
   "flask-httpauth>=4.8.0,<5",
   "flask-wtf~=1.2.1",
   "wtforms>=3.1.2,<4",
-  "markdown>=3.6,<4",
+  "markdown>=3.8.2,<4",
   "passlib==1.7.4",
-  "itsdangerous>=2.1.2,<3",
+  "itsdangerous>=2.2.0,<3",
 ]
 
 [project.urls]
@@ -41,8 +40,8 @@ Documentation = "https://github.com/kgaughan/komorebi#readme"
 Issues = "https://github.com/kgaughan/komorebi/issues"
 Source = "https://github.com/kgaughan/komorebi"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "python-dotenv>=1.1.0",
   "mypy>=1.10.1",
   "pytest>=8.2.2",
@@ -50,15 +49,9 @@ dev-dependencies = [
   "types-markdown>=3.6.0.20240316",
   "types-passlib>=1.7.7.20240327",
 ]
-managed = true
 
 [tool.hatch.build.targets.sdist]
-include = [
-  "/src/komorebi",
-  "/schema/",
-  "/supervision/",
-  "/requirements.lock",
-]
+include = ["src/komorebi", "schema", "supervision", "uv.lock"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/komorebi"]
@@ -73,34 +66,50 @@ version-file = "src/komorebi/_version.py"
 line-length = 120
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py311"
 line-length = 120
-src = ["src", "test"]
+src = ["src", "tests"]
 
 [tool.ruff.lint]
 select = [
   "A",
+  # "ANN",
   "ARG",
   "B",
   "C",
   "DTZ",
   "E",
   "EM",
+  "EXE",
   "F",
   "FBT",
+  "FLY",
+  "FURB",
+  "G",
   "I",
   "ICN",
   "ISC002",
+  "LOG",
   "N",
+  "PERF",
+  "PIE",
   "PLC",
   "PLE",
   "PLR",
   "PLW",
+  # "PT",
+  "PYI",
   "Q",
+  "RET",
+  "RSE",
   "RUF",
   "S",
+  "SIM",
+  "SLOT",
   "T",
+  "TC",
   "TID",
+  "TRY",
   "UP",
   "W",
   "YTT",
@@ -126,11 +135,11 @@ ban-relative-imports = "all"
 
 [tool.ruff.lint.per-file-ignores]
 # Tests can use magic values, assertions, and relative imports
-"tests/**/*" = ["PLR2004", "S101", "TID252", "E501"]
+"tests/**/*" = ["ANN", "PLR2004", "S101", "TID252", "E501"]
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --cov=src/komorebi --junitxml=tests/results.xml --cov-report html"
+addopts = "-ra -q --cov=komorebi --junitxml=results.xml --cov-report html"
 junit_logging = "out-err"
 junit_family = "xunit2"
 

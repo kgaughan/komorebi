@@ -1,19 +1,18 @@
 import io
-import unittest
+
+import pytest
 
 from komorebi import sri
 
 
-class TestSRI(unittest.TestCase):
-    def test_binary(self):
-        self.assertEqual(
-            sri.generate_sri(io.BytesIO(b"abcedfg")),
-            "sha384-3Kqax0ynJR7oxUL8wK8YhBgFkA4p8nENqXfWfgUfUG79JT5ad1YKCXH31y4zTCXH",
-        )
+def test_binary():
+    assert (
+        sri.generate_sri(io.BytesIO(b"abcedfg"))
+        == "sha384-3Kqax0ynJR7oxUL8wK8YhBgFkA4p8nENqXfWfgUfUG79JT5ad1YKCXH31y4zTCXH"
+    )
 
-    def test_text(self):
-        """
-        File should be opened as binary.
-        """
-        with self.assertRaises(TypeError):
-            sri.generate_sri(io.StringIO("abcedfg"))
+
+def test_text():
+    # File should be opened as binary
+    with pytest.raises(TypeError):
+        sri.generate_sri(io.StringIO("abcedfg"))

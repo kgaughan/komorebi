@@ -7,7 +7,7 @@ from flask import current_app, g
 from .adjunct import time
 
 
-def get_db():
+def get_db() -> sqlite3.Connection:
     con = getattr(g, "_database", None)
     if con is None:
         db_path = current_app.config.get("DB_PATH", "db.sqlite")
@@ -28,7 +28,7 @@ def close_connection(req):
     return req
 
 
-def execute(sql, args=()):
+def execute(sql: str, args: tuple = ()) -> int | None:
     con = get_db()
     cur = con.cursor()
     cur.arraysize = 50
@@ -41,7 +41,7 @@ def execute(sql, args=()):
         cur.close()
 
 
-def query(sql, args=()):
+def query(sql: str, args: tuple = ()) -> t.Iterator:
     con = get_db()
     cur = con.cursor()
     try:
@@ -51,7 +51,7 @@ def query(sql, args=()):
         cur.close()
 
 
-def query_row(sql, args=(), default=None):
+def query_row(sql: str, args: tuple = (), *, default=None):
     con = get_db()
     cur = con.cursor()
     try:
@@ -63,7 +63,7 @@ def query_row(sql, args=(), default=None):
     return default
 
 
-def query_value(sql, args=(), default=None):
+def query_value(sql: str, args: tuple = (), *, default: int | str | None = None) -> int | str | None:
     con = get_db()
     cur = con.cursor()
     try:
@@ -75,7 +75,7 @@ def query_value(sql, args=(), default=None):
     return default
 
 
-def query_latest():
+def query_latest() -> t.Iterator:
     return query(
         """
         SELECT    links.id, time_c, time_m, link, title, via, note,
@@ -88,7 +88,7 @@ def query_latest():
     )
 
 
-def query_archive():
+def query_archive() -> t.Iterator:
     # This is gross.
     return query(
         """
@@ -103,7 +103,7 @@ def query_archive():
     )
 
 
-def query_month(year, month):
+def query_month(year: int, month: int) -> list:
     sql = """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
@@ -115,7 +115,7 @@ def query_month(year, month):
     return list(query(sql, (dt.isoformat(), dt.isoformat())))
 
 
-def query_entry(entry_id):
+def query_entry(entry_id: int):
     return query_row(
         """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
@@ -127,13 +127,13 @@ def query_entry(entry_id):
     )
 
 
-def add_entry(link, title, via, note):
+def add_entry(link: str, title: str, via: str, note: str):
     if link.strip() == "":
-        link = None
+        link = None  # type: ignore
     if via.strip() == "":
-        via = None
+        via = None  # type: ignore
     if note.strip() == "":
-        note = None
+        note = None  # type: ignore
 
     return execute(
         """
@@ -145,13 +145,13 @@ def add_entry(link, title, via, note):
     )
 
 
-def update_entry(entry_id, link, title, via, note):
+def update_entry(entry_id: int, link: str, title: str, via: str, note: str) -> int | None:
     if link.strip() == "":
-        link = None
+        link = None  # type: ignore
     if via.strip() == "":
-        via = None
+        via = None  # type: ignore
     if note.strip() == "":
-        note = None
+        note = None  # type: ignore
 
     return execute(
         """
@@ -164,14 +164,14 @@ def update_entry(entry_id, link, title, via, note):
     )
 
 
-def query_last_modified() -> t.Optional[datetime.datetime]:
+def query_last_modified() -> datetime.datetime | None:
     modified = query_value("SELECT MAX(time_m) FROM links")
     if modified:
-        modified = time.parse_dt(modified)
-    return modified
+        return time.parse_dt(modified)  # type: ignore
+    return None
 
 
-def add_oembed(entry_id, html):
+def add_oembed(entry_id: int, html: str) -> None:
     execute(
         """
         INSERT

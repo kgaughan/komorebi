@@ -24,7 +24,7 @@ class XMLBuilder:
     <root xmlns="tag:talideon.com,2013:test">Before<leaf>Within</leaf>After<leaf>Another</leaf></root>
     """
 
-    def __init__(self, out=None, encoding: str = "utf-8"):
+    def __init__(self, out=None, encoding: str = "utf-8") -> None:
         """
         `out` should be a file-like object to write the document to. If none
         is provided, a buffer is created.
@@ -48,7 +48,7 @@ class XMLBuilder:
         yield
         self.generator.endElement(tag)
 
-    def tag(self, tag: str, *values, **attrs):
+    def tag(self, tag: str, *values, **attrs) -> None:
         """
         Generates a simple element.
         """
@@ -73,7 +73,7 @@ class XMLBuilder:
         """
         return "" if self.buffer is None else self.buffer.getvalue()
 
-    def close(self):
+    def close(self) -> None:
         """
         If using the built-in buffer, clean it up.
         """

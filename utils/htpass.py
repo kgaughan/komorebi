@@ -20,7 +20,7 @@ def make_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def main():
+def main() -> None:
     args = make_parser().parse_args()
 
     new = args.add and not os.path.exists(args.path)
@@ -33,7 +33,7 @@ def main():
         ht.delete(args.user)
     elif args.add:
         if args.gen:
-            passwd = pwd.genword(entropy="secure", charset="ascii_72", length=16)
+            passwd = pwd.genword(entropy="secure", charset="ascii_72", length=16)  # type: ignore
             print("Password:", passwd)  # noqa: T201
         else:
             passwd = getpass.getpass()

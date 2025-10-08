@@ -1,9 +1,8 @@
 import base64
 import hashlib
-import io
 import json
 import os
-from typing import Dict
+import typing as t
 
 import click
 
@@ -15,7 +14,7 @@ SUFFIXES = (
 
 
 def generate_sri(
-    fh: io.BufferedReader,
+    fh: t.TextIO | t.BinaryIO,
     alg: str = "sha384",
     block_size: int = 8192,
 ) -> str:
@@ -27,14 +26,14 @@ def generate_sri(
     hashed = hashlib.new(alg)
     while True:
         if blk := fh.read(block_size):
-            hashed.update(blk)
+            hashed.update(blk)  # type: ignore
         else:
             break
     digest = base64.b64encode(hashed.digest()).decode("UTF-8")
     return f"{alg}-{digest}"
 
 
-def load_sris() -> Dict[str, str]:
+def load_sris() -> dict[str, str]:
     sris_path = os.path.join(os.path.dirname(__file__), "sri.json")
     if not os.path.exists(sris_path):
         return {}
@@ -43,7 +42,7 @@ def load_sris() -> Dict[str, str]:
 
 
 @click.command("sri", help="Generate SRI cache")
-def generate_hashes():
+def generate_hashes() -> None:
     app_root = os.path.dirname(__file__)
     static_root = os.path.join(app_root, "static")
     hashes = {}

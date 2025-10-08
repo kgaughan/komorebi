@@ -56,7 +56,7 @@ def parse(properties: t.Collection[t.Tuple[str, str]]) -> t.Sequence[Property]:
     return result
 
 
-def to_meta(props: t.Union[Property, t.Sequence[Property]]) -> str:
+def to_meta(props: Property | t.Sequence[Property]) -> str:
     if isinstance(props, Property):
         return props.to_meta()
     return "\n".join(prop.to_meta() for prop in props)
@@ -65,7 +65,7 @@ def to_meta(props: t.Union[Property, t.Sequence[Property]]) -> str:
 def find(
     props: t.Sequence[Property],
     type_: str,
-    value: t.Optional[str] = None,
+    value: str | None = None,
 ) -> t.Iterable[Property]:
     for prop in props:
         if prop.type_ == type_ and (value is None or prop.value == value):

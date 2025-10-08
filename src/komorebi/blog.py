@@ -30,7 +30,7 @@ auth = HTTPBasicAuth()
 
 
 @auth.verify_password
-def verify_password(username, password):
+def verify_password(username: str, password: str):
     htpasswd_path = current_app.config.get("HTPASSWD_PATH")
     if htpasswd_path is not None:
         return HtpasswdFile(htpasswd_path).check_password(username, password)
@@ -38,12 +38,12 @@ def verify_password(username, password):
 
 
 @blog.route("/")
-def latest():
+def latest() -> str:
     return render_template("latest.html", entries=db.query_latest())
 
 
 @blog.route("/archive")
-def archive():
+def archive() -> str:
     return render_template("archive.html", entries=process_archive(db.query_archive()))
 
 
@@ -77,7 +77,7 @@ def process_archive(records: t.List[dict]) -> t.Iterator[dict]:
 
 
 @blog.route("/feed")
-def feed():
+def feed() -> Response:
     response = Response(content_type="application/atom+xml; charset=UTF-8")
     response.cache_control.public = True
     response.cache_control.max_age = 3600
@@ -85,7 +85,7 @@ def feed():
     response.last_modified = modified
 
     if request.if_modified_since and modified is not None and modified <= request.if_modified_since:
-        return response.make_conditional(request)
+        return response.make_conditional(request)  # type: ignore
 
     response.set_data(
         generate_feed(
@@ -103,7 +103,7 @@ def feed():
 
 
 @blog.route("/<string(length=4):year>-<string(length=2):month>", endpoint="month")
-def render_month(year, month):
+def render_month(year: str, month: str) -> str:
     entries = db.query_month(int(year), int(month))
     if not entries:
         abort(404)
@@ -112,7 +112,7 @@ def render_month(year, month):
 
 
 @blog.route("/<int:entry_id>", endpoint="entry")
-def render_entry(entry_id):
+def render_entry(entry_id: int) -> str:
     entry = db.query_entry(entry_id)
     if entry is None:
         abort(404)
@@ -121,7 +121,7 @@ def render_entry(entry_id):
 
 @blog.route("/add", methods=["GET", "POST"])
 @auth.login_required
-def add_entry():
+def add_entry() -> Response | str:
     form = forms.EntryForm()
     if form.is_submitted() and form.validate():
         # Fetch the embed _first_ to prevent a database lockup
@@ -140,13 +140,13 @@ def add_entry():
             if markup:
                 db.add_oembed(entry_id, markup)
 
-            return redirect(url_for(".entry", entry_id=entry_id))
+            return redirect(url_for(".entry", entry_id=entry_id))  # type: ignore
     return render_template("entry_edit.html", form=form)
 
 
 @blog.route("/<int:entry_id>/edit", methods=["GET", "POST"])
 @auth.login_required
-def edit_entry(entry_id):
+def edit_entry(entry_id: int) -> str:
     entry = db.query_entry(entry_id)
     if entry is None:
         abort(404)
@@ -159,10 +159,10 @@ def edit_entry(entry_id):
             via=form.via.data,
             note=form.note.data,
         )
-        return redirect(url_for(".entry", entry_id=entry_id))
+        return redirect(url_for(".entry", entry_id=entry_id))  # type: ignore
     return render_template("entry_edit.html", form=form)
 
 
 @blog.app_template_filter()
-def extract_hostname(url):
+def extract_hostname(url: str) -> str:
     return parse.urlparse(url).netloc
