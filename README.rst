@@ -20,16 +20,18 @@ The output cache functionality will be replaced with Redis.
 Prep
 ====
 
-Run::
+Install just__ as a task runner. Run::
 
-    uv sync
+    just devel
+
+.. __: https://github.com/casey/just
 
 Development server
 ==================
 
 Run::
 
-    uv run flask --app komorebi --debug run
+    just dev-server
 
 The username and password specified in ``dev/dev.htpasswd`` are *username* and
 *password* respectively.
@@ -50,7 +52,7 @@ Regenerating subresource integrity hashes
 
 Run::
 
-    uv run flask --app komorebi sri
+    just sri
 
 SRI is less trouble than dealing with CSP. I should add something to generate a
 manifest of this stuff to avoid manual updates.

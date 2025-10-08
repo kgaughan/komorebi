@@ -139,9 +139,11 @@ ban-relative-imports = "all"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "-ra -q --cov=komorebi --junitxml=results.xml --cov-report html"
+addopts = "-ra --doctest-modules --cov=komorebi --junitxml=results.xml --cov-report html"
 junit_logging = "out-err"
 junit_family = "xunit2"
+pythonpath = ["src"]
+testpaths = ["tests"]
 
 [tool.coverage.run]
 branch = true
