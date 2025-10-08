@@ -3,7 +3,7 @@ import datetime
 
 def parse_dt(
     dt: str,
-    tz: datetime.timezone = datetime.timezone.utc,
+    tz: datetime.timezone = datetime.UTC,
 ) -> datetime.datetime:
     """
     Parse an SQLite datetime, treating it as UTC.

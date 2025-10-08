@@ -12,10 +12,10 @@ class Entry(t.TypedDict):
     title: str
     time_c: str
     time_m: str
-    link: t.Optional[str]
-    via: t.Optional[str]
-    html: t.Optional[str]
-    note: t.Optional[str]
+    link: str | None
+    via: str | None
+    html: str | None
+    note: str | None
 
 
 def generate_feed(
@@ -23,9 +23,9 @@ def generate_feed(
     author: str,
     feed_id: str,
     entries: t.Iterable[Entry],
-    subtitle: t.Optional[str] = None,
-    rights: t.Optional[str] = None,
-    modified: t.Optional[datetime] = None,
+    subtitle: str | None = None,
+    rights: str | None = None,
+    modified: datetime | None = None,
 ) -> str:
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
@@ -57,7 +57,7 @@ def generate_feed(
     return xml.as_string()
 
 
-def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: Entry):
+def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: Entry) -> None:
     with xml.within("entry"):
         xml.title(entry["title"])
         xml.published(time.to_iso_date(entry["time_c"]))

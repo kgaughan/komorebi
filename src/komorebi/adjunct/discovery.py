@@ -22,13 +22,13 @@ class Extractor(HTMLParser):
     and <link> tags from the header of a HTML document.
     """
 
-    def __init__(self, base: str):
+    def __init__(self, base: str) -> None:
         super().__init__()
         self.base = base
         self.collected: t.List[t.Dict[str, str]] = []
         self.properties: t.List[t.Tuple[str, str]] = []
 
-    def handle_starttag(self, tag, attrs):
+    def handle_starttag(self, tag, attrs) -> None:
         tag = tag.lower()
         attrs = fix_attributes(attrs)
         if tag == "link":
@@ -38,7 +38,7 @@ class Extractor(HTMLParser):
         elif tag == "meta" and "property" in attrs and "content" in attrs:
             self.properties.append((attrs["property"], attrs["content"]))
 
-    def append(self, attrs: t.Dict[str, str]):
+    def append(self, attrs: t.Dict[str, str]) -> None:
         """
         Append the given set of attributes onto our list.
 
@@ -71,7 +71,7 @@ class Extractor(HTMLParser):
 
         return parser
 
-    def error(self, message: str):
+    def error(self, message: str) -> None:
         # This method is undocumented in HTMLParser, but pylint is moaning
         # about it, so...
         logger.error("Error in Extractor: %s", message)  # pragma: no cover
@@ -104,7 +104,7 @@ def safe_slurp(fh, chunk_size: int = 65536, encoding: str = "UTF-8") -> t.Iterat
 
 
 def fix_attributes(
-    attrs: t.Sequence[t.Tuple[str, t.Optional[str]]],
+    attrs: t.Sequence[t.Tuple[str, str | None]],
 ) -> t.Dict[str, str]:
     """
     Normalise and clean up the attributes, and put them in a dict.

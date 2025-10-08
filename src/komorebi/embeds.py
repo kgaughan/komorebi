@@ -9,16 +9,16 @@ import urllib.error
 from .adjunct import discovery, html, oembed, ogp
 
 
-def _scrub(attrs: dict[str, t.Union[str, int, None]]) -> t.Mapping[str, str]:
+def _scrub(attrs: dict[str, str | int | None]) -> t.Mapping[str, str]:
     return {key: str(value) for key, value in attrs.items() if value is not None}
 
 
 def make_video_facade(
-    src: t.Optional[str],
-    title: t.Optional[str],
-    thumb: t.Optional[str],
-    width: t.Optional[int],
-    height: t.Optional[int],
+    src: str | None,
+    title: str | None,
+    thumb: str | None,
+    width: int | None,
+    height: int | None,
 ) -> str:
     attrs = {
         "class": "facade",
@@ -31,7 +31,7 @@ def make_video_facade(
     return html.make("div", attrs=_scrub(attrs))
 
 
-def find_iframe(elems: html.Element) -> t.Optional[html.Element]:
+def find_iframe(elems: html.Element) -> html.Element | None:
     return next(
         (elem for elem in elems if isinstance(elem, html.Element) and elem.tag == "iframe"),
         None,
@@ -57,9 +57,8 @@ def make_vimeo_facade(doc: dict) -> str:
 
     # Adjust the thumbnail size to match the video
     thumb = doc.get("thumbnail_url")
-    if thumb:
-        if match := RE_VIMEO_THUMB.match(thumb):
-            thumb = f"{match.group('prefix')}{width}x{height}"
+    if thumb and (match := RE_VIMEO_THUMB.match(thumb)):
+        thumb = f"{match.group('prefix')}{width}x{height}"
     return make_video_facade(
         src=iframe.attrs["src"],
         title=doc.get("title"),
@@ -95,7 +94,7 @@ FACADE_MAKERS = {
 }
 
 
-def make_markup_from_oembed(doc: dict) -> t.Optional[str]:
+def make_markup_from_oembed(doc: dict) -> str | None:
     title = doc.get("title")
 
     if doc["type"] == "photo":
@@ -117,7 +116,7 @@ def make_markup_from_oembed(doc: dict) -> t.Optional[str]:
     return None
 
 
-def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> t.Optional[str]:
+def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> str | None:
     for video in ogp.find(props, "video"):
         # Currently, only iframe embeds are supported
         if video.metadata["type"] == "text/html":
@@ -136,12 +135,13 @@ def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> t.Optional[str]:
     return None
 
 
-def fetch_embed(url: str) -> t.Optional[str]:
+def fetch_embed(url: str | None) -> str | None:
+    if url is None:
+        return None
     try:
         links, meta = discovery.fetch_meta(url)
     except urllib.error.HTTPError:
         return None
-    if links:
-        if doc := oembed.get_oembed(links):
-            return make_markup_from_oembed(doc)
+    if links and (doc := oembed.get_oembed(links)):
+        return make_markup_from_oembed(doc)
     return make_markup_from_ogp(ogp.parse(meta))

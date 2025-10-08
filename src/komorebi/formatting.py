@@ -1,9 +1,8 @@
-import typing as t
 
 import markdown as md
 
 
-def render_markdown(text: t.Optional[str]) -> str:
+def render_markdown(text: str | None) -> str:
     if text is None:
         return ""
     return md.markdown(

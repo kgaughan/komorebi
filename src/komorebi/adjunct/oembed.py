@@ -38,33 +38,33 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
         "html",
     ]
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.current_field = None
         self.current_value = []
         self.depth = 0
         self.fields = {}
 
-    def startElement(self, name, attrs):  # noqa: N802, ARG002
+    def startElement(self, name, attrs) -> None:  # noqa: N802, ARG002
         self.depth += 1
         if self.depth == 2:
             self.current_field = name
             self.current_value = []
 
-    def endElement(self, name):  # noqa: N802, ARG002
+    def endElement(self, name) -> None:  # noqa: N802, ARG002
         if self.depth == 2 and self.current_field in self.valid_fields:
             self.fields[self.current_field] = "".join(self.current_value)
         self.depth -= 1
 
-    def characters(self, content):
+    def characters(self, content) -> None:
         if self.depth == 2:
             self.current_value.append(content)
 
 
 def _build_url(
     url: str,
-    max_width: t.Optional[int],
-    max_height: t.Optional[int],
+    max_width: int | None,
+    max_height: int | None,
 ) -> str:
     if additional := [
         (key, value) for key, value in (("maxwidth", max_width), ("maxheight", max_height)) if value is not None
@@ -75,9 +75,9 @@ def _build_url(
 
 def fetch_oembed_document(
     url: str,
-    max_width: t.Optional[int] = None,
-    max_height: t.Optional[int] = None,
-) -> t.Optional[dict]:
+    max_width: int | None = None,
+    max_height: int | None = None,
+) -> dict | None:
     """
     Fetch the oEmbed document for a resource at `url` from the provider. If you
     want to constrain the dimensions of the thumbnail, specify the maximum
@@ -103,7 +103,7 @@ def fetch_oembed_document(
     return None
 
 
-def _parse_xml_oembed_response(fh: t.TextIO) -> t.Dict[str, t.Union[str, int]]:
+def _parse_xml_oembed_response(fh: t.TextIO) -> t.Dict[str, str | int]:
     """
     Parse the fields from an XML OEmbed document.
     """
@@ -128,7 +128,7 @@ ACCEPTABLE_TYPES = {
 LINK_TYPES = [key for key in ACCEPTABLE_TYPES if key.endswith("+oembed")]
 
 
-def find_first_oembed_link(links: t.Collection[dict]) -> t.Optional[str]:
+def find_first_oembed_link(links: t.Collection[dict]) -> str | None:
     """
     Search for the first valid oEmbed link.
     """
@@ -142,9 +142,9 @@ def find_first_oembed_link(links: t.Collection[dict]) -> t.Optional[str]:
 
 def get_oembed(
     links: t.Collection[dict],
-    max_width: t.Optional[int] = None,
-    max_height: t.Optional[int] = None,
-) -> t.Optional[dict]:
+    max_width: int | None = None,
+    max_height: int | None = None,
+) -> dict | None:
     """
     Given a URL, fetch its associated oEmbed information.
     """

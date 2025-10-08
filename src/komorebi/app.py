@@ -3,7 +3,7 @@ from flask import Flask, render_template
 from . import blog, sri
 
 
-def create_app():
+def create_app() -> Flask:
     app = Flask(__name__)
     app.config.from_envvar("KOMOREBI_SETTINGS")
     app.register_blueprint(blog.blog)
@@ -16,7 +16,7 @@ def create_app():
     sris = sri.load_sris()
 
     @app.template_global("sri")
-    def get_sri(filename):
+    def get_sri(filename: str) -> str:
         if app.debug:
             return ""
         return sris.get(filename, "")

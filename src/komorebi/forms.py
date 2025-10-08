@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired
 
 
 class EntryForm(FlaskForm):
-    class Meta:
+    class Meta:  # type: ignore
         csrf = False
 
     title = StringField("Title", validators=[DataRequired()])
