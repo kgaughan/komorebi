@@ -1,4 +1,5 @@
 app := "komorebi"
+docker_repo := "ghcr.io/kgaughan/" + app
 
 [private]
 default:
@@ -23,3 +24,10 @@ sri:
 # run the test suite
 tests:
 	@uv run --frozen pytest
+
+# build the docker image
+docker:
+	@rm -rf dist
+	@uv build --wheel
+	@docker buildx build -t {{docker_repo}}:$(git describe --tags --always) .
+	@docker tag {{docker_repo}}:$(git describe --tags --always) {{docker_repo}}:latest
