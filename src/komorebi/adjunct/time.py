@@ -5,8 +5,7 @@ def parse_dt(
     dt: str,
     tz: datetime.timezone = datetime.UTC,
 ) -> datetime.datetime:
-    """
-    Parse an SQLite datetime, treating it as UTC.
+    """Parse an SQLite datetime, treating it as UTC.
 
     If you want it treated naively, pass `None` as the timezone.
     """

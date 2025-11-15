@@ -29,7 +29,7 @@ import typing as t
 class Property:
     type_: str
     value: str
-    metadata: t.Dict[str, str]
+    metadata: dict[str, str]
 
     def to_meta(self) -> str:
         lines = [
@@ -42,7 +42,7 @@ class Property:
         return "\n".join(lines)
 
 
-def parse(properties: t.Collection[t.Tuple[str, str]]) -> t.Sequence[Property]:
+def parse(properties: t.Collection[tuple[str, str]]) -> t.Sequence[Property]:
     result = []
     for name, value in properties:
         name_parts = name.split(":", 2)

@@ -21,7 +21,7 @@ class OEmbedContentHandler(xml.sax.handler.ContentHandler):
     Pulls the fields out of an XML oEmbed document.
     """
 
-    valid_fields: t.ClassVar[t.List[str]] = [
+    valid_fields: t.ClassVar[list[str]] = [
         "type",
         "version",
         "title",
@@ -103,7 +103,7 @@ def fetch_oembed_document(
     return None
 
 
-def _parse_xml_oembed_response(fh: t.TextIO) -> t.Dict[str, str | int]:
+def _parse_xml_oembed_response(fh: t.TextIO) -> dict[str, str | int]:
     """
     Parse the fields from an XML OEmbed document.
     """
