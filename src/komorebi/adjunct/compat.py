@@ -1,7 +1,7 @@
 import typing as t
 
 
-def parse_header(line: str) -> t.Tuple[str, t.Dict[str, str]]:
+def parse_header(line: str) -> tuple[str, dict[str, str]]:
     """
     Parse a Content-type like header.
 

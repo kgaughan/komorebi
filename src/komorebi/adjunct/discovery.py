@@ -4,6 +4,7 @@ Discovery via HTML <link> elements.
 
 import contextlib
 from html.parser import HTMLParser
+import io
 import logging
 import typing as t
 from urllib import parse, request
@@ -25,20 +26,20 @@ class Extractor(HTMLParser):
     def __init__(self, base: str) -> None:
         super().__init__()
         self.base = base
-        self.collected: t.List[t.Dict[str, str]] = []
-        self.properties: t.List[t.Tuple[str, str]] = []
+        self.collected: list[dict[str, str]] = []
+        self.properties: list[tuple[str, str]] = []
 
-    def handle_starttag(self, tag, attrs) -> None:
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         tag = tag.lower()
-        attrs = fix_attributes(attrs)
+        fixed_attrs = fix_attributes(attrs)
         if tag == "link":
-            self.append(attrs)
-        elif tag == "base" and "href" in attrs:
-            self.base = parse.urljoin(self.base, attrs["href"])
-        elif tag == "meta" and "property" in attrs and "content" in attrs:
-            self.properties.append((attrs["property"], attrs["content"]))
+            self.append(fixed_attrs)
+        elif tag == "base" and "href" in fixed_attrs:
+            self.base = parse.urljoin(self.base, fixed_attrs["href"])
+        elif tag == "meta" and "property" in fixed_attrs and "content" in fixed_attrs:
+            self.properties.append((fixed_attrs["property"], fixed_attrs["content"]))
 
-    def append(self, attrs: t.Dict[str, str]) -> None:
+    def append(self, attrs: dict[str, str]) -> None:
         """
         Append the given set of attributes onto our list.
 
@@ -53,7 +54,7 @@ class Extractor(HTMLParser):
         return parse.urljoin(self.base, href)
 
     @classmethod
-    def extract(cls, fh, base: str = ".", encoding: str = "UTF-8"):
+    def extract(cls, fh: io.IOBase, base: str = ".", encoding: str = "UTF-8") -> "Extractor":
         """
         Extract the link tags from header of a HTML document to be read from
         the file object, `fh`. The return value is a list of dicts where the
@@ -77,7 +78,7 @@ class Extractor(HTMLParser):
         logger.error("Error in Extractor: %s", message)  # pragma: no cover
 
 
-def safe_slurp(fh, chunk_size: int = 65536, encoding: str = "UTF-8") -> t.Iterator[str]:
+def safe_slurp(fh: io.IOBase, chunk_size: int = 65536, encoding: str = "UTF-8") -> t.Iterator[str]:
     """
     Safely convert file object, converting it to the given file encoding.
 
@@ -103,9 +104,7 @@ def safe_slurp(fh, chunk_size: int = 65536, encoding: str = "UTF-8") -> t.Iterat
         yield decoded
 
 
-def fix_attributes(
-    attrs: t.Sequence[t.Tuple[str, str | None]],
-) -> t.Dict[str, str]:
+def fix_attributes(attrs: list[tuple[str, str | None]]) -> dict[str, str]:
     """
     Normalise and clean up the attributes, and put them in a dict.
     """
@@ -124,7 +123,7 @@ def fix_attributes(
 def fetch_meta(
     url: str,
     extractor=Extractor,
-) -> t.Tuple[t.Collection[t.Dict[str, str]], t.Collection[t.Tuple[str, str]]]:
+) -> tuple[t.Collection[dict[str, str]], t.Collection[tuple[str, str]]]:
     """
     Extract the <link> tags from the HTML document at the given URL.
     """

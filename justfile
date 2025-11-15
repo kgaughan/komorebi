@@ -1,5 +1,6 @@
 app := "komorebi"
 
+[private]
 default:
 	@just --list
 
@@ -7,14 +8,18 @@ default:
 devel:
 	@uv sync --frozen
 
+# tidy everything with ruff
+tidy:
+	@uv run --frozen ruff check --fix
+
 # run dev server
 dev-server:
-	@uv run flask --app {{app}} --debug run
+	@uv run --frozen flask --app {{app}} --debug run
 
 # regenerate SRI hashes
 sri:
-	@uv run flask --app {{app}} sri
+	@uv run --frozen flask --app {{app}} sri
 
 # run the test suite
 tests:
-	@uv run pytest
+	@uv run --frozen pytest
