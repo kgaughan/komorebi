@@ -33,8 +33,12 @@ Run::
 
     just dev-server
 
-The username and password specified in ``dev/dev.htpasswd`` are *username* and
-*password* respectively.
+The username and password specified in ``dev/dev.passwd.json`` are *username*
+and *password* respectively.
+
+If you want to create/update a password file, run::
+
+     uv run komorebi-passwd
 
 Deployment
 ==========

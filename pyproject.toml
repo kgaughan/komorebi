@@ -31,7 +31,6 @@ dependencies = [
   "flask-wtf~=1.2.1",
   "wtforms>=3.1.2,<4",
   "markdown>=3.8.2,<4",
-  "passlib==1.7.4",
   "itsdangerous>=2.2.0,<3",
 ]
 
@@ -40,6 +39,9 @@ Documentation = "https://github.com/kgaughan/komorebi#readme"
 Issues = "https://github.com/kgaughan/komorebi/issues"
 Source = "https://github.com/kgaughan/komorebi"
 
+[project.scripts]
+komorebi-passwd = "komorebi.adjunct.passkit:main"
+
 [dependency-groups]
 dev = [
   "python-dotenv>=1.1.0",
@@ -47,7 +49,6 @@ dev = [
   "pytest>=8.2.2",
   "pytest-cov>=2.12.1",
   "types-markdown>=3.6.0.20240316",
-  "types-passlib>=1.7.7.20240327",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -125,6 +126,7 @@ ignore = [
   "UP035",   # Deprecated import
   "EM101",   # Exceptions must not use strings
   "EM102",   # Exception must not use f-string literal
+  "TRY003",  # Avoid specifying long messages outside the exception class"
 ]
 
 [tool.ruff.lint.isort]

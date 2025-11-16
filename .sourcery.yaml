@@ -1,0 +1,6 @@
+---
+ignore:
+  - tests/*.json
+  - tests/*.xml
+  - tests/*.html
+  - dev/dev.passwd.json
