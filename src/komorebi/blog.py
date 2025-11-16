@@ -14,10 +14,9 @@ from flask import (
     url_for,
 )
 from flask_httpauth import HTTPBasicAuth
-from passlib.apache import HtpasswdFile
 
 from . import db, embeds, formatting, forms
-from .adjunct import time
+from .adjunct import passkit, time
 from .feed import generate_feed
 
 blog = Blueprint("blog", __name__)
@@ -31,9 +30,9 @@ auth = HTTPBasicAuth()
 
 @auth.verify_password
 def verify_password(username: str, password: str):
-    htpasswd_path = current_app.config.get("HTPASSWD_PATH")
-    if htpasswd_path is not None:
-        return HtpasswdFile(htpasswd_path).check_password(username, password)
+    passwd_path = current_app.config.get("PASSWD_PATH")
+    if passwd_path is not None:
+        return passkit.JSONPasswdFile(passwd_path).check_password(username, password)
     return False
 
 

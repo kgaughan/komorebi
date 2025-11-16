@@ -1,0 +1,1 @@
+{"metadata": {"type": "tag:talideon.com,2025:jsonpasswd", "version": 1}, "users": {"username": {"alg": "scrypt", "key": "aBm/b0XBCRo/IAQmc27DyfDCAXn9UB2aPJahG7dDoXqWHoizL3FLAGHILj3j7d+GaFTanGJfUmWURUihAKNy8g==", "salt": "XUPXhxnl05rm0AHRlKwCPbzWVumCBOaUkjW7sfZ9EgE=", "params": {"n": 16384, "r": 8, "p": 1}}}}
