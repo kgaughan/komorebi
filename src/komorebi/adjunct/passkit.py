@@ -1,8 +1,11 @@
-"""
-A partial replacement for passlib, implementing an equivalent of its
-HtpasswdFile class and supporting functionality.
+"""A partial replacement for [passlib].
+
+Implementing an equivalent of its HtpasswdFile class and supporting
+functionality.
 
 It comes with a simple tool for manipulating JSONPasswd files.
+
+[passlib]: https://passlib.readthedocs.io/
 """
 
 import argparse
@@ -18,32 +21,32 @@ class UnknownAlgorithmError(Exception):
     """Raised when an entry has either an unknown algorithm or none."""
 
 
-class ScryptParams(t.TypedDict):
+class _ScryptParams(t.TypedDict):
     n: int
     r: int
     p: int
 
 
-class ScryptEntry(t.TypedDict):
+class _ScryptEntry(t.TypedDict):
     alg: t.Literal["scrypt"]
     key: str
     salt: str
-    params: ScryptParams
+    params: _ScryptParams
 
 
-def scrypt_construct(passwd: bytes, *, salt_len: int = 32, n: int = 1 << 14, r: int = 8, p: int = 1) -> ScryptEntry:
+def _scrypt_construct(passwd: bytes, *, salt_len: int = 32, n: int = 1 << 14, r: int = 8, p: int = 1) -> _ScryptEntry:
     """Construct an entry from a password using scrypt."""
     salt = secrets.token_bytes(salt_len)
     key = hashlib.scrypt(passwd, salt=salt, n=n, r=r, p=p)
-    return ScryptEntry(
+    return _ScryptEntry(
         alg="scrypt",
         key=base64.b64encode(key).decode("ascii"),
         salt=base64.b64encode(salt).decode("ascii"),
-        params=ScryptParams(n=n, r=r, p=p),
+        params=_ScryptParams(n=n, r=r, p=p),
     )
 
 
-def scrypt_check(passwd: bytes, entry: ScryptEntry) -> bool:
+def _scrypt_check(passwd: bytes, entry: _ScryptEntry) -> bool:
     """Check if a password matches the given entry using scrypt."""
     key = hashlib.scrypt(
         passwd,
@@ -58,7 +61,7 @@ def scrypt_check(passwd: bytes, entry: ScryptEntry) -> bool:
 class JSONPasswdFile:
     """A class to manage user credentials stored in a JSON file.
 
-    ## File Format
+    # File Format
 
     The JSON file should contain a dictionary where keys are usernames and
     values are structured data for checking password validity.
@@ -76,9 +79,12 @@ class JSONPasswdFile:
         "<username2>": { ... }
       }
     }
+    ```
 
-    For the benefit of tools like file(1), the file should start with the
+    For the benefit of tools like [file(1)], the file should start with the
     metadata entry.
+
+    [file(1)]: https://www.man7.org/linux/man-pages/man1/file.1.html
 
     Each value entry has the format:
 
@@ -98,20 +104,32 @@ class JSONPasswdFile:
     Note that the salt and hashed password key are base64-encoded.
 
     Currently only the "scrypt" algorithm is supported.
+
+    Warning:
+        it is the user's responsibility to lock the file if necessary to
+        prevent concurrent access.
+
+    Args:
+        filepath: the path to use when loading/saving the file
+        implementation: the method to use for encrypting the passwords; only
+            "scrypt" is currently supported.
+
+    Attributes:
+        filepath: the path to use when loading/saving the file
     """
 
     # This is just an initial stab and I don't expect it to the the final
     # product.
     _implementations: t.ClassVar = {
         "scrypt": {
-            "entry": ScryptEntry,
-            "construct": scrypt_construct,
-            "check": scrypt_check,
+            "entry": _ScryptEntry,
+            "construct": _scrypt_construct,
+            "check": _scrypt_check,
         }
     }
 
     def __init__(self, filepath: str, implementation: str = "scrypt"):
-        self.filepath = filepath
+        self.filepath: str = filepath
         self.implementation = implementation
         self.users = self._load()
 
@@ -140,10 +158,35 @@ class JSONPasswdFile:
             json.dump(payload, fh)
 
     def set_password(self, username: str, password: str):
+        """Set the given user's password.
+
+        Args:
+            username: the user's username
+            password: the new password
+
+        Note:
+            Calling this method will immediately save the file.
+        """
         self.users[username] = self._implementations[self.implementation]["construct"](password.encode("utf-8"))
         self._save()
 
     def check_password(self, username: str, password: str) -> bool:
+        """Check is a user's password is valid.
+
+        This verifies the provided password against the stored credentials for
+        the given user.
+
+        Args:
+            username: the username whose password must be validated
+            password: the plaintext password to validate
+
+        Returns:
+            `True` if the password is correct; `False` if the user doesn't
+                exist or the password is invalid.
+
+        Raises:
+            UnknownAlgorithmError: the password does not use a known algorithm
+        """
         entry = self.users.get(username)
         if entry is None:
             return False
@@ -155,7 +198,16 @@ class JSONPasswdFile:
 
         return impl["check"](password.encode("utf-8"), entry)
 
-    def delete(self, username) -> bool:
+    def delete(self, username: str) -> bool:
+        """Remove the given user from the database.
+
+        Args:
+            username: the user to remove
+
+        Returns:
+            `True` if the user was found and removed; `False` if the user was
+                not found.
+        """
         if username in self.users:
             del self.users[username]
             self._save()
