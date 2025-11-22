@@ -1,7 +1,7 @@
 """
 An intensely pragmatic implementation of the Open Graph Protocol.
 
-This follows `the specification <https://opengraphprotocol.org/>`_ rather than
+This follows [the specification](https://opengraphprotocol.org/) rather than
 attempting to implement RDFa.
 
 # Theory of Operation
@@ -14,10 +14,13 @@ attached to a property (thus making it structured) has the form "ns:name:meta".
 Metadata should be implemented as a multimap, but I'll be treating it as a map.
 
 Example of prefix with multiple entries:
-<body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
 
-If this is present: vocab="http://www.w3.org/2011/rdfa-context/rdfa-1.1"
-An initial context is set up consisting of the namespaces given on that page.
+```xml
+<body prefix="dc: http://purl.org/dc/terms/ schema: http://schema.org/">
+```
+
+If this is present: `vocab="http://www.w3.org/2011/rdfa-context/rdfa-1.1"`,
+an initial context is set up consisting of the namespaces given on that page.
 """
 
 import dataclasses
@@ -43,6 +46,7 @@ class Property:
 
 
 def parse(properties: t.Collection[tuple[str, str]]) -> t.Sequence[Property]:
+    """"""
     result = []
     for name, value in properties:
         name_parts = name.split(":", 2)
@@ -57,6 +61,7 @@ def parse(properties: t.Collection[tuple[str, str]]) -> t.Sequence[Property]:
 
 
 def to_meta(props: Property | t.Sequence[Property]) -> str:
+    """"""
     if isinstance(props, Property):
         return props.to_meta()
     return "\n".join(prop.to_meta() for prop in props)
@@ -67,6 +72,7 @@ def find(
     type_: str,
     value: str | None = None,
 ) -> t.Iterable[Property]:
+    """"""
     for prop in props:
         if prop.type_ == type_ and (value is None or prop.value == value):
             yield prop

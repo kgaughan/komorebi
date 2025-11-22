@@ -126,7 +126,7 @@ ignore = [
   "UP035",   # Deprecated import
   "EM101",   # Exceptions must not use strings
   "EM102",   # Exception must not use f-string literal
-  "TRY003",  # Avoid specifying long messages outside the exception class"
+  "TRY003",  # Avoid specifying long messages outside the exception class
 ]
 
 [tool.ruff.lint.isort]

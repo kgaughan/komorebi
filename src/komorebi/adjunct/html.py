@@ -1,6 +1,4 @@
-"""
-HTML parsing and serialisation support.
-"""
+"""HTML parsing and serialisation support."""
 
 import dataclasses
 from html import escape
@@ -13,12 +11,12 @@ logger = logging.getLogger(__name__)
 
 __all__ = [
     "Element",
-    "Parser",
-    "escape",
+    "make",
+    "parse",
 ]
 
 # See: https://html.spec.whatwg.org/multipage/syntax.html#void-elements
-SELF_CLOSING = {
+_SELF_CLOSING = {
     "area",
     "base",
     "br",
@@ -44,8 +42,16 @@ def make(
     *,
     close: bool | None = None,
 ) -> str:
-    """
-    Helper for quickly constructing a HTML tag.
+    """Helper for quickly constructing a HTML tag.
+
+    Args:
+        tag: tag name
+        attrs: attributes to apply to the tag
+        close: set to `True` or `False` to determine whether a closing tag
+            should be generated; omit to let the function decide
+
+    Returns:
+        the tag
     """
     attr_list = []
     for name, value in attrs.items():
@@ -55,7 +61,7 @@ def make(
             attr_list.append(f' {name}="{escape(value, quote=True)}"')
     result = f"<{tag}{''.join(attr_list)}>"
     if close is None:
-        close = tag not in SELF_CLOSING
+        close = tag not in _SELF_CLOSING
     if close:
         result += f"</{tag}>"
     return result
@@ -63,6 +69,14 @@ def make(
 
 @dataclasses.dataclass
 class Element:
+    """A HTML element.
+
+    Attributes:
+        tag: the tag name
+        attrs: the tag's attributes
+        children: the child elements of the element
+    """
+
     tag: str | None
     attrs: dict = dataclasses.field(default_factory=dict)
     children: list = dataclasses.field(default_factory=list)
@@ -77,6 +91,15 @@ class Element:
         return iter(self.children)
 
     def serialize(self, dest: io.TextIOBase | None = None) -> io.TextIOBase:
+        """Serialise the element to a file-like object.
+
+        Args:
+            dest: the file-like object to serialise the document to; if this is
+                `None`, as [io.StringIO][] object will be created instead.
+
+        Returns:
+            A file-like object containing the serialised element.
+        """
         if dest is None:
             dest = io.StringIO()
         if self.tag is not None:
@@ -91,16 +114,14 @@ class Element:
                 dest.write(escape(child, quote=False))
             elif isinstance(child, Element):
                 child.serialize(dest)
-        if self.tag is not None and self.tag not in SELF_CLOSING:
+        if self.tag is not None and self.tag not in _SELF_CLOSING:
             dest.write(f"</{self.tag}>")
 
         return dest
 
 
-class Parser(HTMLParser):
-    """
-    Parses a HTML document into
-    """
+class _Parser(HTMLParser):
+    """Parses a HTML document into an [Element][]."""
 
     def __init__(self) -> None:
         super().__init__()
@@ -114,7 +135,7 @@ class Parser(HTMLParser):
     def handle_starttag(self, tag, attrs) -> None:
         elem = Element(tag=tag, attrs=dict(attrs))
         self.top.children.append(elem)
-        if tag not in SELF_CLOSING:
+        if tag not in _SELF_CLOSING:
             self.stack.append(elem)
 
     def handle_startendtag(self, tag, attrs) -> None:
@@ -122,7 +143,7 @@ class Parser(HTMLParser):
         self.top.children.append(elem)
 
     def handle_endtag(self, tag) -> None:
-        if tag not in SELF_CLOSING:
+        if tag not in _SELF_CLOSING:
             while len(self.stack) > 1:
                 self.stack.pop()
                 if tag == self.top.tag:
@@ -139,7 +160,15 @@ class Parser(HTMLParser):
 
 
 def parse(markup: str) -> Element:
-    parser = Parser()
+    """Parse a HTML document, returning its root element.
+
+    Args:
+        markup: the document to parse
+
+    Returns:
+        The root element of the document.
+    """
+    parser = _Parser()
     parser.feed(markup)
     parser.close()
     return parser.root
