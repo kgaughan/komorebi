@@ -32,13 +32,13 @@ def generate_feed(
             rel="alternate",
             type="text/html",
             hreflang="en",
-            href=url_for(".latest", _external=True),
+            href=url_for("blog.latest", _external=True),
         )
         xml.link(
             rel="self",
             type="application/atom+xml",
             hreflang="en",
-            href=url_for(".feed", _external=True),
+            href=url_for("blog.feed", _external=True),
         )
 
         for entry in entries:
@@ -52,7 +52,7 @@ def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: db.Entry) -> None:
         xml.published(time.to_iso_date(entry["time_c"]))
         xml.updated(time.to_iso_date(entry["time_m"]))
         xml.id(f"{feed_id}:{entry['id']}")
-        permalink = url_for(".entry", entry_id=entry["id"], _external=True)
+        permalink = url_for("blog.entry", entry_id=entry["id"], _external=True)
         alternate = entry["link"] or permalink
         xml.link(rel="alternate", type="text/html", href=alternate)
         if entry["link"]:

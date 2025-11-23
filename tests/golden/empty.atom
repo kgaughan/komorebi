@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>Title</title><subtitle>Subtitle</subtitle><updated>1970-02-01T12:00:59+00:00</updated><author><name>Author</name></author><id>urn:uuid:00000000-0000-0000-0000-000000000000</id><rights>Rights</rights><link rel="alternate" type="text/html" hreflang="en" href="http://example.com/site/"></link><link rel="self" type="application/atom+xml" hreflang="en" href="http://example.com/site/feed"></link></feed>

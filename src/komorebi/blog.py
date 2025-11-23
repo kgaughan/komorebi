@@ -139,7 +139,7 @@ def add_entry() -> Response | str:
             if markup:
                 db.add_oembed(entry_id, markup)
 
-            return redirect(url_for(".entry", entry_id=entry_id))  # type: ignore
+            return redirect(url_for("blog.entry", entry_id=entry_id))  # type: ignore
     return render_template("entry_edit.html", form=form)
 
 
@@ -158,7 +158,7 @@ def edit_entry(entry_id: int) -> str:
             via=form.via.data,
             note=form.note.data,
         )
-        return redirect(url_for(".entry", entry_id=entry_id))  # type: ignore
+        return redirect(url_for("blog.entry", entry_id=entry_id))  # type: ignore
     return render_template("entry_edit.html", form=form)
 
 
