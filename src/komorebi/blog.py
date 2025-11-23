@@ -46,7 +46,7 @@ def archive() -> str:
     return render_template("archive.html", entries=process_archive(db.query_archive()))
 
 
-def process_archive(records: t.Iterable[dict]) -> t.Iterator[dict]:
+def process_archive(records: t.Iterable[db.ArchiveMonth]) -> t.Iterable[db.ArchiveMonth]:
     year = None
     last_month = 0
     for record in records:
@@ -56,7 +56,7 @@ def process_archive(records: t.Iterable[dict]) -> t.Iterator[dict]:
                 for i in range(1, 13 - last_month):
                     yield {
                         "n": 0,
-                        "year": year,
+                        "year": year or 0,
                         "month": last_month + i,
                     }
             year = record["year"]

@@ -1,6 +1,4 @@
-"""
-Extract build embeds based on target page metadata.
-"""
+"""Extract build embeds based on target page metadata."""
 
 import re
 import typing as t
@@ -136,7 +134,7 @@ def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> str | None:
 
 
 def fetch_embed(url: str | None) -> str | None:
-    if url is None:
+    if url is None or url == "":
         return None
     try:
         links, meta = discovery.fetch_meta(url)
