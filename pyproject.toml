@@ -150,7 +150,7 @@ testpaths = ["tests"]
 [tool.coverage.run]
 branch = true
 parallel = true
-omit = ["src/komorebi/adjunct/*"]
+omit = ["src/komorebi/adjunct/*", "src/komorebi/_version.py"]
 
 [tool.coverage.report]
 ignore_errors = true

@@ -3,9 +3,19 @@ from flask import Flask, render_template
 from . import blog, sri
 
 
-def create_app() -> Flask:
+def create_app(*, testing: bool = False) -> Flask:
     app = Flask(__name__)
-    app.config.from_envvar("KOMOREBI_SETTINGS")
+    if not testing:
+        app.config.from_envvar("KOMOREBI_SETTINGS")
+    else:
+        app.config.update(
+            {
+                "TESTING": True,
+                "SERVER_NAME": "example.com",
+                "APPLICATION_ROOT": "/site/",
+                "PREFERRED_URI_SCHEME": "http",
+            }
+        )
     app.register_blueprint(blog.blog)
     app.cli.add_command(sri.generate_hashes)
 

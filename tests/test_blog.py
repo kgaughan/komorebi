@@ -1,4 +1,4 @@
-from komorebi import blog
+from komorebi import blog, db
 
 
 def test_process_archive_no_entries():
@@ -6,12 +6,12 @@ def test_process_archive_no_entries():
 
 
 def test_process_archive_single():
-    single = [{"year": 2020, "month": 1, "n": 42}]
+    single = [db.ArchiveMonth(year=2020, month=1, n=42)]
     assert list(blog.process_archive(single)) == single
 
 
 def test_process_archive_span():
-    span = [{"year": 2020, "month": n + 1, "n": 42 + n} for n in range(3)]
+    span = [db.ArchiveMonth(year=2020, month=n + 1, n=42 + n) for n in range(3)]
     assert list(blog.process_archive(span)) == span
 
 
