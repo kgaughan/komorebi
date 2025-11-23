@@ -1,4 +1,179 @@
-/*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}
+/*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
+html {
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%
+}
+
+body {
+  margin: 0
+}
+
+h1 {
+  font-size: 2em;
+  margin: .67em 0
+}
+
+hr {
+  box-sizing: content-box;
+  height: 0;
+  overflow: visible
+}
+
+pre {
+  font-family: monospace;
+  font-size: 1em
+}
+
+a {
+  background-color: transparent
+}
+
+abbr[title] {
+  border-bottom: none;
+  text-decoration: underline;
+  text-decoration: underline dotted
+}
+
+b,
+strong {
+  font-weight: bolder
+}
+
+code,
+kbd,
+samp {
+  font-family: monospace;
+  font-size: 1em
+}
+
+small {
+  font-size: 80%
+}
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline
+}
+
+sub {
+  bottom: -.25em
+}
+
+sup {
+  top: -.5em
+}
+
+img {
+  border-style: none
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0
+}
+
+button,
+input {
+  overflow: visible
+}
+
+button,
+select {
+  text-transform: none
+}
+
+[type=button],
+[type=reset],
+[type=submit],
+button {
+  -webkit-appearance: button
+}
+
+[type=button]::-moz-focus-inner,
+[type=reset]::-moz-focus-inner,
+[type=submit]::-moz-focus-inner,
+button::-moz-focus-inner {
+  border-style: none;
+  padding: 0
+}
+
+[type=button]:-moz-focusring,
+[type=reset]:-moz-focusring,
+[type=submit]:-moz-focusring,
+button:-moz-focusring {
+  outline: 1px dotted ButtonText
+}
+
+fieldset {
+  padding: .35em .75em .625em
+}
+
+legend {
+  box-sizing: border-box;
+  color: inherit;
+  display: table;
+  max-width: 100%;
+  padding: 0;
+  white-space: normal
+}
+
+progress {
+  vertical-align: baseline
+}
+
+textarea {
+  overflow: auto
+}
+
+[type=checkbox],
+[type=radio] {
+  box-sizing: border-box;
+  padding: 0
+}
+
+[type=number]::-webkit-inner-spin-button,
+[type=number]::-webkit-outer-spin-button {
+  height: auto
+}
+
+[type=search] {
+  -webkit-appearance: textfield;
+  outline-offset: -2px
+}
+
+[type=search]::-webkit-search-decoration {
+  -webkit-appearance: none
+}
+
+::-webkit-file-upload-button {
+  -webkit-appearance: button;
+  font: inherit
+}
+
+details {
+  display: block
+}
+
+summary {
+  display: list-item
+}
+
+template {
+  display: none
+}
+
+[hidden] {
+  display: none
+}
 
 /*! Bunny Fonts: https://fonts.bunny.net/css?family=inconsolata:400,700|raleway:400,600 | Latin only */
 
@@ -12,6 +187,7 @@
   src: url(https://fonts.bunny.net/inconsolata/files/inconsolata-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 /* latin-ext */
 @font-face {
   font-family: 'Inconsolata';
@@ -33,6 +209,7 @@
   src: url(https://fonts.bunny.net/inconsolata/files/inconsolata-latin-700-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 /* latin-ext */
 @font-face {
   font-family: 'Inconsolata';
@@ -54,6 +231,7 @@
   src: url(https://fonts.bunny.net/raleway/files/raleway-latin-400-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 /* latin-ext */
 @font-face {
   font-family: 'Raleway';
@@ -75,6 +253,7 @@
   src: url(https://fonts.bunny.net/raleway/files/raleway-latin-600-normal.woff2) format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
 /* latin-ext */
 @font-face {
   font-family: 'Raleway';
@@ -98,48 +277,61 @@ body {
   padding: 0;
   color: #555;
 }
+
 a {
   color: #048;
 }
-pre, code {
+
+pre,
+code {
   font-family: 'Inconsolata', monospace;
   font-display: swap;
 }
-body > header {
+
+body>header {
   background-color: #802;
   color: white;
   padding: 2rem 0 1rem 0;
   margin: 0 auto;
 }
+
 nav {
   margin-top: 1rem;
   text-align: center;
   color: #C03;
 }
+
 nav a {
   color: white;
   text-decoration: none;
 }
+
 svg {
   vertical-align: middle;
 }
+
 nav svg path {
   fill: white;
 }
-body > main, body > footer {
+
+body>main,
+body>footer {
   line-height: 1.6;
   max-width: 40rem;
   width: 100%;
   padding: 0;
   margin: 2rem auto;
 }
-body > footer {
+
+body>footer {
   text-align: center;
 }
+
 article {
   border-bottom: 1px dashed #FEE;
   padding-left: 1.25em;
 }
+
 blockquote:before {
   content: "\275d";
   position: absolute;
@@ -149,82 +341,107 @@ blockquote:before {
   color: #804;
   font-style: normal;
 }
+
 blockquote {
   position: relative;
   padding-left: 1rem;
   font-style: italic;
 }
+
 blockquote em {
   font-style: normal;
 }
+
 article .metadata {
   font-size: 80%;
 }
-article > header {
+
+article>header {
   position: relative;
 }
-article > header .permalink {
+
+article>header .permalink {
   position: absolute;
   left: -1.25em;
 }
+
 .permalink svg path {
   fill: #802;
 }
+
 .permalink a {
   text-decoration: none;
 }
+
 .oembed {
   margin: 1rem 0;
 }
-.oembed > img,
-.oembed > object,
-.oembed > iframe {
+
+.oembed>img,
+.oembed>object,
+.oembed>iframe {
   margin: 0 auto;
   display: block;
 }
-h1, h2 {
+
+h1,
+h2 {
   font-weight: 400;
   margin-bottom: 0;
 }
+
 article h1,
 article h2 {
   color: black;
 }
+
 h1 {
   font-size: 300%;
   line-height: 1.1;
   text-align: center;
   margin-top: 0;
 }
+
 h2 {
   font-size: 100%;
   color: #802;
   font-weight: bold;
 }
-pre, code {
+
+pre,
+code {
   background: #eee;
 }
+
 p code {
   padding: 0.25em;
 }
+
 pre {
   padding: 0.75rem;
   border-left: 2px solid #802;
   overflow-x: auto;
 }
+
 table {
   border-collapse: collapse;
   width: 100%;
 }
-thead, tbody {
+
+thead,
+tbody {
   border-bottom: 1px solid #802;
 }
-tbody tr + tr {
+
+tbody tr+tr {
   border-top: 1px solid #ccc;
 }
-th, td {
+
+th,
+td {
   padding: 0.5em 1em;
 }
+
 th {
   text-align: left;
 }
@@ -232,26 +449,33 @@ th {
 dl#archive-summary {
   overflow: hidden;
 }
+
 dl#archive-summary dd.month {
   font-weight: bold;
 }
-dl#archive-summary dt, dl#archive-summary dd {
+
+dl#archive-summary dt,
+dl#archive-summary dd {
   float: left;
 }
+
 dl#archive-summary dt {
   clear: left;
   width: 3.5em;
   font-weight: bold;
   text-align: right;
 }
+
 dl#archive-summary dd {
   margin: 0;
   width: 3em;
   text-align: right;
 }
+
 dl#archive-summary dd a {
   display: block;
 }
+
 .empty {
   color: silver;
 }
@@ -261,6 +485,7 @@ dl#archive-summary dd a {
   grid-template-columns: min-content auto;
   grid-gap: 0.5ch;
 }
+
 .form label {
   text-align: right;
 }
@@ -271,21 +496,28 @@ dl#archive-summary dd a {
   margin: 0;
 }
 
-.facade, .player {
+.facade,
+.player {
   margin: 0 auto;
   display: block;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
 }
+
 .facade {
   position: relative;
   overflow: hidden;
   cursor: pointer;
 }
-.facade img, .facade span {
+
+.facade img,
+.facade span {
   position: absolute;
   top: 0;
   bottom: 0;
   margin: auto;
 }
+
 .facade span {
   height: 1.5em;
   text-align: center;

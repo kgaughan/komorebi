@@ -48,7 +48,6 @@ window.addEventListener('DOMContentLoaded', () => {
 			iframe.src = url.href;
 			iframe.width = elem.dataset.width;
 			iframe.height = elem.dataset.height;
-			iframe.frameBorder = "0";
 			iframe.sandbox = "allow-same-origin allow-scripts";
 			iframe.allow = "autoplay; clipboard-write; encrypted-media; picture-in-picture";
 
