@@ -145,7 +145,7 @@ def query_entry(entry_id: int) -> Entry | None:
 
 def add_entry(
     link: str | None,
-    title: str | None,
+    title: str,
     via: str | None,
     note: str | None,
 ) -> int:
@@ -172,7 +172,7 @@ def add_entry(
 def update_entry(
     entry_id: int,
     link: str | None,
-    title: str | None,
+    title: str,
     via: str | None,
     note: str | None,
 ) -> int | None:

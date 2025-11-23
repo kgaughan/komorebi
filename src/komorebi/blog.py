@@ -129,7 +129,7 @@ def add_entry() -> Response | str:
         try:
             entry_id = db.add_entry(
                 link=form.link.data,
-                title=form.title.data,
+                title=form.title.data,  # type: ignore
                 via=form.via.data,
                 note=form.note.data,
             )
@@ -154,7 +154,7 @@ def edit_entry(entry_id: int) -> str:
         db.update_entry(
             entry_id,
             link=form.link.data,
-            title=form.title.data,
+            title=form.title.data,  # type: ignore
             via=form.via.data,
             note=form.note.data,
         )
