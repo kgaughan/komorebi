@@ -3,26 +3,15 @@ import typing as t
 
 from flask import url_for
 
-from . import formatting
+from . import db, formatting
 from .adjunct import time, xmlutils
-
-
-class Entry(t.TypedDict):
-    id: str
-    title: str
-    time_c: str
-    time_m: str
-    link: str | None
-    via: str | None
-    html: str | None
-    note: str | None
 
 
 def generate_feed(
     title: str,
     author: str,
     feed_id: str,
-    entries: t.Iterable[Entry],
+    entries: t.Iterable[db.Entry],
     subtitle: str | None = None,
     rights: str | None = None,
     modified: datetime | None = None,
@@ -57,7 +46,7 @@ def generate_feed(
     return xml.as_string()
 
 
-def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: Entry) -> None:
+def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: db.Entry) -> None:
     with xml.within("entry"):
         xml.title(entry["title"])
         xml.published(time.to_iso_date(entry["time_c"]))

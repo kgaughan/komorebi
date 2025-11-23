@@ -14,7 +14,7 @@ SUFFIXES = (
 
 
 def generate_sri(
-    fh: t.TextIO | t.BinaryIO,
+    fh: t.BinaryIO,
     alg: str = "sha384",
     block_size: int = 8192,
 ) -> str:
@@ -26,7 +26,7 @@ def generate_sri(
     hashed = hashlib.new(alg)
     while True:
         if blk := fh.read(block_size):
-            hashed.update(blk)  # type: ignore
+            hashed.update(blk)
         else:
             break
     digest = base64.b64encode(hashed.digest()).decode("UTF-8")

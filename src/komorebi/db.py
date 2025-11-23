@@ -75,11 +75,21 @@ def query_value(sql: str, args: tuple = (), *, default: int | str | None = None)
     return default
 
 
-def query_latest() -> t.Iterator:
+class Entry(t.TypedDict):
+    id: int
+    title: str
+    time_c: str
+    time_m: str
+    link: str | None
+    via: str | None
+    note: str | None
+    html: str | None
+
+
+def query_latest() -> t.Iterable[Entry]:
     return query(
         """
-        SELECT    links.id, time_c, time_m, link, title, via, note,
-                  html
+        SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
         LEFT JOIN oembed ON links.id = oembed.id
         ORDER BY  time_c DESC
@@ -88,7 +98,13 @@ def query_latest() -> t.Iterator:
     )
 
 
-def query_archive() -> t.Iterator:
+class ArchiveMonth(t.TypedDict):
+    year: int
+    month: int
+    n: int
+
+
+def query_archive() -> t.Iterable[ArchiveMonth]:
     # This is gross.
     return query(
         """
@@ -103,7 +119,7 @@ def query_archive() -> t.Iterator:
     )
 
 
-def query_month(year: int, month: int) -> list:
+def query_month(year: int, month: int) -> t.Iterable[Entry]:
     sql = """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
@@ -112,10 +128,10 @@ def query_month(year: int, month: int) -> list:
         ORDER BY  time_c ASC
         """
     dt = datetime.date(year, month, 1)
-    return list(query(sql, (dt.isoformat(), dt.isoformat())))
+    return query(sql, (dt.isoformat(), dt.isoformat()))
 
 
-def query_entry(entry_id: int):
+def query_entry(entry_id: int) -> Entry | None:
     return query_row(
         """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
@@ -127,31 +143,45 @@ def query_entry(entry_id: int):
     )
 
 
-def add_entry(link: str, title: str, via: str, note: str):
-    if link.strip() == "":
-        link = None  # type: ignore
-    if via.strip() == "":
-        via = None  # type: ignore
-    if note.strip() == "":
-        note = None  # type: ignore
+def add_entry(
+    link: str | None,
+    title: str,
+    via: str | None,
+    note: str | None,
+) -> int:
+    if link is not None and link.strip() == "":
+        link = None
+    if via is not None and via.strip() == "":
+        via = None
+    if note is not None and note.strip() == "":
+        note = None
 
-    return execute(
-        """
-        INSERT
-        INTO    links (link, title, via, note)
-        VALUES  (?, ?, ?, ?)
-        """,
-        (link, title, via, note),
+    return (
+        execute(
+            """
+            INSERT
+            INTO    links (link, title, via, note)
+            VALUES  (?, ?, ?, ?)
+            """,
+            (link, title, via, note),
+        )
+        or 0
     )
 
 
-def update_entry(entry_id: int, link: str, title: str, via: str, note: str) -> int | None:
-    if link.strip() == "":
-        link = None  # type: ignore
-    if via.strip() == "":
-        via = None  # type: ignore
-    if note.strip() == "":
-        note = None  # type: ignore
+def update_entry(
+    entry_id: int,
+    link: str | None,
+    title: str,
+    via: str | None,
+    note: str | None,
+) -> int | None:
+    if link is not None and link.strip() == "":
+        link = None
+    if via is not None and via.strip() == "":
+        via = None
+    if note is not None and note.strip() == "":
+        note = None
 
     return execute(
         """
@@ -171,8 +201,8 @@ def query_last_modified() -> datetime.datetime | None:
     return None
 
 
-def add_oembed(entry_id: int, html: str) -> None:
-    execute(
+def add_oembed(entry_id: int, html: str) -> int | None:
+    return execute(
         """
         INSERT
         INTO    oembed (id, html)
