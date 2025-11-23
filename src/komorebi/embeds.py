@@ -134,7 +134,7 @@ def make_markup_from_ogp(props: t.Sequence[ogp.Property]) -> str | None:
 
 
 def fetch_embed(url: str | None) -> str | None:
-    if url is None or url == "":
+    if url is None or url.strip() == "":
         return None
     try:
         links, meta = discovery.fetch_meta(url)
