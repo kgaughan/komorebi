@@ -2,13 +2,15 @@ import datetime
 import sqlite3
 import typing as t
 
-from flask import current_app, g
+from flask import Request, current_app, g
 
 from .adjunct import time
 
+Scalar = int | float | str | None
+
 
 def get_db() -> sqlite3.Connection:
-    con = getattr(g, "_database", None)
+    con: sqlite3.Connection = getattr(g, "_database", None)  # type: ignore
     if con is None:
         db_path = current_app.config.get("DB_PATH", "db.sqlite")
         con = g._database = sqlite3.connect(db_path)  # pylint: disable=E0237
@@ -16,8 +18,8 @@ def get_db() -> sqlite3.Connection:
     return con
 
 
-def close_connection(req):
-    con = getattr(g, "_database", None)
+def close_connection(req: Request) -> Request:
+    con: sqlite3.Connection = getattr(g, "_database", None)  # type: ignore
     if con is not None:
         cur = con.cursor()
         try:
@@ -28,7 +30,7 @@ def close_connection(req):
     return req
 
 
-def execute(sql: str, args: tuple = ()) -> int | None:
+def execute(sql: str, args: tuple[Scalar, ...] = ()) -> int | None:
     con = get_db()
     cur = con.cursor()
     cur.arraysize = 50
@@ -41,7 +43,7 @@ def execute(sql: str, args: tuple = ()) -> int | None:
         cur.close()
 
 
-def query(sql: str, args: tuple = ()) -> t.Iterator:
+def query(sql: str, args: tuple[Scalar, ...] = ()) -> t.Iterator:
     con = get_db()
     cur = con.cursor()
     try:
@@ -51,7 +53,7 @@ def query(sql: str, args: tuple = ()) -> t.Iterator:
         cur.close()
 
 
-def query_row(sql: str, args: tuple = (), *, default=None):
+def query_row(sql: str, args: tuple[Scalar, ...] = (), *, default=None):
     con = get_db()
     cur = con.cursor()
     try:
@@ -63,7 +65,7 @@ def query_row(sql: str, args: tuple = (), *, default=None):
     return default
 
 
-def query_value(sql: str, args: tuple = (), *, default: int | str | None = None) -> int | str | None:
+def query_value(sql: str, args: tuple[Scalar, ...] = (), *, default: Scalar = None) -> Scalar:
     con = get_db()
     cur = con.cursor()
     try:
@@ -86,7 +88,7 @@ class Entry(t.TypedDict):
     html: str | None
 
 
-def query_latest() -> t.Iterable[Entry]:
+def query_latest() -> t.Iterator[Entry]:
     return query(
         """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
@@ -104,7 +106,7 @@ class ArchiveMonth(t.TypedDict):
     n: int
 
 
-def query_archive() -> t.Iterable[ArchiveMonth]:
+def query_archive() -> t.Iterator[ArchiveMonth]:
     # This is gross.
     return query(
         """
@@ -119,7 +121,7 @@ def query_archive() -> t.Iterable[ArchiveMonth]:
     )
 
 
-def query_month(year: int, month: int) -> t.Iterable[Entry]:
+def query_month(year: int, month: int) -> t.Iterator[Entry]:
     sql = """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
