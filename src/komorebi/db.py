@@ -2,7 +2,7 @@ import datetime
 import sqlite3
 import typing as t
 
-from flask import Request, current_app, g
+from flask import current_app, g
 
 from .adjunct import time
 
@@ -18,7 +18,7 @@ def get_db() -> sqlite3.Connection:
     return con
 
 
-def close_connection(req: Request) -> Request:
+def close_connection(ctx):
     con: sqlite3.Connection = getattr(g, "_database", None)  # type: ignore
     if con is not None:
         cur = con.cursor()
@@ -27,7 +27,7 @@ def close_connection(req: Request) -> Request:
         finally:
             cur.close()
         con.close()
-    return req
+    return ctx
 
 
 def execute(sql: str, args: tuple[Scalar, ...] = ()) -> int | None:

@@ -23,7 +23,7 @@ blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(time.to_iso_date)
 blog.add_app_template_filter(time.to_wayback_date)
 blog.add_app_template_filter(formatting.render_markdown, "markdown")
-blog.after_request(db.close_connection)
+blog.teardown_request(db.close_connection)
 
 auth = HTTPBasicAuth()
 
