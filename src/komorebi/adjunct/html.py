@@ -90,7 +90,7 @@ class Element:
     def __iter__(self):
         return iter(self.children)
 
-    def serialize(self, dest: io.TextIOBase | None = None) -> io.TextIOBase:
+    def serialize(self, dest: t.TextIO | None = None) -> t.TextIO:
         """Serialise the element to a file-like object.
 
         Args:

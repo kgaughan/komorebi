@@ -29,11 +29,11 @@ auth = HTTPBasicAuth()
 
 
 @auth.verify_password
-def verify_password(username: str, password: str):
+def verify_password(username: str, password: str) -> bool:
     passwd_path = current_app.config.get("PASSWD_PATH")
-    if passwd_path is not None:
-        return passkit.JSONPasswdFile(passwd_path).check_password(username, password)
-    return False
+    if passwd_path is None:
+        return False
+    return passkit.JSONPasswdFile(passwd_path).check_password(username, password)
 
 
 @blog.route("/")
@@ -145,7 +145,7 @@ def add_entry() -> Response | str:
 
 @blog.route("/<int:entry_id>/edit", methods=["GET", "POST"])
 @auth.login_required
-def edit_entry(entry_id: int) -> str:
+def edit_entry(entry_id: int) -> Response | str:
     entry = db.query_entry(entry_id)
     if entry is None:
         abort(404)
