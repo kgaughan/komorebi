@@ -6,7 +6,7 @@ from flask import current_app, g
 
 from .adjunct import time
 
-Scalar = int | float | str | None
+Scalar = int | float | str | bytes | None
 
 
 def get_db() -> sqlite3.Connection:
