@@ -5,7 +5,7 @@ import datetime
 
 def parse_dt(
     dt: str,
-    tz: datetime.timezone | None = datetime.UTC,
+    tz: datetime.tzinfo | None = datetime.UTC,
 ) -> datetime.datetime:
     """Parse an SQLite datetime, treating it as UTC by default.
 
@@ -20,7 +20,7 @@ def parse_dt(
     return parsed if tz is None else parsed.replace(tzinfo=tz)
 
 
-def to_iso_date(dt: str, tz: datetime.timezone = datetime.UTC) -> str:
+def to_iso_date(dt: str, tz: datetime.tzinfo = datetime.UTC) -> str:
     """Convert an SQLite timestamp string to [ISO 8601] format.
 
     [ISO 8601]: http://en.wikipedia.org/wiki/ISO_8601
