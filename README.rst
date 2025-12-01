@@ -43,13 +43,61 @@ If you want to create/update a password file, run::
 Deployment
 ==========
 
-The ``komorebi`` module containst a ``__main__.py`` file. This means that the
-module is executable. This default runner uses wsgiref_. Use the ``--help``
-flag for a list of options. Under the ``supevision`` directory is
-``komorebi.ini``, a config file for Supervisor_ showing how to run the site.
+The ``komorebi`` module contains a ``__main__.py`` file. This means that the
+module is executable. This default runner uses wsgiref_, so it's not really
+suitable for production usage, but it's enough for testing things out before
+configuring a more suitable WSGI server.
+
+The application expects an environment variable called ``KOMOREBI_SETTINGS``
+to contain the *absolute* path of a configuration file. If it's not absolute,
+Flask will, for reasons, assume it's relative to the ``komorebi`` module
+itself, which you don't want. The configuration is a Python file with the
+following format:
+
+.. code-block:: python
+
+    # The feed ID to be used in for your site. I recommend you use a tag URI
+    # for # this. Substitute 'example.com' with the domain name of your
+    # website, '2005' with the current year, and 'komorebi' with whatever you
+    # want so long as it's descriptive and consists of alphanumeric characters.
+    # This # will be used to construct the Atom feed ID for your feed and also
+    # the entry IDs for each entry by appending ':<id>' to the end of it.
+    FEED_ID = "tag:example.com,2005:komorebi"
+
+    # A secret key used for signing things within the application. Generate it
+    # by running:
+    #    python3 -c 'import secrets; print(secrets.token_hex())'
+    SECRET_KEY = "deadbeef"
+
+    # Path to your blog's database. Currently only SQLite is supported.
+    DB_PATH = "db.sqlite"
+
+    # Path to the password store for your application. You can manage these
+    # files by running:
+    #     uv run komorebi-password
+    PASSWD_PATH = "dev/dev.passwd.json"
+
+    # The title to use for your blog, along with your name for the feed.
+    BLOG_TITLE = "My Weblog"
+    BLOG_AUTHOR = "Joe Bloggs"
+
+This can include any of the `Flask configuration values`_ too, if they're
+relevant to you.
+
+Under the ``supervision`` directory is ``komorebi.ini``, a config file for
+Supervisor_ showing how to run the site.
+
+To run with gunicorn_, run::
+
+    gunicorn 'komorebi:create_wsgi_app()'
+
+This assumes that Komorebi and its dependencies are installed and you have
+``KOMOREBI_SETTINGS`` suitably configured in your environment.
 
 .. _wsgiref: https://docs.python.org/3.7/library/wsgiref.html
 .. _Supervisor: http://supervisord.org/
+.. _Flask configuration values: https://flask.palletsprojects.com/en/stable/config/#builtin-configuration-values
+.. _gunicorn: https://gunicorn.org/
 
 Regenerating subresource integrity hashes
 =========================================
