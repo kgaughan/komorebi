@@ -23,4 +23,4 @@ def render_markdown(text: str | None) -> str:
             ],
         )
         _formatter.set(formatter)
-    return formatter.convert(text)
+    return formatter.reset().convert(text)
