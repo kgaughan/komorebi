@@ -215,7 +215,7 @@ class JSONPasswdFile:
         return False
 
 
-def make_parser() -> argparse.ArgumentParser:  # pragma; no cover
+def make_parser() -> argparse.ArgumentParser:  # pragma: no cover
     parser = argparse.ArgumentParser(description="jsonpasswd editor")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--list", action="store_true", help="List users")
