@@ -1,7 +1,7 @@
-from firebirdsql import IntegrityError
 import typing as t
 from urllib import parse
 
+from firebirdsql import IntegrityError
 from flask import (
     Blueprint,
     Response,
