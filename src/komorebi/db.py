@@ -57,7 +57,7 @@ def query(sql: str, args: tuple[Scalar, ...] = ()) -> t.Iterator:
         cur.close()
 
 
-def query_row(sql: str, args: tuple[Scalar, ...] = (), *, default=None) -> dict[str, Scalar] | None:
+def query_row(sql: str, args: tuple[Scalar, ...] = ()) -> dict[str, Scalar] | None:
     conn = get_connection()
     cur = conn.cursor()
     try:
@@ -66,7 +66,7 @@ def query_row(sql: str, args: tuple[Scalar, ...] = (), *, default=None) -> dict[
             return row
     finally:
         cur.close()
-    return default
+    return None
 
 
 def query_value(sql: str, args: tuple[Scalar, ...] = (), *, default: Scalar = None) -> Scalar:
