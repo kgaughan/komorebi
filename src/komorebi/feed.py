@@ -22,7 +22,7 @@ def generate_feed(
         if subtitle:
             xml.subtitle(subtitle)
         if modified:
-            xml.updated(modified.replace(tzinfo=datetime.UTC).isoformat())
+            xml.updated(modified.isoformat())
         with xml.within("author"):
             xml.name(author)
         xml.id(feed_id)
@@ -49,8 +49,8 @@ def generate_feed(
 def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: db.Entry) -> None:
     with xml.within("entry"):
         xml.title(entry["title"])
-        xml.published(entry["time_c"].replace(tzinfo=datetime.UTC).isoformat())
-        xml.updated(entry["time_m"].replace(tzinfo=datetime.UTC).isoformat())
+        xml.published(entry["time_c"].isoformat())
+        xml.updated(entry["time_m"].isoformat())
         xml.id(f"{feed_id}:{entry['id']}")
         permalink = url_for("blog.entry", entry_id=entry["id"], _external=True)
         alternate = entry["link"] or permalink

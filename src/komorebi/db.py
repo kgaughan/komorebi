@@ -12,18 +12,23 @@ def get_connection() -> firebirdsql.Connection:
         g.db = firebirdsql.connect(
             host=current_app.config.get("DB_HOST", "localhost"),
             database=current_app.config["DB_DATABASE"],
-            port=3050,
+            port=current_app.config.get("DB_PORT", 3050),
             user=current_app.config["DB_USER"],
             password=current_app.config["DB_PASSWORD"],
         )
     return g.db
 
 
-def close_db(_):
+def close_db(exc):
     conn = g.pop("db", None)
     if conn is not None:
-        conn.commit()
-        conn.close()
+        try:
+            if exc is None:
+                conn.commit()
+            else:
+                conn.rollback()
+        finally:
+            conn.close()
 
 
 def init_app(app: Flask) -> None:
