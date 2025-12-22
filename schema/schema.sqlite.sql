@@ -13,13 +13,6 @@ CREATE TABLE links (
 CREATE INDEX links_created ON links (time_c);
 CREATE INDEX links_modified ON links (time_m);
 
--- Configuration dictionary for various plugins, extensions, &c.
-CREATE TABLE config (
-	dict  TEXT NOT NULL,
-	key   TEXT NOT NULL,
-	value TEXT NOT NULL
-);
-
 -- oEmbed data associated with links, if fetched
 CREATE TABLE oembed (
 	-- Same ID as the matching link
