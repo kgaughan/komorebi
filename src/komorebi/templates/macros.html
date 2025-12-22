@@ -11,12 +11,12 @@
 		{% endif -%}
 		<div class="metadata">
 			<span title="Published">&#128337; <time
-					datetime="{{ entry.time_c | to_iso_date }}">{{ entry.time_c | to_iso_date }}</time></span>
+					datetime="{{ entry.time_c.isoformat() }}">{{ entry.time_c.isoformat() }}</time></span>
 			{%- if entry.via -%}
 			; via <a href="{{ entry.via }}">{{ entry.via | extract_hostname }}</a>
 			{%- endif -%}
 			{%- if entry.link -%}
-			; try the <a rel="nofollow" href="https://web.archive.org/web/{{ entry.time_c | to_wayback_date }}/{{ entry.link }}">Wayback Machine</a>
+			; try the <a rel="nofollow" href="https://web.archive.org/web/{{ entry.time_c.strftime('%Y%m%d%H*') }}/{{ entry.link }}">Wayback Machine</a>
 			{% endif %}
 			| <a rel="nofollow" href="{{ url_for('blog.edit_entry', entry_id=entry.id) }}">edit</a>
 		</div>

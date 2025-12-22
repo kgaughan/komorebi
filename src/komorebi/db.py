@@ -1,76 +1,80 @@
 import datetime
-import sqlite3
 import typing as t
 
-from flask import current_app, g
+import firebirdsql
+from flask import Flask, current_app, g
 
-from .adjunct import time
-
-Scalar = int | float | str | bytes | None
-
-
-def get_db() -> sqlite3.Connection:
-    con: sqlite3.Connection = getattr(g, "_database", None)  # type: ignore
-    if con is None:
-        db_path = current_app.config.get("DB_PATH", "db.sqlite")
-        con = g._database = sqlite3.connect(db_path)  # pylint: disable=E0237
-        con.row_factory = sqlite3.Row
-    return con
+Scalar = int | float | str | bytes | datetime.datetime | None
 
 
-def close_connection(ctx):
-    con: sqlite3.Connection = getattr(g, "_database", None)  # type: ignore
-    if con is not None:
-        cur = con.cursor()
+def get_connection() -> firebirdsql.Connection:
+    if "db" not in g:
+        g.db = firebirdsql.connect(
+            host=current_app.config.get("DB_HOST", "localhost"),
+            database=current_app.config["DB_DATABASE"],
+            port=current_app.config.get("DB_PORT", 3050),
+            user=current_app.config["DB_USER"],
+            password=current_app.config["DB_PASSWORD"],
+        )
+    return g.db
+
+
+def close_db(exc):
+    conn = g.pop("db", None)
+    if conn is not None:
         try:
-            cur.execute("PRAGMA optimize")
+            if exc is None:
+                conn.commit()
+            else:
+                conn.rollback()
         finally:
-            cur.close()
-        con.close()
-    return ctx
+            conn.close()
+
+
+def init_app(app: Flask) -> None:
+    app.teardown_appcontext(close_db)
 
 
 def execute(sql: str, args: tuple[Scalar, ...] = ()) -> int | None:
-    con = get_db()
-    cur = con.cursor()
-    cur.arraysize = 50
+    conn = get_connection()
+    cur = conn.cursor()
     try:
         cur.execute(sql, args)
-        result = cur.lastrowid
-        con.commit()
-        return result
+        if returned := cur.fetchone():
+            return returned[0]
     finally:
         cur.close()
+    return None
 
 
 def query(sql: str, args: tuple[Scalar, ...] = ()) -> t.Iterator:
-    con = get_db()
-    cur = con.cursor()
+    conn = get_connection()
+    cur = conn.cursor()
     try:
         cur.execute(sql, args)
-        yield from iter(cur.fetchone, None)
+        yield from cur.itermap()
     finally:
         cur.close()
 
 
-def query_row(sql: str, args: tuple[Scalar, ...] = (), *, default=None):
-    con = get_db()
-    cur = con.cursor()
+def query_row(sql: str, args: tuple[Scalar, ...] = ()) -> dict[str, Scalar] | None:
+    conn = get_connection()
+    cur = conn.cursor()
     try:
         cur.execute(sql, args)
-        for row in iter(cur.fetchone, None):
+        if row := cur.fetchonemap():
             return row
     finally:
         cur.close()
-    return default
+    return None
 
 
 def query_value(sql: str, args: tuple[Scalar, ...] = (), *, default: Scalar = None) -> Scalar:
-    con = get_db()
-    cur = con.cursor()
+    conn = get_connection()
+    cur = conn.cursor()
     try:
         cur.execute(sql, args)
-        for row in iter(cur.fetchone, None):
+        if row := cur.fetchone():
             return row[0]
     finally:
         cur.close()
@@ -80,8 +84,8 @@ def query_value(sql: str, args: tuple[Scalar, ...] = (), *, default: Scalar = No
 class Entry(t.TypedDict):
     id: int
     title: str
-    time_c: str
-    time_m: str
+    time_c: datetime.datetime
+    time_m: datetime.datetime
     link: str | None
     via: str | None
     note: str | None
@@ -95,7 +99,7 @@ def query_latest() -> t.Iterator[Entry]:
         FROM      links
         LEFT JOIN oembed ON links.id = oembed.id
         ORDER BY  time_c DESC
-        LIMIT     40
+        ROWS      40
         """
     )
 
@@ -107,30 +111,30 @@ class ArchiveMonth(t.TypedDict):
 
 
 def query_archive() -> t.Iterator[ArchiveMonth]:
-    # This is gross.
     return query(
         """
-        SELECT   CAST(SUBSTR(time_c, 0, 5) AS INTEGER) AS "year",
-                 CAST(SUBSTR(time_c, 6, 2) AS INTEGER) AS "month",
+        SELECT   EXTRACT(YEAR FROM time_c) AS "year",
+                 EXTRACT(MONTH FROM time_c) AS "month",
                  COUNT(*) AS n
         FROM     links
-        GROUP BY SUBSTR(time_c, 0, 8)
-        ORDER BY SUBSTR(time_c, 0, 5) DESC,
-                 SUBSTR(time_c, 6, 2) ASC
+        GROUP BY EXTRACT(YEAR FROM time_c), EXTRACT(MONTH FROM time_c)
+        ORDER BY EXTRACT(YEAR FROM time_c) DESC, EXTRACT(MONTH FROM time_c) ASC
         """
     )
 
 
 def query_month(year: int, month: int) -> t.Iterator[Entry]:
-    sql = """
+    dt = datetime.date(year, month, 1).isoformat()
+    return query(
+        """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
         FROM      links
         LEFT JOIN oembed ON links.id = oembed.id
-        WHERE     time_c BETWEEN ? AND DATE(?, '+1 month')
+        WHERE     time_c BETWEEN ? AND DATEADD(1 MONTH TO ?)
         ORDER BY  time_c ASC
-        """
-    dt = datetime.date(year, month, 1)
-    return query(sql, (dt.isoformat(), dt.isoformat()))
+        """,
+        (dt, dt),
+    )
 
 
 def query_entry(entry_id: int) -> Entry | None:
@@ -142,7 +146,7 @@ def query_entry(entry_id: int) -> Entry | None:
         WHERE     links.id = ?
         """,
         (entry_id,),
-    )
+    )  # type: ignore
 
 
 def add_entry(
@@ -164,6 +168,7 @@ def add_entry(
             INSERT
             INTO    links (link, title, via, note)
             VALUES  (?, ?, ?, ?)
+            RETURNING id
             """,
             (link, title, via, note),
         )
@@ -189,7 +194,7 @@ def update_entry(
         """
         UPDATE  links
         SET     link = ?, title = ?, via = ?, note = ?,
-                time_m = DATETIME('now')
+                time_m = CURRENT_TIMESTAMP
         WHERE   id = ?
         """,
         (link, title, via, note, entry_id),
@@ -197,10 +202,7 @@ def update_entry(
 
 
 def query_last_modified() -> datetime.datetime | None:
-    modified = query_value("SELECT MAX(time_m) FROM links")
-    if modified:
-        return time.parse_dt(modified)  # type: ignore
-    return None
+    return query_value("SELECT MAX(time_m) FROM links")  # type: ignore
 
 
 def add_oembed(entry_id: int, html: str) -> int | None:

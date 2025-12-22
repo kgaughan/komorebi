@@ -64,8 +64,8 @@ def test_with_entry(application):
                 db.Entry(
                     id=123,
                     title="This is the title",
-                    time_c="2023-12-11 10:09:08",
-                    time_m="2024-12-11 10:09:08",
+                    time_c=datetime.datetime.fromisoformat("2023-12-11T10:09:08Z"),
+                    time_m=datetime.datetime.fromisoformat("2024-12-11T10:09:08Z"),
                     link=None,
                     via=None,
                     note=None,
@@ -88,8 +88,8 @@ def test_with_full_entry(application):
                 db.Entry(
                     id=123,
                     title="This is the title",
-                    time_c="2023-12-11 10:09:08",
-                    time_m="2024-12-11 10:09:08",
+                    time_c=datetime.datetime.fromisoformat("2023-12-11T10:09:08Z"),
+                    time_m=datetime.datetime.fromisoformat("2024-12-11T10:09:08Z"),
                     link="http://example.com/thingy/",
                     via="http://example.com/via/",
                     note="This is a note",

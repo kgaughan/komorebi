@@ -2,7 +2,7 @@ import contextvars
 
 import markdown
 
-_formatter = contextvars.ContextVar("_formatter")
+_formatter: contextvars.ContextVar[markdown.Markdown] = contextvars.ContextVar("_formatter")
 
 
 def render_markdown(text: str | None) -> str:

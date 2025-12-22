@@ -1,7 +1,7 @@
-from sqlite3 import IntegrityError
 import typing as t
 from urllib import parse
 
+from firebirdsql import IntegrityError
 from flask import (
     Blueprint,
     Response,
@@ -16,14 +16,11 @@ from flask import (
 from flask_httpauth import HTTPBasicAuth
 
 from . import db, embeds, formatting, forms
-from .adjunct import passkit, time
+from .adjunct import passkit
 from .feed import generate_feed
 
 blog = Blueprint("blog", __name__)
-blog.add_app_template_filter(time.to_iso_date)
-blog.add_app_template_filter(time.to_wayback_date)
 blog.add_app_template_filter(formatting.render_markdown, "markdown")
-blog.teardown_request(db.close_connection)
 
 auth = HTTPBasicAuth()
 

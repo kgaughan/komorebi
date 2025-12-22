@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from . import blog, sri
+from . import blog, db, sri
 
 
 def create_app(*, testing: bool = False) -> Flask:
@@ -18,9 +18,10 @@ def create_app(*, testing: bool = False) -> Flask:
         )
     app.register_blueprint(blog.blog)
     app.cli.add_command(sri.generate_hashes)
+    db.init_app(app)
 
     @app.errorhandler(404)
-    def page_not_found(_e):
+    def page_not_found(_):
         return (render_template("404.html"), 404)
 
     sris = sri.load_sris()

@@ -7,8 +7,7 @@ permanent setup for all my online stuff. Fundamentally, the project is to
 deprecate stereochro.me as a website.
 
 The project will be a partial port of my old PHP code over to a WSGI app of
-some sort written in Python. Additionally, I'll be replacing the database with
-SQLite, though I'm slightly worried about data corruption issues there.
+some sort written in Python.
 
 The pages functionality is due to be replaced with a set of permanent
 redirects to my blog. The linklog is probably going to be moved to
@@ -69,8 +68,12 @@ following format:
     #    python3 -c 'import secrets; print(secrets.token_hex())'
     SECRET_KEY = "deadbeef"
 
-    # Path to your blog's database. Currently only SQLite is supported.
-    DB_PATH = "db.sqlite"
+    # Configuration for your blog's database. Currently only FirebirdSQL is
+    # supported.
+    DB_HOST = "localhost"
+    DB_DATABASE = "komorebi.fdb"
+    DB_USER = "komorebi"
+    DB_PASSWORD = "DbPass123!"
 
     # Path to the password store for your application. You can manage these
     # files by running:
