@@ -33,6 +33,7 @@ dependencies = [
   "markdown>=3.8.2,<4",
   "itsdangerous>=2.2.0,<3",
   "firebirdsql==1.3.5",
+  "flask-caching==2.2.0",
 ]
 
 [project.urls]

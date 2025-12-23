@@ -17,6 +17,7 @@ from flask_httpauth import HTTPBasicAuth
 
 from . import db, embeds, formatting, forms
 from .adjunct import passkit
+from .caching import cache
 from .feed import generate_feed
 
 blog = Blueprint("blog", __name__)
@@ -39,6 +40,7 @@ def latest() -> str:
 
 
 @blog.route("/archive")
+@cache.cached(timeout=60 * 60)
 def archive() -> str:
     return render_template("archive.html", entries=process_archive(db.query_archive()))
 
@@ -73,6 +75,7 @@ def process_archive(records: t.Iterable[db.ArchiveMonth]) -> t.Iterable[db.Archi
 
 
 @blog.route("/feed")
+@cache.cached(timeout=5 * 60)
 def feed() -> Response:
     response = Response(content_type="application/atom+xml; charset=UTF-8")
     response.cache_control.public = True
@@ -99,6 +102,7 @@ def feed() -> Response:
 
 
 @blog.route("/<string(length=4):year>-<string(length=2):month>", endpoint="month")
+@cache.cached(timeout=60 * 60)
 def render_month(year: str, month: str) -> str:
     entries = db.query_month(int(year), int(month))
     if not entries:
