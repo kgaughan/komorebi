@@ -17,8 +17,6 @@ CREATE INDEX links_modified ON links (time_m);
 CREATE TABLE oembed (
 	-- Same ID as the matching link
 	id     INTEGER NOT NULL PRIMARY KEY,
-	-- The original oEmbed data
-	oembed TEXT    NOT NULL,
 	-- We transform the image into HTML
 	html   TEXT    NOT NULL
 );
