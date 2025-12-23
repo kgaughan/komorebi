@@ -115,9 +115,6 @@ manifest of this stuff to avoid manual updates.
 TODO
 ====
 
-* Get `Flask-Caching`__ into the FreeBSD ports tree so I can use it. This is
-  needed because the mechanism used to generate the archive page is a bit
-  crazy.
 * Some kind of simple admin backend to allow editing and posting of new
   entries. Or if I were feeling particularly inspired, I could implement
   Micropub__...
