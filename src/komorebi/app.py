@@ -14,6 +14,7 @@ def create_app(*, testing: bool = False) -> Flask:
                 "SERVER_NAME": "example.com",
                 "APPLICATION_ROOT": "/site/",
                 "PREFERRED_URI_SCHEME": "http",
+                "CACHE_TYPE": "NullBackend",
             }
         )
     app.register_blueprint(blog.blog)
