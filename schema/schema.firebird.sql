@@ -13,6 +13,5 @@ CREATE INDEX ix_links_modified ON links (time_m);
 
 CREATE TABLE oembed (
     id     INTEGER                 NOT NULL PRIMARY KEY,
-    oembed BLOB CHARACTER SET UTF8 NOT NULL,
     html   BLOB CHARACTER SET UTF8 NOT NULL
 );
