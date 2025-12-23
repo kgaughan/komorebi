@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from . import blog, db, sri
+from . import blog, caching, db, sri
 
 
 def create_app(*, testing: bool = False) -> Flask:
@@ -19,6 +19,7 @@ def create_app(*, testing: bool = False) -> Flask:
     app.register_blueprint(blog.blog)
     app.cli.add_command(sri.generate_hashes)
     db.init_app(app)
+    caching.cache.init_app(app)
 
     @app.errorhandler(404)
     def page_not_found(_):

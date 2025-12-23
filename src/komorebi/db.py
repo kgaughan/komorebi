@@ -19,7 +19,7 @@ def get_connection() -> firebirdsql.Connection:
     return g.db
 
 
-def close_db(exc):
+def close_connection(exc):
     conn = g.pop("db", None)
     if conn is not None:
         try:
@@ -32,7 +32,7 @@ def close_db(exc):
 
 
 def init_app(app: Flask) -> None:
-    app.teardown_appcontext(close_db)
+    app.teardown_appcontext(close_connection)
 
 
 def execute(sql: str, args: tuple[Scalar, ...] = ()) -> int | None:
