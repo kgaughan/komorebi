@@ -27,11 +27,11 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM gcr.io/distroless/cc:nonroot
 
 # Copy the Python version
-COPY --from=builder --chown=python:python /python /python
+COPY --from=builder /python /python
 
 WORKDIR /app
 # Copy the application from the builder
-COPY --from=builder --chown=app:app /app/.venv /app/.venv
+COPY --from=builder /app/.venv /app/.venv
 
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
