@@ -1,6 +1,6 @@
 {
-  "common.js": "sha384-fOdHYtieM6CJ+gXD6kcBqxrYX1Pwz1RGNCupKSYODh+7qDYy6gOqFbH7jHCnB+jh",
+  "common.js": "sha384-NwLKHa6Oq+O9zgMUKeSXqbeWLQSGg6zVQnaGSo8jE/RkzN7xjMfXJ20JXrl5NTHj",
+  "dayjs.min.js": "sha384-qKOGKwlxNqVZhquaywex6q1R6Le1uR5tc1BYZqDKKctqN7VkuYyVUhK2dSdDIXXz",
   "htmx.min.js": "sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz",
-  "luxon.js": "sha384-MPG/j0tMZel8D/wdSK2M2n+fUXFQ6lHE3r5wnJZ25xVC8KKtBOvT9BGMOmLfSxGT",
-  "screen.css": "sha384-48yYCAEldVPCdwKP1m765nu4d+MpdpuAWuL/n0BU9A8sYnWAVYE89eauHWMghIf7"
+  "screen.css": "sha384-t/LYFX2OsraZoLKSgsSTmlqzBARUrTAT+IHNH8UxDpy58u3dRFDmOK1ehfiAZce+"
 }
