@@ -1,5 +1,5 @@
 app := "komorebi"
-docker_repo := "ghcr.io/kgaughan/" + app
+container_repo := "ghcr.io/kgaughan/" + app
 
 [private]
 default:
@@ -34,9 +34,9 @@ clean:
 	@rm -rf .mypy_cache .pytest_cache .ruff_cache .venv dist htmlcov .coverage
 	@find . -name \*.orig -delete
 
-# build the docker image
-docker:
+# build the container image
+container:
 	@rm -rf dist
 	@uv build --wheel
-	@docker buildx build -t {{docker_repo}}:$(git describe --tags --always) .
-	@docker tag {{docker_repo}}:$(git describe --tags --always) {{docker_repo}}:latest
+	@podman build -t {{container_repo}}:$(git describe --tags --always) .
+	@podman tag {{container_repo}}:$(git describe --tags --always) {{container_repo}}:latest
