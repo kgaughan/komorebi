@@ -132,7 +132,7 @@ You can create a container from it with::
 (Obviously using ``--network=host`` isn't ideal, but it's fine for trying
 things out.)
 
-Here, ``/path/to/config`` the path to a directory outside the container in
+Here, ``/path/to/config`` is the path to a directory outside the container in
 which you've previously put the configuration. Now, start it::
 
     $ podman container start komorebi
