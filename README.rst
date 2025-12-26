@@ -118,7 +118,7 @@ This will build an image called ``ghcr.io/kgaughan/komorebi:latest``.
 
 .. _podman: https://podman.io/
 
-Create a configation file called ``komorebi.cfg`` and a password database
+Create a configuration file called ``komorebi.cfg`` and a password database
 called ``passwd.json`` in a directory as documented above.
 
 You can create a container from it with::
