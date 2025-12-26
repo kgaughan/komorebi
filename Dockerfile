@@ -15,7 +15,7 @@ WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --locked --no-install-project --no-dev
+    uv sync --locked --no-install-project --no-dev --group waitress
 
 # Note: you must have built the wheel first, and there can only be one.
 # We have to do it this way because we've hatch configured to lean on the VCS
@@ -23,6 +23,21 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=dist,target=dist \
     uv pip install --no-deps dist/*.whl
+
+# Remove some junk to shrink the image a bit.
+RUN <<EOT
+cd /python/cpython-*-linux-x86_64-gnu
+rm -rf include
+rm -rf lib/itcl*
+rm -rf lib/pkgconfig
+rm -rf lib/libtcl*
+rm -rf lib/libtk*
+rm -rf lib/python*/lib-dynload/_tkinter.cpython-*.so
+rm -rf lib/python*/tkinter
+rm -rf lib/python*/turtle*
+rm -rf lib/tcl*
+rm -rf lib/tk*
+EOT
 
 FROM gcr.io/distroless/cc:nonroot
 
@@ -35,6 +50,11 @@ COPY --from=builder /app/.venv /app/.venv
 
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
+ENV KOMOREBI_SETTINGS=/config/komorebi.cfg
+
+VOLUME ["/config", "/cache"]
+
+EXPOSE 8000/tcp
 
 ENTRYPOINT ["/app/.venv/bin/python3"]
-CMD ["-m", "komorebi", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["-m", "waitress", "--asyncore-use-poll", "--listen=0.0.0.0:8000", "--call", "komorebi:create_wsgi_app"]

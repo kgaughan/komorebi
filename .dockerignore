@@ -1,0 +1,4 @@
+*
+# The bare minimum needed to build the image
+!dist/*.whl
+!pyproject.toml
