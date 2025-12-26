@@ -26,6 +26,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Remove some junk to shrink the image a bit.
 RUN <<EOT
+set -e
 cd /python/cpython-*-linux-x86_64-gnu
 rm -rf include
 rm -rf lib/itcl*
