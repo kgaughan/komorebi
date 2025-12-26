@@ -39,8 +39,8 @@ If you want to create/update a password file, run::
 
      uv run komorebi-passwd
 
-Deployment
-==========
+Deployment without a container
+==============================
 
 The ``komorebi`` module contains a ``__main__.py`` file. This means that the
 module is executable. This default runner uses wsgiref_, so it's not really
@@ -75,10 +75,15 @@ following format:
     DB_USER = "komorebi"
     DB_PASSWORD = "DbPass123!"
 
+    # Cache configuration. To disable caching, use `NullCache`. For further
+    # details, see https://flask-caching.readthedocs.io/en/latest/
+    CACHE_TYPE = "FileSystemCache"
+    CACHE_DIR = "/path/to/cache"
+
     # Path to the password store for your application. You can manage these
     # files by running:
     #     uv run komorebi-password
-    PASSWD_PATH = "dev/dev.passwd.json"
+    PASSWD_PATH = "/path/to/config/passwd.json"
 
     # The title to use for your blog, along with your name for the feed.
     BLOG_TITLE = "My Weblog"
@@ -101,6 +106,36 @@ This assumes that Komorebi and its dependencies are installed and you have
 .. _Supervisor: http://supervisord.org/
 .. _Flask configuration values: https://flask.palletsprojects.com/en/stable/config/#builtin-configuration-values
 .. _gunicorn: https://gunicorn.org/
+
+Deployment with a container locally
+===================================
+
+To build a container image locally with podman_, run::
+
+    just container
+
+This will build an image called ``ghcr.io/kgaughan/komorebi:latest``.
+
+.. _podman: https://podman.io/
+
+Create a configuration file called ``komorebi.cfg`` and a password database
+called ``passwd.json`` in a directory as documented above.
+
+You can create a container from it with::
+
+    $ podman container create --init --network=host --name=komorebi \
+        --env=KOMOREBI_SETTINGS=/config/komorebi.cfg \
+        --mount=type=bind,src=/path/to/config,destination=/config,ro=true \
+        --mount=type=tmpfs,destination=/cache \
+        ghcr.io/kgaughan/komorebi:latest
+
+(Obviously using ``--network=host`` isn't ideal, but it's fine for trying
+things out.)
+
+Here, ``/path/to/config`` is the path to a directory outside the container in
+which you've previously put the configuration. Now, start it::
+
+    $ podman container start komorebi
 
 Regenerating subresource integrity hashes
 =========================================
