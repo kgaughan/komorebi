@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from . import blog, caching, db, sri
+from . import blog, caching, compress, db, sri
 
 
 def create_app(*, testing: bool = False) -> Flask:
@@ -17,10 +17,21 @@ def create_app(*, testing: bool = False) -> Flask:
                 "CACHE_TYPE": "NullCache",
             }
         )
+    app.config["COMPRESS_REGISTER"] = False  # only compress annotated views
+    app.config["COMPRESS_MIMETYPES"] = [
+        "application/json",
+        "text/css",
+        "text/html",
+        "text/javascript",
+        # Missing in 1.14
+        "application/xml",
+        "application/atom+xml",
+    ]
     app.register_blueprint(blog.blog)
     app.cli.add_command(sri.generate_hashes)
     db.init_app(app)
     caching.cache.init_app(app)
+    compress.compress.init_app(app)
 
     @app.errorhandler(404)
     def page_not_found(_):

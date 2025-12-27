@@ -18,7 +18,14 @@ from flask_httpauth import HTTPBasicAuth
 from . import db, embeds, formatting, forms
 from .adjunct import passkit
 from .caching import cache
+from .compress import compress
 from .feed import generate_feed
+from .sitemap import generate_sitemap
+
+# Useful time constants
+MINUTE = 60
+HOUR = 3600
+DAY = 86400
 
 blog = Blueprint("blog", __name__)
 blog.add_app_template_filter(formatting.render_markdown, "markdown")
@@ -40,9 +47,27 @@ def latest() -> str:
 
 
 @blog.route("/archive")
-@cache.cached(timeout=60 * 60)
+@cache.cached(timeout=HOUR)
+@compress.compressed()
 def archive() -> str:
     return render_template("archive.html", entries=process_archive(db.query_archive()))
+
+
+@blog.route("/sitemap.xml")
+@cache.cached(timeout=DAY)
+@compress.compressed()
+def sitemap() -> Response:
+    response = Response(content_type="application/xml; charset=UTF-8")
+    response.cache_control.public = True
+    response.cache_control.max_age = DAY
+
+    modified = db.query_last_modified()
+    response.last_modified = modified
+    if request.if_modified_since and modified is not None and modified <= request.if_modified_since:
+        return response.make_conditional(request)  # type: ignore
+
+    response.set_data(generate_sitemap(entries=db.query_sitemap()))
+    return response
 
 
 def process_archive(records: t.Iterable[db.ArchiveMonth]) -> t.Iterable[db.ArchiveMonth]:
@@ -75,11 +100,12 @@ def process_archive(records: t.Iterable[db.ArchiveMonth]) -> t.Iterable[db.Archi
 
 
 @blog.route("/feed")
-@cache.cached(timeout=5 * 60)
+@cache.cached(timeout=5 * MINUTE)
+@compress.compressed()
 def feed() -> Response:
     response = Response(content_type="application/atom+xml; charset=UTF-8")
     response.cache_control.public = True
-    response.cache_control.max_age = 3600
+    response.cache_control.max_age = HOUR
     modified = db.query_last_modified()
     response.last_modified = modified
 
@@ -102,7 +128,8 @@ def feed() -> Response:
 
 
 @blog.route("/<string(length=4):year>-<string(length=2):month>", endpoint="month")
-@cache.cached(timeout=60 * 60)
+@cache.cached(timeout=HOUR)
+@compress.compressed()
 def render_month(year: str, month: str) -> str:
     entries = db.query_month(int(year), int(month))
     if not entries:
