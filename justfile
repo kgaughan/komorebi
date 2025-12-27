@@ -38,5 +38,5 @@ clean:
 container:
 	@rm -rf dist
 	@uv build --wheel
-	@podman build -t {{container_repo}}:$(git describe --tags --always) .
+	@podman build --rm -t {{container_repo}}:$(git describe --tags --always) .
 	@podman tag {{container_repo}}:$(git describe --tags --always) {{container_repo}}:latest

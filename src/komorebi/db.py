@@ -123,6 +123,15 @@ def query_archive() -> t.Iterator[ArchiveMonth]:
     )
 
 
+class SitemapEntry(t.TypedDict):
+    id: int
+    time_m: datetime.datetime
+
+
+def query_sitemap() -> t.Iterator[SitemapEntry]:
+    return query("SELECT id, time_m FROM links")
+
+
 def query_month(year: int, month: int) -> t.Iterator[Entry]:
     dt = datetime.date(year, month, 1).isoformat()
     return query(
