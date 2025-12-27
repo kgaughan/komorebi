@@ -30,14 +30,20 @@ set -e
 cd /python/cpython-*-linux-x86_64-gnu
 rm -rf include
 rm -rf lib/itcl*
-rm -rf lib/pkgconfig
 rm -rf lib/libtcl*
 rm -rf lib/libtk*
-rm -rf lib/python*/lib-dynload/_tkinter.cpython-*.so
-rm -rf lib/python*/tkinter
-rm -rf lib/python*/turtle*
+rm -rf lib/pkgconfig
+rm -rf lib/python3.*/config-*-linux-gnu
+rm -rf lib/python3.*/ensurepip/_bundled/*.whl
+rm -rf lib/python3.*/idlelib
+rm -rf lib/python3.*/lib-dynload/_tkinter.cpython-*.so
+rm -rf lib/python3.*/lib2to3
+rm -rf lib/python3.*/site-packages/*
+rm -rf lib/python3.*/tkinter
+rm -rf lib/python3.*/turtle*
 rm -rf lib/tcl*
 rm -rf lib/tk*
+find lib -name \*.tcl -delete
 EOT
 
 FROM gcr.io/distroless/cc:nonroot
