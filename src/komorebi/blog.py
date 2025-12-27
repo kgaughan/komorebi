@@ -17,8 +17,7 @@ from flask_httpauth import HTTPBasicAuth
 
 from . import db, embeds, formatting, forms
 from .adjunct import passkit
-from .caching import cache
-from .compress import compress
+from .extensions import cache, compress
 from .feed import generate_feed
 from .sitemap import generate_sitemap
 
