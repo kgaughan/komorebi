@@ -1,5 +1,4 @@
-"""
-An intensely pragmatic implementation of the Open Graph Protocol.
+"""An intensely pragmatic implementation of the Open Graph Protocol.
 
 This follows [the specification](https://opengraphprotocol.org/) rather than
 attempting to implement RDFa.
@@ -30,6 +29,14 @@ import typing as t
 
 @dataclasses.dataclass
 class Property:
+    """Open Graph Property.
+
+    Attributes:
+        type_: The property type (e.g., "title", "image", etc.).
+        value: The property value.
+        metadata: A mapping of metadata keys to values.
+    """
+
     type_: str
     value: str
     metadata: dict[str, str]
@@ -44,9 +51,20 @@ class Property:
         )
         return "\n".join(lines)
 
+    def __str__(self) -> str:
+        return self.to_meta()
 
-def parse(properties: t.Collection[tuple[str, str]]) -> t.Sequence[Property]:
-    """"""
+
+def parse(properties: t.Collection[tuple[str, str]]) -> list[Property]:
+    """Parse Open Graph properties from a list of name-value pairs.
+
+    Args:
+        properties: A collection of (name, value) pairs representing Open Graph
+            properties.
+
+    Returns:
+        The `Property` instances.
+    """
     result = []
     for name, value in properties:
         name_parts = name.split(":", 2)
@@ -61,7 +79,14 @@ def parse(properties: t.Collection[tuple[str, str]]) -> t.Sequence[Property]:
 
 
 def to_meta(props: Property | t.Sequence[Property]) -> str:
-    """"""
+    """Convert Open Graph properties to HTML meta tags.
+
+    Args:
+        props: A single `Property` instance or a sequence of `Property` instances.
+
+    Returns:
+        A string containing HTML meta tags representing the Open Graph properties.
+    """
     if isinstance(props, Property):
         return props.to_meta()
     return "\n".join(prop.to_meta() for prop in props)
@@ -72,7 +97,16 @@ def find(
     type_: str,
     value: str | None = None,
 ) -> t.Iterable[Property]:
-    """"""
+    """Find Open Graph properties by type and optional value.
+
+    Args:
+        props: A sequence of `Property` instances to search.
+        type_: The property type to search for.
+        value: An optional property value to match.
+
+    Returns:
+        An iterable of `Property` instances that match the specified type and value.
+    """
     for prop in props:
         if prop.type_ == type_ and (value is None or prop.value == value):
             yield prop
