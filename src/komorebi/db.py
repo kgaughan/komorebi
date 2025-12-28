@@ -63,7 +63,8 @@ def query_row(sql: str, args: tuple[Scalar, ...] = ()) -> dict[str, Scalar] | No
     try:
         cur.execute(sql, args)
         if row := cur.fetchonemap():
-            return row
+            # Hack to get the update form working properly.
+            return {k.lower(): v for k, v in row.items()}
     finally:
         cur.close()
     return None

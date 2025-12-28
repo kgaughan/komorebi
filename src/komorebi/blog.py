@@ -41,20 +41,22 @@ def verify_password(username: str, password: str) -> bool:
 
 
 @blog.route("/")
+@compress.compressed()
+@cache.cached(timeout=HOUR, make_cache_key=lambda: "blog.latest")
 def latest() -> str:
     return render_template("latest.html", entries=db.query_latest())
 
 
 @blog.route("/archive")
-@cache.cached(timeout=HOUR)
 @compress.compressed()
+@cache.cached(timeout=HOUR)
 def archive() -> str:
     return render_template("archive.html", entries=process_archive(db.query_archive()))
 
 
 @blog.route("/sitemap.xml")
-@cache.cached(timeout=DAY)
 @compress.compressed()
+@cache.cached(timeout=DAY)
 def sitemap() -> Response:
     response = Response(content_type="application/xml; charset=UTF-8")
     response.cache_control.public = True
@@ -99,8 +101,8 @@ def process_archive(records: t.Iterable[db.ArchiveMonth]) -> t.Iterable[db.Archi
 
 
 @blog.route("/feed")
-@cache.cached(timeout=5 * MINUTE)
 @compress.compressed()
+@cache.cached(timeout=5 * MINUTE)
 def feed() -> Response:
     response = Response(content_type="application/atom+xml; charset=UTF-8")
     response.cache_control.public = True
@@ -127,8 +129,8 @@ def feed() -> Response:
 
 
 @blog.route("/<string(length=4):year>-<string(length=2):month>", endpoint="month")
-@cache.cached(timeout=HOUR)
 @compress.compressed()
+@cache.cached(timeout=HOUR)
 def render_month(year: str, month: str) -> str:
     entries = db.query_month(int(year), int(month))
     if not entries:
@@ -165,6 +167,7 @@ def add_entry() -> Response | str:
         else:
             if markup:
                 db.add_oembed(entry_id, markup)
+            cache.delete("blog.latest")
 
             return redirect(url_for("blog.entry", entry_id=entry_id))  # type: ignore
     return render_template("entry_edit.html", form=form)
@@ -185,6 +188,7 @@ def edit_entry(entry_id: int) -> Response | str:
             via=form.via.data,
             note=form.note.data,
         )
+        cache.delete("blog.latest")
         return redirect(url_for("blog.entry", entry_id=entry_id))  # type: ignore
     return render_template("entry_edit.html", form=form)
 
