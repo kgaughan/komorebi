@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-from . import blog, db, extensions, sri
+from . import _version, blog, db, extensions, sri
 
 
 def create_app(*, testing: bool = False) -> Flask:
@@ -32,6 +32,10 @@ def create_app(*, testing: bool = False) -> Flask:
     db.init_app(app)
     extensions.cache.init_app(app)
     extensions.compress.init_app(app)
+
+    @app.template_global()
+    def app_version():
+        return _version.__version__
 
     @app.errorhandler(404)
     def page_not_found(_):

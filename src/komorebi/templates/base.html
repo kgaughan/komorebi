@@ -10,7 +10,8 @@
 	<link rel="preconnect" href="https://fonts.bunny.net" crossorigin="anonymous" referrerpolicy="no-referrer">
 	<link rel="preconnect" href="https://i.ytimg.com" crossorigin="anonymous" referrerpolicy="no-referrer">
 	<meta name="Author" content="Keith Gaughan">
-	<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2022">
+	<meta name="Copyright" content="Copyright (c) Keith Gaughan, 2001-2025">
+	<meta name="Engine" content="Komorebi/{{ app_version() }}">
 
 	<link rel="stylesheet" crossorigin="anonymous" referrerpolicy="no-referrer" media="screen" href="{{ url_for('static', filename='screen.css') }}" integrity="{{ sri('screen.css') }}">
 
@@ -37,6 +38,7 @@
 		</nav>
 	</header>
 	<main>{% block content %}{% endblock %}</main>
+	<footer>Served by <a href="https://github.com/kgaughan/komorebi">Komorebi/{{ app_version() }}</a></footer>
 </body>
 
 </html>
