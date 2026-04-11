@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:trixie-slim AS builder
 ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy
 
 # Configure the Python directory so it is consistent
@@ -8,7 +8,7 @@ ENV UV_PYTHON_INSTALL_DIR=/python
 ENV UV_PYTHON_PREFERENCE=only-managed
 
 # Install Python before the project for caching
-RUN uv python install 3.12
+RUN uv python install 3.13
 
 # Install the dependencies.
 WORKDIR /app
