@@ -10,6 +10,7 @@ devel:
 	@uv sync --frozen
 
 # tidy everything with ruff
+[group("Analysis/Fixing")]
 tidy:
 	@uv run --frozen ruff check --fix
 
@@ -22,6 +23,7 @@ sri:
 	@uv run --frozen flask --app {{app}} sri
 
 # run the test suite
+[group("Testing")]
 tests:
 	@uv run --frozen pytest
 
