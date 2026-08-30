@@ -12,6 +12,7 @@ def generate_feed(
     author: str,
     feed_id: str,
     entries: t.Iterable[db.Entry],
+    *,
     subtitle: str | None = None,
     rights: str | None = None,
     modified: datetime.datetime | None = None,
