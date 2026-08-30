@@ -19,11 +19,11 @@ The output cache functionality will be replaced with Redis.
 Prep
 ====
 
-Install just__ as a task runner. Run::
+Install just_ as a task runner. Run::
 
     just devel
 
-.. __: https://github.com/casey/just
+.. _just: https://github.com/casey/just
 
 Development server
 ==================
@@ -152,11 +152,10 @@ TODO
 
 * Some kind of simple admin backend to allow editing and posting of new
   entries. Or if I were feeling particularly inspired, I could implement
-  Micropub__...
+  Micropub_...
 * Remove hardwired stuff, such as the blog name, author, copyright notice,
   feed ID prefix, &c.
 
-.. __: https://github.com/sh4nks/flask-caching
-.. __: https://www.w3.org/TR/micropub/
+.. _Micropub: https://www.w3.org/TR/micropub/
 
 .. vim:set ft=rst:
