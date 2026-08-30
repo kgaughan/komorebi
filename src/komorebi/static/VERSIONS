@@ -1,2 +1,2 @@
-dayjs+relativeTime==1.11.19
-htmx==2.0.8
+dayjs+relativeTime==1.11.23
+htmx==4.0.0
