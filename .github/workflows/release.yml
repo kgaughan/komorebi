@@ -29,9 +29,9 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - uses: astral-sh/setup-uv@v7
+      - uses: astral-sh/setup-uv@v10.0.1
         with:
-          version: "0.8.17"
+          version: "0.12.7"
 
       # The wheel built here is consumed when building the image.
       - name: Build wheel
