@@ -71,7 +71,7 @@ version-file = "src/komorebi/_version.py"
 line-length = 120
 
 [tool.ruff]
-target-version = "py311"
+target-version = "py312"
 line-length = 120
 src = ["src", "tests"]
 
@@ -131,6 +131,7 @@ ignore = [
   "EM101",   # Exceptions must not use strings
   "EM102",   # Exception must not use f-string literal
   "TRY003",  # Avoid specifying long messages outside the exception class
+  "ICN001",  # `datetime` should be imported as `dt'
 ]
 
 [tool.ruff.lint.isort]
