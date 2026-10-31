@@ -125,10 +125,10 @@ class JSONPasswdFile:
             "entry": _ScryptEntry,
             "construct": _scrypt_construct,
             "check": _scrypt_check,
-        }
+        },
     }
 
-    def __init__(self, filepath: str, implementation: str = "scrypt"):
+    def __init__(self, filepath: str, implementation: str = "scrypt") -> None:
         self.filepath: str = filepath
         self.implementation = implementation
         self.users = self._load()
@@ -149,7 +149,7 @@ class JSONPasswdFile:
                 result[user] = entry
         return result
 
-    def _save(self):
+    def _save(self) -> None:
         with open(self.filepath, "w") as fh:
             payload = {
                 "metadata": {"type": "tag:talideon.com,2025:jsonpasswd", "version": 1},
@@ -157,7 +157,7 @@ class JSONPasswdFile:
             }
             json.dump(payload, fh)
 
-    def set_password(self, username: str, password: str):
+    def set_password(self, username: str, password: str) -> None:
         """Set the given user's password.
 
         Args:

@@ -99,6 +99,7 @@ class Element:
 
         Returns:
             A file-like object containing the serialised element.
+
         """
         if dest is None:
             dest = io.StringIO()
@@ -167,6 +168,7 @@ def parse(markup: str) -> Element:
 
     Returns:
         The root element of the document.
+
     """
     parser = _Parser()
     parser.feed(markup)

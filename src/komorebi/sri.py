@@ -18,8 +18,7 @@ def generate_sri(
     alg: str = "sha384",
     block_size: int = 8192,
 ) -> str:
-    """
-    A basic [subresource integrity](https://www.w3.org/TR/SRI/) hashing
+    """A basic [subresource integrity](https://www.w3.org/TR/SRI/) hashing
     implementation. This doesn't check the algorithm chosen nor does it support
     multiple algorithms.
     """

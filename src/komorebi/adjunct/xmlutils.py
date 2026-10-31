@@ -2,7 +2,6 @@
 
 import contextlib
 import io
-import typing as t
 from xml.sax import saxutils
 
 
@@ -14,12 +13,12 @@ class XMLBuilder:
 
     Examples:
         >>> xml = XMLBuilder()
-        >>> with xml.within('root', xmlns='tag:talideon.com,2013:test'):
-        ...     xml += 'Before'
-        ...     with xml.within('leaf'):
-        ...         xml += 'Within'
-        ...     xml += 'After'
-        ...     xml.tag('leaf', 'Another')
+        >>> with xml.within("root", xmlns="tag:talideon.com,2013:test"):
+        ...     xml += "Before"
+        ...     with xml.within("leaf"):
+        ...         xml += "Within"
+        ...     xml += "After"
+        ...     xml.tag("leaf", "Another")
         >>> print xml.as_string()
         <?xml version="1.0" encoding="utf-8"?>
         <root xmlns="tag:talideon.com,2013:test">Before<leaf>Within</leaf>After<leaf>Another</leaf></root>
@@ -31,9 +30,10 @@ class XMLBuilder:
     Note:
         If you provide your own, the `as_string()` method will return an empty
         string as no other sensible value can be returned.
+
     """
 
-    def __init__(self, out: t.TextIO | None = None, encoding: str = "utf-8") -> None:
+    def __init__(self, out: io.TextIOBase | None = None, encoding: str = "utf-8") -> None:
         self.buffer = None
         if out is None:
             self.buffer = io.StringIO()
@@ -43,23 +43,25 @@ class XMLBuilder:
 
     @contextlib.contextmanager
     def within(self, tag: str, **attrs: str):
-        """Generates an element containing nested elements.
+        """Generate an element containing nested elements.
 
         Args:
             tag: the tag name
             attrs: any attributes to add to the tag
+
         """
         self.generator.startElement(tag, attrs)  # type: ignore
         yield
         self.generator.endElement(tag)
 
     def tag(self, tag: str, *values: str, **attrs: str) -> None:
-        """Generates a simple element.
+        """Generate a simple element.
 
         Args:
             tag: the tag name
             values: any character data to write between the start and end tag
             attrs: any attributes to add to the tag
+
         """
         self.generator.startElement(tag, attrs)  # type: ignore
         for value in values:

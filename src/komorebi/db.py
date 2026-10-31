@@ -1,10 +1,10 @@
-import datetime
+import datetime as dt
 import typing as t
 
 import firebirdsql
 from flask import Flask, current_app, g
 
-Scalar = int | float | str | bytes | datetime.datetime | None
+Scalar = int | float | str | bytes | dt.datetime | None
 
 
 def get_connection() -> firebirdsql.Connection:
@@ -85,8 +85,8 @@ def query_value(sql: str, args: tuple[Scalar, ...] = (), *, default: Scalar = No
 class Entry(t.TypedDict):
     id: int
     title: str
-    time_c: datetime.datetime
-    time_m: datetime.datetime
+    time_c: dt.datetime
+    time_m: dt.datetime
     link: str | None
     via: str | None
     note: str | None
@@ -126,7 +126,7 @@ def query_archive() -> t.Iterator[ArchiveMonth]:
 
 class SitemapEntry(t.TypedDict):
     id: int
-    time_m: datetime.datetime
+    time_m: dt.datetime
 
 
 def query_sitemap() -> t.Iterator[SitemapEntry]:
@@ -134,7 +134,7 @@ def query_sitemap() -> t.Iterator[SitemapEntry]:
 
 
 def query_month(year: int, month: int) -> t.Iterator[Entry]:
-    dt = datetime.date(year, month, 1).isoformat()
+    start = dt.date(year, month, 1).isoformat()
     return query(
         """
         SELECT    links.id, time_c, time_m, link, title, via, note, html
@@ -143,7 +143,7 @@ def query_month(year: int, month: int) -> t.Iterator[Entry]:
         WHERE     time_c BETWEEN ? AND DATEADD(1 MONTH TO ?)
         ORDER BY  time_c ASC
         """,
-        (dt, dt),
+        (start, start),
     )
 
 
@@ -211,7 +211,7 @@ def update_entry(
     )
 
 
-def query_last_modified() -> datetime.datetime | None:
+def query_last_modified() -> dt.datetime | None:
     return query_value("SELECT MAX(time_m) FROM links")  # type: ignore
 
 

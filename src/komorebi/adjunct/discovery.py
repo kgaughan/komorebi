@@ -20,8 +20,7 @@ logger = logging.getLogger(__name__)
 
 # pylint: disable-msg=R0904
 class Extractor(HTMLParser):
-    """
-    A simple subclass of [html.parser.HTMLParser][] for extracting metadata
+    """A simple subclass of [html.parser.HTMLParser][] for extracting metadata
     like from `<meta>` and `<link>` tags from the header of a HTML document.
 
     It's recommended you use the [adjunct.discovery.Extractor.extract][] class
@@ -34,6 +33,7 @@ class Extractor(HTMLParser):
         base: the base URL for the document; the `<base>` tag is used if found
         collected: any collected links; each entry is a dictionary of the attributes
         properties: any collected `<meta>` tags with `property` and `content` attributes
+
     """
 
     def __init__(self, base: str) -> None:
@@ -56,6 +56,7 @@ class Extractor(HTMLParser):
         """Append the given set of attributes onto our list.
 
         By separating this out, we can modify the behaviour in subclasses.
+
         """
         self.collected.append(attrs)
 
@@ -74,6 +75,7 @@ class Extractor(HTMLParser):
 
         Returns:
             The parser with all links extracted and canonicalised.
+
         """
         parser = cls(base)
         with contextlib.closing(parser):
@@ -106,6 +108,7 @@ def _safe_slurp(fh: io.IOBase, chunk_size: int = 65536, encoding: str = "UTF-8")
 
     Yields:
         Chunks of string data read from the file-like object.
+
     """
     # Enforce a lower end: 6 will give us 31 bits of codepoint space coverage,
     # though RFC3629 mandates a max of 4 for compatibility with UTF-16. The
@@ -144,6 +147,7 @@ def fix_attributes(attrs: list[tuple[str, str | None]]) -> dict[str, str]:
 
     Returns:
         cleaned-up attributes
+
     """
     result = {}
     for attr, value in attrs:
@@ -172,6 +176,7 @@ def fetch_meta(
 
     Returns:
         The link tag data and any properties discovered in meta tags.
+
     """
     links = []
     properties = []
