@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import typing as t
 
 from flask import url_for
@@ -16,9 +16,9 @@ def generate_sitemap(entries: t.Iterable[db.SitemapEntry]) -> str:
             xml.priority("0.8")
         for entry in entries:
             with xml.within("url"):
-                dt = entry["time_m"].astimezone(datetime.UTC)
+                modified = entry["time_m"].astimezone(dt.UTC)
                 xml.loc(url_for("blog.entry", entry_id=entry["id"], _external=True))
-                xml.lastmod(dt.isoformat())
+                xml.lastmod(modified.isoformat())
                 xml.changefreq("weekly")
                 xml.priority("0.5")
     return xml.as_string()

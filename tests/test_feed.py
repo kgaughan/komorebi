@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 from pathlib import Path
 
 import pytest
@@ -7,11 +7,10 @@ from komorebi import db, feed
 from komorebi.app import create_app
 
 
-@pytest.fixture()
+@pytest.fixture
 def application():
-    result = create_app(testing=True)
+    return create_app(testing=True)
     # other setup can go here
-    yield result
     # add any cleanup here
 
 
@@ -39,14 +38,14 @@ def test_empty_feed(application):
             entries=[],
             subtitle="Subtitle",
             rights="Rights",
-            modified=datetime.datetime(
+            modified=dt.datetime(
                 year=1970,
                 month=2,
                 day=1,
                 hour=12,
                 minute=0,
                 second=59,
-                tzinfo=datetime.UTC,
+                tzinfo=dt.UTC,
             ),
         )
     assert contents == expected
@@ -64,8 +63,8 @@ def test_with_entry(application):
                 db.Entry(
                     id=123,
                     title="This is the title",
-                    time_c=datetime.datetime.fromisoformat("2023-12-11T10:09:08Z"),
-                    time_m=datetime.datetime.fromisoformat("2024-12-11T10:09:08Z"),
+                    time_c=dt.datetime.fromisoformat("2023-12-11T10:09:08Z"),
+                    time_m=dt.datetime.fromisoformat("2024-12-11T10:09:08Z"),
                     link=None,
                     via=None,
                     note=None,
@@ -88,8 +87,8 @@ def test_with_full_entry(application):
                 db.Entry(
                     id=123,
                     title="This is the title",
-                    time_c=datetime.datetime.fromisoformat("2023-12-11T10:09:08Z"),
-                    time_m=datetime.datetime.fromisoformat("2024-12-11T10:09:08Z"),
+                    time_c=dt.datetime.fromisoformat("2023-12-11T10:09:08Z"),
+                    time_m=dt.datetime.fromisoformat("2024-12-11T10:09:08Z"),
                     link="http://example.com/thingy/",
                     via="http://example.com/via/",
                     note="This is a note",

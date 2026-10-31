@@ -1,4 +1,4 @@
-import datetime
+import datetime as dt
 import typing as t
 
 from flask import url_for
@@ -15,7 +15,7 @@ def generate_feed(
     *,
     subtitle: str | None = None,
     rights: str | None = None,
-    modified: datetime.datetime | None = None,
+    modified: dt.datetime | None = None,
 ) -> str:
     xml = xmlutils.XMLBuilder()
     with xml.within("feed", xmlns="http://www.w3.org/2005/Atom"):
@@ -23,7 +23,7 @@ def generate_feed(
         if subtitle:
             xml.subtitle(subtitle)
         if modified:
-            xml.updated(modified.astimezone(datetime.UTC).isoformat())
+            xml.updated(modified.astimezone(dt.UTC).isoformat())
         with xml.within("author"):
             xml.name(author)
         xml.id(feed_id)
@@ -50,8 +50,8 @@ def generate_feed(
 def add_entry(xml: xmlutils.XMLBuilder, feed_id: str, entry: db.Entry) -> None:
     with xml.within("entry"):
         xml.title(entry["title"])
-        xml.published(entry["time_c"].astimezone(datetime.UTC).isoformat())
-        xml.updated(entry["time_m"].astimezone(datetime.UTC).isoformat())
+        xml.published(entry["time_c"].astimezone(dt.UTC).isoformat())
+        xml.updated(entry["time_m"].astimezone(dt.UTC).isoformat())
         xml.id(f"{feed_id}:{entry['id']}")
         permalink = url_for("blog.entry", entry_id=entry["id"], _external=True)
         alternate = entry["link"] or permalink
